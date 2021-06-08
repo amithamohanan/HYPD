@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
+import 'package:hypd/global.dart';
 
 class AddUserDetails extends StatefulWidget
 {
@@ -13,6 +14,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 {
 	var height;
 	var width;
+	var fontSize;
 
 	@override
 	Widget build(BuildContext context)
@@ -29,6 +31,10 @@ class _AddUserDetailsState extends State<AddUserDetails>
 
 	Widget scaffold()
 	{
+		fontSize = getFontSize(context);
+		height = getHeight(context);
+		width = getWidth(context);
+
 		return Scaffold
 		(
 			body: Container
@@ -68,7 +74,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 			"Your Profile",
 			style: GoogleFonts.montserrat
 			(
-				fontSize: 25,
+				fontSize: fontSize / 20,
 			),
 		);
 	}
@@ -80,7 +86,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 			"Enter the following details and",
 			style: GoogleFonts.montserrat
 			(
-				fontSize: 12,
+				fontSize: fontSize / 35,
 				color: Colors.black38
 			),
 		);
@@ -93,7 +99,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 			"get connected...",
 			style: GoogleFonts.montserrat
 			(
-				fontSize: 12,
+				fontSize: fontSize / 35,
 				color: Colors.black38
 			),
 		);
@@ -107,13 +113,8 @@ class _AddUserDetailsState extends State<AddUserDetails>
 			[
 				Container
 				(
-					height: 90,
-					width: 90,
-					decoration: BoxDecoration
-					(
-						color: Colors.transparent,
-						// borderRadius: BorderRadius.circular(25)
-					),
+					height: 100,
+					width: 100,
 					child: Container
 					(
 						margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
@@ -128,7 +129,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 				),
 				Positioned
 				(
-					top: height / 15,
+					bottom: 3,
 					right: 0,
 					child: CircleAvatar
 					(
@@ -225,6 +226,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 						fontSize: 12,
 					),
 				),
+				SizedBox(height: height / 25,),
 				TextFormField
 				(
 					style:  GoogleFonts.montserrat
@@ -260,6 +262,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 				SizedBox(height: height / 25,),
 				Row
 				(
+					mainAxisAlignment: MainAxisAlignment.spaceBetween,
 					children:
 					[
 						Container
@@ -283,7 +286,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 									(
 										fontWeight: FontWeight.w500,
 										color: Colors.black26,
-										fontSize: 12
+										fontSize: fontSize / 35
 									),
 									counterText: "",
 									contentPadding: EdgeInsets.all(0),
@@ -293,7 +296,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 								),
 							),
 						),
-						SizedBox(width: 25,),
+						SizedBox(width: 5,),
 						Container
 						(
 							height: 25,
@@ -315,7 +318,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 									(
 										fontWeight: FontWeight.w500,
 										color: Colors.black26,
-										fontSize: 12
+										fontSize: fontSize / 35
 									),
 									counterText: "",
 									contentPadding: EdgeInsets.all(0),
@@ -325,7 +328,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 								),
 							),
 						),
-						SizedBox(width: 25,),
+						SizedBox(width: 5,),
 						Container
 						(
 							height: 25,
@@ -347,7 +350,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 									(
 										fontWeight: FontWeight.w500,
 										color: Colors.black26,
-										fontSize: 12
+										fontSize: fontSize / 35
 									),
 									counterText: "",
 									contentPadding: EdgeInsets.all(0),
@@ -389,7 +392,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 					style: GoogleFonts.montserrat
 					(
 						color: Colors.black38,
-						fontSize: 12,
+						fontSize: fontSize / 30
 					),
 				),
 				Row
@@ -404,8 +407,8 @@ class _AddUserDetailsState extends State<AddUserDetails>
 								"Male",
 								style: GoogleFonts.montserrat
 								(
-									fontSize: 13,
-									color: Colors.black26	
+									fontSize: fontSize / 30,
+									color: Colors.black26
 								),
 							),
 							onPressed: ()
@@ -420,8 +423,8 @@ class _AddUserDetailsState extends State<AddUserDetails>
 								"Female",
 								style: GoogleFonts.montserrat
 								(
-									fontSize: 15,
-									color: Colors.black26	
+									fontSize: fontSize / 30,
+									color: Colors.black26
 								),
 							),
 							onPressed: ()
@@ -436,8 +439,8 @@ class _AddUserDetailsState extends State<AddUserDetails>
 								"Other",
 								style: GoogleFonts.montserrat
 								(
-									fontSize: 15,
-									color: Colors.black26	
+									fontSize: fontSize / 35,
+									color: Colors.black26
 								),
 							),
 							onPressed: ()
@@ -457,7 +460,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 						child: Text
 						(
 							"Submit",
-							style: TextStyle(fontSize: 14)
+							style: TextStyle(fontSize: fontSize / 23)
 						),
 						style: ButtonStyle
 						(
@@ -478,7 +481,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 						}
 					)
 				),
-				SizedBox(height: height / 15,),
+				SizedBox(height: 10),
 			],
 		);
 	}

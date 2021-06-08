@@ -38,8 +38,6 @@ class _RegisterState extends State<Register>
 					color: Colors.white,
 					borderRadius: BorderRadius.circular(40.0)
 				),
-				height: height / 1.6,
-				width: width / 10,
 				child: Form
 				(
 					child: Column
@@ -212,7 +210,8 @@ class _RegisterState extends State<Register>
 										Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
 									},
 								)
-							)
+							),
+							SizedBox(height: 10,),
 						],
 					),
 				),

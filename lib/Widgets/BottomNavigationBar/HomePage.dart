@@ -11,6 +11,7 @@ import 'package:hypd/Widgets/MyBag.dart';
 import 'package:hypd/Widgets/MyWishlist.dart';
 import 'package:hypd/Widgets/Notifications.dart';
 import 'package:hypd/Widgets/Search..dart';
+import 'package:hypd/global.dart';
 
 class HomePage extends StatefulWidget 
 {
@@ -24,6 +25,7 @@ class _HomePageState extends State<HomePage>
 
 	var height;
 	var width;
+	var fontSize;
 
 	bool isScrollLeft = false;
 	bool isScrollRight = false;
@@ -32,8 +34,9 @@ class _HomePageState extends State<HomePage>
 	@override
 	Widget build(BuildContext context)
 	{
-		height = MediaQuery.of(context).size.height;
-		width = MediaQuery.of(context).size.width;
+		height = getHeight(context);
+		width = getWidth(context);
+		fontSize = getFontSize(context);
 
 		return Scaffold
 		(
@@ -70,10 +73,10 @@ class _HomePageState extends State<HomePage>
 					transform:  Matrix4.translationValues(-40.0, 0.0, 0.0),
 					child: Text
 					(
-						"Ruvieroy.",
+						"Baby Munchkins.",
 						style: GoogleFonts.montserrat
 						(
-							fontSize: 20,
+							fontSize: fontSize / 20,
 							color: Colors.black,
 							fontWeight: FontWeight.bold
 						),
@@ -164,6 +167,7 @@ class _HomePageState extends State<HomePage>
 				[
 					Container
 					(
+						height: height * .15,
 						width: width / 6,
 						decoration: BoxDecoration
 						(

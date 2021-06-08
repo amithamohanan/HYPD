@@ -49,7 +49,7 @@ class _ViewAllState extends State<ViewAll>
 					transform:  Matrix4.translationValues(-40.0, 0.0, 0.0),
 					child: Text
 					(
-						"Ruvieroy.",
+						"Baby Munchkins.",
 						style: GoogleFonts.montserrat
 						(
 							fontSize: 20,
@@ -125,7 +125,6 @@ class _ViewAllState extends State<ViewAll>
 						(
 							margin: EdgeInsets.only(left: 15),
 							color: Colors.white,
-							height: height / 2.3,
 							child: Stack
 							(
 								children: 
@@ -134,7 +133,7 @@ class _ViewAllState extends State<ViewAll>
 									(
 										child: Container
 										(
-											height: height / 3,
+											height: 250,
 											width: width / 2.5,
 											child: FittedBox
 											(
@@ -150,10 +149,10 @@ class _ViewAllState extends State<ViewAll>
 									Positioned
 									(
 										left: 0,
-										bottom: height / 30,
+										bottom: 50,
 										child: Container
 										(
-											height: height / 8,
+											height: 100,
 											width: width / 2.8,
 											decoration: BoxDecoration
 											(
@@ -205,8 +204,8 @@ class _ViewAllState extends State<ViewAll>
 										child:Container
 										(
 											margin: EdgeInsets.all(5),
-											height: height / 16,
-											width: width / 10,
+											height: 45,
+											width: 45,
 											decoration: BoxDecoration
 											(
 												color: Color(int.parse("0xfff2f2f0")),

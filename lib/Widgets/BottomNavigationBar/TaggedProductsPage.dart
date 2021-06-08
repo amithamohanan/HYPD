@@ -22,21 +22,25 @@ class _TaggedProductsState extends State<TaggedProducts>
 		height = MediaQuery.of(context).size.height;
 		width = MediaQuery.of(context).size.width;
 
-		return Scaffold
+		return  SafeArea
 		(
-			backgroundColor: Color(int.parse("0xff312247")),
-			body: Container
+			top: false,
+			child: Scaffold
 			(
-				child: Column
+				backgroundColor: Color(int.parse("0xff312247")),
+				body: Container
 				(
-					children:
-					[
-						productDescription(),
-						// priceDetails()
-					],
+					child: Column
+					(
+						children:
+						[
+							productDescription(),
+							// priceDetails()
+						],
+					),
 				),
-			),
-			bottomSheet: priceDetails(),
+				bottomSheet: priceDetails(),
+			)
 		);
 	}
 
@@ -118,7 +122,7 @@ class _TaggedProductsState extends State<TaggedProducts>
 	{
 		return  Container
 		(
-			margin: EdgeInsets.only(top: 30, bottom: 10),
+			margin: EdgeInsets.only(top: 50, bottom: 10),
 			// height: 25,
 			child: ListView.builder
 			(
@@ -139,7 +143,7 @@ class _TaggedProductsState extends State<TaggedProducts>
 									(
 										child: Container
 										(
-											height: height / 3,
+											height: 250,
 											width: width / 2.5,
 											child: FittedBox
 											(
@@ -155,52 +159,48 @@ class _TaggedProductsState extends State<TaggedProducts>
 									Positioned
 									(
 										left: 0,
-										bottom: height / 6,
+										top: height / 4.5,
 										child: Container
 										(
-											height: height / 8,
+											height: 100,
 											width: width / 2.8,
 											decoration: BoxDecoration
 											(
 												borderRadius: BorderRadius.circular(50)
 											),
-											child: Card
+											child:Card
 											(
 												elevation: 10,
 												shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
 												child: ListTile
 												(
-													leading: Column
+													isThreeLine: true,
+													title: Text
 													(
-														crossAxisAlignment: CrossAxisAlignment.start,
-														children: 
-														[
-															SizedBox(height: 5),
-															Text
+														"Yellow Blossom Print Shirt",
+														style: GoogleFonts.montserrat
+														(
+															color: Colors.black,
+															fontWeight: FontWeight.w400,
+															fontSize: 12,
+														),
+													),
+													subtitle: Padding
+													(
+														padding: EdgeInsets.only(top: 5),
+														child: Text
+														(
+															" ₹ 12000",
+															style: GoogleFonts.montserrat
 															(
-																"Travis Scott Tee",
-																style: GoogleFonts.montserrat
-																(
-																	color: Colors.black,
-																	fontWeight: FontWeight.w500,
-																	fontSize: 10,
-																),
+																color: Colors.black,
+																fontWeight: FontWeight.bold,
+																fontSize: 12,
 															),
-															SizedBox(height: 20),
-															Text
-															(
-																" ₹ 12000",
-																style: GoogleFonts.montserrat
-																(
-																	color: Colors.black,
-																	fontWeight: FontWeight.bold,
-																	fontSize: 10,
-																),
-															),
-														],
+														),
 													)
-												),
-											),
+												)
+											)
 										)
 									),
 								],
@@ -373,11 +373,11 @@ class _TaggedProductsState extends State<TaggedProducts>
 		(	
 			shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
 			context: context,
-			builder: (context) 
+			builder: (BuildContext context) 
 			{
-				return FractionallySizedBox
+				return Padding
 				(
-        			heightFactor: 0.9,
+					padding: MediaQuery.of(context).viewInsets,
 					child: Container
 					(
 						margin: EdgeInsets.only(left: 15, right: 15),
@@ -387,6 +387,7 @@ class _TaggedProductsState extends State<TaggedProducts>
 						),
 						child: Column
 						(
+							mainAxisSize: MainAxisSize.min,
 							crossAxisAlignment: CrossAxisAlignment.start,
 							children: 
 							[
@@ -477,91 +478,87 @@ class _TaggedProductsState extends State<TaggedProducts>
 
 	pricePopUp()
 	{
-		return Expanded
+		return Container
 		(
-			child: Container
+			child: Row
 			(
-				child: Row
-				(
-					children: 
-					[
-						Column
-						(
-							crossAxisAlignment: CrossAxisAlignment.start,
-							children: 
-							[
-								InkWell
-								(
-									child: Padding
-									(
-										padding: EdgeInsets.only(left: 15),
-										child: Text
-										(
-											"TOTAL PRICE",
-											style: GoogleFonts.montserrat
-											(
-												color: Colors.black,
-												fontWeight: FontWeight.bold,
-												fontSize: 13,
-											),
-										)
-									),
-								),
-								SizedBox(height: 10,),
-								Padding
+				children: 
+				[
+					Column
+					(
+						crossAxisAlignment: CrossAxisAlignment.start,
+						children: 
+						[
+							InkWell
+							(
+								child: Padding
 								(
 									padding: EdgeInsets.only(left: 15),
 									child: Text
 									(
-										"₹ 8500",
+										"TOTAL PRICE",
 										style: GoogleFonts.montserrat
 										(
 											color: Colors.black,
-											fontWeight: FontWeight.w500,
-											fontSize: 17,
+											fontWeight: FontWeight.bold,
+											fontSize: 13,
 										),
 									)
-								)
-							],
-						),
-						Expanded
-						(
-							child: Container
+								),
+							),
+							SizedBox(height: 10,),
+							Padding
 							(
-								margin: EdgeInsets.only(bottom:15, left: 15, right: 15 ),
-								height: MediaQuery.of(context).size.height / 12,
-								width: double.infinity,
-								child: ElevatedButton
+								padding: EdgeInsets.only(left: 15),
+								child: Text
 								(
-									child: Text
+									"₹ 8500",
+									style: GoogleFonts.montserrat
 									(
-										"Express Checkout",
-										style: TextStyle(fontSize: 16)
+										color: Colors.black,
+										fontWeight: FontWeight.w500,
+										fontSize: 17,
 									),
-									style: ButtonStyle
-									(
-										foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-										backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
-										shape: MaterialStateProperty.all<RoundedRectangleBorder>
-										(
-											RoundedRectangleBorder
-											(
-												borderRadius: BorderRadius.circular(20.5),
-												side: BorderSide(color: Colors.white38)
-											)
-										)
-									),
-									onPressed: ()
-									{
-										// Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
-									}
 								)
 							)
+						],
+					),
+					Expanded
+					(
+						child: Container
+						(
+							margin: EdgeInsets.only(bottom:15, left: 15, right: 15 ),
+							height: MediaQuery.of(context).size.height / 12,
+							width: double.infinity,
+							child: ElevatedButton
+							(
+								child: Text
+								(
+									"Express Checkout",
+									style: TextStyle(fontSize: 16)
+								),
+								style: ButtonStyle
+								(
+									foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+									backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
+									shape: MaterialStateProperty.all<RoundedRectangleBorder>
+									(
+										RoundedRectangleBorder
+										(
+											borderRadius: BorderRadius.circular(20.5),
+											side: BorderSide(color: Colors.white38)
+										)
+									)
+								),
+								onPressed: ()
+								{
+									// Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+								}
+							)
 						)
-					],
-				)
+					)
+				],
 			)
 		);
 	}
-
 }

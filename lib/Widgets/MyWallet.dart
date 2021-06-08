@@ -97,7 +97,7 @@ class _MyWalletState extends State<MyWallet>
 			child:
 			Text
 			(
-				"Ruvieroy Credit Wallet",
+				"Baby Munchkins Credit Wallet",
 				style: GoogleFonts.montserrat
 				(
 					fontWeight: FontWeight.w200,

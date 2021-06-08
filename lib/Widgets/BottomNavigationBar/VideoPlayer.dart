@@ -42,12 +42,7 @@ class _PlayerState extends State<Player>
 		// player
 	Widget videoPlayer()
 	{
-		return 
-		// AspectRatio
-		// (
-		// 	// aspectRatio: MediaQuery.of(context).size.width / MediaQuery.of(context).size.height,
-		// 	child: 
-			VideoPlayer(_controller);
+		return VideoPlayer(_controller);
 	}
 
 }

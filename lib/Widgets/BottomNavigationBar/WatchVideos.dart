@@ -1,14 +1,10 @@
-import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/TaggedProductsPage.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/VideoPlayer.dart';
-import 'package:hypd/Widgets/MyBag.dart';
-import 'package:hypd/Widgets/MyWishlist.dart';
-import 'package:hypd/Widgets/Notifications.dart';
-import 'package:video_player/video_player.dart';
+import 'package:hypd/global.dart';
 
 class WatchVideo extends StatefulWidget
 {
@@ -20,6 +16,7 @@ class _WatchVideoState extends State<WatchVideo>
 {
 	var height;
 	var width;
+	var fontSize;
 	var random;
 
 	bool isFavourite = false;
@@ -38,9 +35,9 @@ class _WatchVideoState extends State<WatchVideo>
 	@override
 	Widget build(BuildContext context)
 	{
-		height = MediaQuery.of(context).size.height;
-		width = MediaQuery.of(context).size.width;
-		random = new Random();
+		height = getHeight(context);
+		width = getWidth(context);
+		fontSize = getFontSize(context);
 
 		return Scaffold
 		(
@@ -99,142 +96,52 @@ class _WatchVideoState extends State<WatchVideo>
 		);
 	}
 
-	appBar()
-	{
-		return PreferredSize
-		(
-        	preferredSize: Size.fromHeight(50.0),
-			child: AppBar
-			(
-				elevation: 0,
-				backgroundColor: Colors.white,
-				centerTitle: false,
-				titleSpacing: 0.0,
-				leading: Text(""),
-				title:  Transform
-				(
-					transform:  Matrix4.translationValues(-40.0, 0.0, 0.0),
-					child: Text
-					(
-						"Ruvieroy.",
-						style: GoogleFonts.montserrat
-						(
-							fontSize: 20,
-							color: Colors.black,
-							fontWeight: FontWeight.bold
-						),
-					),
-				),
-				actions:
-				[
-					Container
-					(
-						margin: EdgeInsets.all(5),
-						height: 10,
-						width: 45,
-						decoration: BoxDecoration
-						(
-							color: Color(int.parse("0xfff2f2f0")),
-							borderRadius: BorderRadius.circular(20)
-						),
-						child: IconButton
-						(
-							onPressed: ()
-							{
-								Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications()));
-							},
-							icon: Icon(Icons.notifications_none_outlined),
-							color: Colors.black,
-						),
-					),
-					Container
-					(
-						margin: EdgeInsets.all(5),
-						height: 10,
-						width: 45,
-						decoration: BoxDecoration
-						(
-							color: Color(int.parse("0xfff2f2f0")),
-							borderRadius: BorderRadius.circular(20)
-						),
-						child: IconButton
-						(
-							onPressed: ()
-							{
-								Navigator.push(context, MaterialPageRoute(builder: (context) => MyWishlist()));
-							},
-							icon: Icon(Icons.favorite_border),
-							color: Colors.black,
-						),
-					),
-					Container
-					(
-						margin: EdgeInsets.all(5),
-						height: 10,
-						width: 45,
-						decoration: BoxDecoration
-						(
-							color: Color(int.parse("0xfff2f2f0")),
-							borderRadius: BorderRadius.circular(20)
-						),
-						child: IconButton
-						(
-							onPressed: ()
-							{
-								Navigator.push(context, MaterialPageRoute(builder: (context) => MyBag()));
-							},
-							icon: Icon(Icons.shopping_bag_outlined),
-							color: Colors.black,
-						)
-					)
-				],
-			)
-		);
-	}
-
 	buttons(context)
 	{
 		return Positioned
 		(
 			right: 5,
 			bottom: 10,
-			child: Column
+			child: Container
 			(
-				children:
-				[
-					// my favourite
-					myFavourite(),
-					Text
-					(
-						"6",
-						style: GoogleFonts.montserrat
+				child: Column
+				(
+					children:
+					[
+						// my favourite
+						myFavourite(),
+						Text
 						(
-							color: Colors.white,
-							fontSize: 11,
-							fontWeight: FontWeight.w300
+							"6",
+							style: GoogleFonts.montserrat
+							(
+								color: Colors.white,
+								fontSize: 11,
+								fontWeight: FontWeight.w300
+							),
 						),
-					),
-					SizedBox(height: 20,),
-					// viewers
-					viewers(),
-					Text
-					(
-						"74",
-						style: GoogleFonts.montserrat
+						SizedBox(height: 20,),
+						// viewers
+						viewers(),
+						Text
 						(
-							color: Colors.white,
-							fontSize: 13,
+							"74",
+							style: GoogleFonts.montserrat
+							(
+								color: Colors.white,
+								fontSize: 13,
+							),
 						),
-					),
-					SizedBox(height: 15,),
-					// share
-					share(),
-					SizedBox(height: 15,),
-					// add to cart
-					addToCart(context),
-					SizedBox(height: 15,),
+						SizedBox(height: 15,),
+						// share
+						share(),
+						SizedBox(height: 15,),
+						// add to cart
+						addToCart(context),
+						SizedBox(height: 15,),
 
-				],
+					],
+				),
 			)
 		);
 	}
@@ -243,19 +150,13 @@ class _WatchVideoState extends State<WatchVideo>
 	{
 		return Container
 		(
-			// margin: EdgeInsets.all(5),
-			height: 30,
-			width: 30,
-			decoration: BoxDecoration
-			(
-				// color: Color(int.parse("0xfff2f2f0")),
-				borderRadius: BorderRadius.circular(10)
-			),
+			height: 45,
+			width: 45,
 			child: FittedBox
 			(
 				child: IconButton
 				(
-					iconSize: 50,
+					iconSize: 30,
 					onPressed: ()
 					{
 						setState(()
@@ -283,30 +184,20 @@ class _WatchVideoState extends State<WatchVideo>
 	{
 		return Container
 		(
-			height: 30,
-			width: 30,
-			decoration: BoxDecoration
-			(
-				borderRadius: BorderRadius.circular(10)
-			),
+			height: 45,
+			width: 45,
 			child: FittedBox
 			(
 				child: IconButton
 				(
-					iconSize: 50,
+					iconSize: 30,
 					onPressed: ()
 					{
-						setState(()
-						{
-							isFavourite = !isFavourite;
-						});
+						taggedProductsPopUp(context);
 					},
-					icon: Icon
-					(
-						Icons.remove_red_eye_outlined,
-						color: Colors.white70,
-					),
-				),
+					icon: Icon(Icons.remove_red_eye_outlined,
+					color: Colors.white70),
+				)
 			)
 		);
 	}
@@ -315,17 +206,13 @@ class _WatchVideoState extends State<WatchVideo>
 	{
 		return Container
 		(
-			height: 30,
-			width: 30,
-			decoration: BoxDecoration
-			(
-				borderRadius: BorderRadius.circular(10)
-			),
+			height: 45,
+			width: 45,
 			child: FittedBox
 			(
 				child: IconButton
 				(
-					iconSize: 50,
+					iconSize: 30,
 					onPressed: ()
 					{
 						Navigator.push(context, MaterialPageRoute(builder: (context) => TaggedProducts()));
@@ -356,6 +243,7 @@ class _WatchVideoState extends State<WatchVideo>
 			(
 				child: IconButton
 				(
+					iconSize: 30,
 					onPressed: ()
 					{
 						taggedProductsPopUp(context);
@@ -407,11 +295,11 @@ class _WatchVideoState extends State<WatchVideo>
 										[
 											Text
 											(
-												"Ruvieroy Store",
+												"Baby Munchkins",
 												style: GoogleFonts.montserrat
 												(
 													color: Colors.white,
-													fontSize: 15,
+													fontSize: fontSize / 25,
 													fontWeight: FontWeight.w600
 												),
 											),
@@ -503,7 +391,7 @@ class _WatchVideoState extends State<WatchVideo>
 			{
 				return FractionallySizedBox
 				(
-        			heightFactor: 0.65,
+        			heightFactor: 0.55,
 					child: Container
 					(
 						decoration: BoxDecoration
@@ -569,7 +457,7 @@ class _WatchVideoState extends State<WatchVideo>
 		return  Container
 		(
 			margin: EdgeInsets.only(top: 2, bottom: 0),
-			height: height / 2.5,
+			height: height * .40,
 			child: ListView.builder
 			(
 				scrollDirection: Axis.horizontal,
@@ -589,7 +477,7 @@ class _WatchVideoState extends State<WatchVideo>
 									(
 										child: Container
 										(
-											height: height / 3,
+											height: 250,
 											width: width / 2.5,
 											child: FittedBox
 											(
@@ -605,10 +493,10 @@ class _WatchVideoState extends State<WatchVideo>
 									Positioned
 									(
 										left: 0,
-										bottom: 0,
+										bottom: 50,
 										child: Container
 										(
-											height: height / 8,
+											height: 100,
 											width: width / 2.6,
 											decoration: BoxDecoration
 											(

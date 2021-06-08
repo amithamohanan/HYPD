@@ -48,7 +48,7 @@ class _CollectionsState extends State<Collections>
 					transform:  Matrix4.translationValues(-40.0, 0.0, 0.0),
 					child: Text
 					(
-						"Ruvieroy.",
+						"Baby Munchkins.",
 						style: GoogleFonts.montserrat
 						(
 							fontSize: 20,
@@ -126,15 +126,12 @@ class _CollectionsState extends State<Collections>
 								margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),
 								height: height / 5.5,
 								width: width,
-								child: FittedBox
-								(
+								
 									child:ClipRRect
 									(
-										borderRadius: BorderRadius.circular(50.0),
-										child: Image.network("https://images.pexels.com/photos/862848/pexels-photo-862848.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
+										borderRadius: BorderRadius.circular(20.0),
+										child: Image.network("https://images.pexels.com/photos/862848/pexels-photo-862848.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500", fit: BoxFit.cover,),
 									),
-									fit: BoxFit.fill,
-								)
 							),
 							Positioned
 							(

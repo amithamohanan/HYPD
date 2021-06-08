@@ -7,6 +7,7 @@ import 'package:hypd/Widgets/MyBag.dart';
 import 'package:hypd/Widgets/MyWishlist.dart';
 import 'package:hypd/Widgets/Notifications.dart';
 import 'package:hypd/Widgets/Utilities/SelectSizeModal.dart';
+import 'package:hypd/global.dart';
 
 class ProductPage extends StatefulWidget
 {
@@ -36,11 +37,12 @@ class _ProductPageState extends State<ProductPage>
 	@override
 	Widget build(BuildContext context)
 	{
-		height = MediaQuery.of(context).size.height;
-		width = MediaQuery.of(context).size.width;
+		height = getHeight(context);
+		width = getWidth(context);
 		
 		return Scaffold
 		(
+			extendBodyBehindAppBar: true,
 			backgroundColor: Colors.white,
 			appBar: appBar(),
 			body: Container
@@ -68,8 +70,9 @@ class _ProductPageState extends State<ProductPage>
 	{
 		return AppBar
 		(
+			// excludeHeaderSemantics: false,
 			elevation: 0,
-			backgroundColor: Colors.black,
+			backgroundColor: Colors.transparent,
 			leading: Container
 			(
 				margin: EdgeInsets.all(5),
@@ -102,7 +105,7 @@ class _ProductPageState extends State<ProductPage>
 					width: 45,
 					decoration: BoxDecoration
 					(
-						color: Color(int.parse("0xfff2f2f0")),
+						color: Colors.white,
 						borderRadius: BorderRadius.circular(20)
 					),
 					child: IconButton
@@ -122,7 +125,7 @@ class _ProductPageState extends State<ProductPage>
 					width: 45,
 					decoration: BoxDecoration
 					(
-						color: Color(int.parse("0xfff2f2f0")),
+						color: Colors.white,
 						borderRadius: BorderRadius.circular(20)
 					),
 					child: IconButton
@@ -142,7 +145,7 @@ class _ProductPageState extends State<ProductPage>
 					width: 45,
 					decoration: BoxDecoration
 					(
-						color: Color(int.parse("0xfff2f2f0")),
+						color: Colors.white,
 						borderRadius: BorderRadius.circular(20)
 					),
 					child: IconButton
@@ -380,12 +383,11 @@ class _ProductPageState extends State<ProductPage>
 	{
 		return Container
 		(
-			height: height / 7,
 			margin: EdgeInsets.only(left: 15, right: 15),
 			decoration: BoxDecoration
 			(
 				color: Color(int.parse("0xfff0f2f2")),
-				borderRadius: BorderRadius.circular(25),
+				borderRadius: BorderRadius.circular(10),
 			),
 			child: Row
 			(
@@ -393,7 +395,7 @@ class _ProductPageState extends State<ProductPage>
 				[
 					Container
 					(
-						margin: EdgeInsets.only(bottom: 12, left: 10, right: 10),
+						margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
 						height: height / 20,
 						width: width / 15,
 						child: Image.network("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWJsNgL5xt6MOZ6Y8XsunvSA3kz5KtxJ6zPA&usqp=CAU"),
@@ -436,6 +438,7 @@ class _ProductPageState extends State<ProductPage>
 										fontSize: 10
 									)
 								),
+								SizedBox(height: 5,),
 							],
 						),
 					),

@@ -64,27 +64,22 @@ class _LoginState extends State<Login>
 						isNewUser ? Register() : skipText(),
 						!isNewUser ? Positioned
 						(
-							left: width / 30,
-							right: width / 30,
-							bottom: 0,
-							child: Container
+							right: width/ 40,
+							left: width / 40,
+							bottom: 20,
+							child: Form
 							(
-								width: width,
-								height: height / 1.6,
 								child: Column
 								(
 									crossAxisAlignment: CrossAxisAlignment.start,
 									children: 
 									[
 										loginText(),
-										Expanded(child: SizedBox(height: 30,),),
 										socialMediaIcons(),
-										Expanded(child: SizedBox(height: 30,),),
 										formField(),
-										Expanded(child: SizedBox(height: 30,),),
 									],
 								),
-							)
+							),
 						): SizedBox.shrink()
 					],
 				),
@@ -131,51 +126,59 @@ class _LoginState extends State<Login>
 
 	Widget loginText()
 	{
-		return  Text
+		return  Padding
 		(
-			"Log in with Social Media",
-			style: GoogleFonts.montserrat
+			padding: EdgeInsets.only(bottom: 20),
+			child: Text
 			(
-				color: Colors.white,
-				fontSize: fontSize / 20,
-				fontWeight: FontWeight.w300
-			)
+				"Log in with Social Media",
+				style: GoogleFonts.montserrat
+				(
+					color: Colors.white,
+					fontSize: fontSize / 20,
+					fontWeight: FontWeight.w300
+				)
+			),
 		);
 	}
 
 	Widget socialMediaIcons()
 	{
-		return Row
+		return Padding
 		(
-			children: 
-			[
-				facebookLogin(),
-				SizedBox(width: 10,),
-				googleLogin(),
-				SizedBox(width: 10,),
-				Text
-				(
-					"OR",
-					style: GoogleFonts.montserrat
+			padding: EdgeInsets.only(bottom: 20),
+			child: Row
+			(
+				children: 
+				[
+					facebookLogin(),
+					SizedBox(width: 10,),
+					googleLogin(),
+					SizedBox(width: 10,),
+					Text
 					(
-						color: Colors.white,
-						fontSize: 12,
-						fontWeight: FontWeight.w300,
+						"OR",
+						style: GoogleFonts.montserrat
+						(
+							color: Colors.white,
+							fontSize: 12,
+							fontWeight: FontWeight.w300,
+						),
 					),
-				),
-				SizedBox(width: 10,),
-				Container
-				(
-					height: MediaQuery.of(context).size.height / 50,
-					width: MediaQuery.of(context).size.width / 2.7,
-					// width: 75,
-					child: Divider
+					SizedBox(width: 10,),
+					Container
 					(
-						color: Colors.white,
-						thickness: 0.6,
-					),
-				)
-			],
+						height: MediaQuery.of(context).size.height / 50,
+						width: MediaQuery.of(context).size.width / 2.7,
+						// width: 75,
+						child: Divider
+						(
+							color: Colors.white,
+							thickness: 0.6,
+						),
+					)
+				],
+			)
 		);
 	}
 
@@ -201,43 +204,41 @@ class _LoginState extends State<Login>
 	{
 		return Container
 		(
-			padding: EdgeInsets.only(left: 25, right: 25, top: 25),
+			padding: EdgeInsets.fromLTRB(25, 25, 25, 5),
 			decoration: BoxDecoration
 			(
 				color: Colors.white,
 				borderRadius: BorderRadius.circular(40.0)
 			),
-			height:  height * 0.45,
-			width:  width,
 			child: Form
 			(
 				child: Column
 				(
 					crossAxisAlignment: CrossAxisAlignment.start,
-					children: 
+					children:
 					[
-						 Text
+						Text
 						(
 							"Log in to Continue",
 							style: GoogleFonts.montserrat
 							(
 								color: Colors.black,
-								fontSize: fontSize / 20,
+								fontSize: 20,
 								fontWeight: FontWeight.bold
 							),
 						),
-						SizedBox(height: height / 30,),
+						SizedBox(height: 20),
 						Text
+						(
+							"Email or Phone Number",
+							style: GoogleFonts.montserrat
 							(
-								"Email or Phone Number",
-								style: GoogleFonts.montserrat
-								(
-									color: Colors.grey,
-									fontSize: fontSize / 25,
-									fontWeight: FontWeight.w300
-								),
+								color: Colors.grey,
+								fontSize: fontSize / 25,
+								fontWeight: FontWeight.w300
 							),
-						SizedBox(height: height / 30,),
+						),
+						SizedBox(height: 20),
 						TextFormField
 						(
 							decoration: InputDecoration
@@ -245,7 +246,7 @@ class _LoginState extends State<Login>
 								hintStyle:  GoogleFonts.montserrat
 								(
 									color: Colors.grey,
-									fontSize: 12
+									fontSize: fontSize / 30,
 								),
 								counterText: "",
 								contentPadding: EdgeInsets.all(0),
@@ -254,80 +255,75 @@ class _LoginState extends State<Login>
 								focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 							),
 						),
-						Expanded
-						(
-							child: Center
-							(
-								child: Container
-								(
-									height: height  / 13,
-									width: double.infinity,
-									child: ElevatedButton
-									(
-										child: Text
-										(
-											"Submit",
-											style: GoogleFonts.montserrat(fontSize: fontSize / 20)
-										),
-										style: ButtonStyle
-										(
-											foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-											backgroundColor: MaterialStateProperty.all<Color>(Colors.white70),
-											shape: MaterialStateProperty.all<RoundedRectangleBorder>
-											(
-												RoundedRectangleBorder
-												(
-													borderRadius: BorderRadius.circular(20.5),
-													side: BorderSide(color: Colors.white38)
-												)
-											)
-										),
-										onPressed: ()
-										{
-											Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyOTP()));
-										}
-									)
-								)
-							),
-						),
-						Expanded
+						SizedBox(height: 25,),
+						Center
 						(
 							child: Container
 							(
+								height: height / 11,
 								width: double.infinity,
-								child: GestureDetector
+								child: ElevatedButton
 								(
-									child: RichText
+									child: Text
 									(
-										textAlign: TextAlign.center,
-										text: TextSpan
-										(
-											text: "Don't have an account? ",
-											style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 13), /*defining default style is optional */
-											children:
-											[
-												TextSpan
-												(
-													text: "Create Account",
-													style: GoogleFonts.montserrat
-													(
-														color: Colors.black,
-														fontWeight: FontWeight.bold
-													)
-												),
-											],
-										),
+										"Submit",
+										style: GoogleFonts.montserrat(fontSize: fontSize / 20,)
 									),
-									onTap: ()
-									{
-										setState(() 
-										{
-											isNewUser = true;
-										});
-									},
+									style: ButtonStyle
+									(
+										foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+										backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
+										shape: MaterialStateProperty.all<RoundedRectangleBorder>
+										(
+											RoundedRectangleBorder
+											(
+												borderRadius: BorderRadius.circular(20.5),
+												side: BorderSide(color: Colors.white38)
+											)
+										)
+									),
+									onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyOTP()))
+
 								)
 							)
-						)
+						),
+						SizedBox(height: 10,),
+						Container
+						(
+							width: double.infinity,
+							child: GestureDetector
+							(
+								child: RichText
+								(
+									textAlign: TextAlign.center,
+									text: TextSpan
+									(
+										text: "Don't have an account? ",
+										style: GoogleFonts.montserrat(color: Colors.grey, fontSize: 13), /*defining default style is optional */
+										children:
+										[
+											TextSpan
+											(
+												text: "Create Account",
+												style: GoogleFonts.montserrat
+												(
+													color: Colors.black,
+													fontWeight: FontWeight.bold
+												)
+											),
+										],
+									),
+								),
+								onTap: ()
+								{
+									setState(() 
+									{
+										isNewUser = true;
+									});
+								},
+							)
+						),
+						SizedBox(height: 10,),
 					],
 				),
 			),

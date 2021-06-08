@@ -7,6 +7,7 @@ import 'package:hypd/Widgets/MyAddress.dart';
 import 'package:hypd/Widgets/MyOrders.dart';
 import 'package:hypd/Widgets/MyWallet.dart';
 import 'package:hypd/Widgets/settings.dart';
+import 'package:hypd/global.dart';
 
 class UserAccount extends StatefulWidget
 {
@@ -18,6 +19,7 @@ class _UserAccountState extends State<UserAccount>
 {
 	var height;
 	var width;
+	var fontSize;
 
 	@override
 	void initState()
@@ -28,8 +30,9 @@ class _UserAccountState extends State<UserAccount>
 	@override
 	Widget build(BuildContext context)
 	{
-		height = MediaQuery.of(context).size.height;
-		width = MediaQuery.of(context).size.width;
+		height = getHeight(context);
+		width = getWidth(context);
+		fontSize = getFontSize(context);
 
 		return Scaffold
 		(
@@ -45,12 +48,14 @@ class _UserAccountState extends State<UserAccount>
 			child: Column
 			(
 				crossAxisAlignment: CrossAxisAlignment.start,
+				mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 				children:
 				[
+					SizedBox(height:  20),
 					userAccount(),
-					SizedBox(height:  height / 30,),
+					Expanded(child: Text("")),
 					inviteLink(),
-					SizedBox(height:  5,),
+					// SizedBox(height:  5,),
 				],
 			),
 		);
@@ -60,10 +65,8 @@ class _UserAccountState extends State<UserAccount>
 	{
 		return Container
 		(
-			margin: EdgeInsets.all(20),
+			margin: EdgeInsets.only(top: 30, left: 10, right: 10, bottom: 25),
 			padding: EdgeInsets.all(5),
-			height: height / 1.9,
-
 			decoration: BoxDecoration
 			(
 				borderRadius: BorderRadius.circular(25),
@@ -75,14 +78,15 @@ class _UserAccountState extends State<UserAccount>
 				children:
 				[
 					settingsIcon(),
-					SizedBox(height: 5,),
+					SizedBox(height: 10,),
 					imageUpload(),
-					SizedBox(height: 5,),
+					SizedBox(height: 10),
 					text(),
 					SizedBox(height: 5,),
 					orderDetails1(),
 					SizedBox(height: 5,),
-					orderDetails2()
+					orderDetails2(),
+					SizedBox(height: 20,),
 				],
 			),
 		);
@@ -187,11 +191,11 @@ class _UserAccountState extends State<UserAccount>
 				[
 					Text
 					(
-						"Ruvieroy Credit Wallet",
+						"Baby Munchkins Credit Wallet",
 						style: GoogleFonts.montserrat
 						(
 							color: Colors.white,
-							fontSize: 11,
+							fontSize: fontSize / 25,
 							fontWeight: FontWeight.w200,
 						),
 					),
@@ -202,7 +206,7 @@ class _UserAccountState extends State<UserAccount>
 						style: GoogleFonts.montserrat
 						(
 							color: Colors.amber,
-							fontSize: 18,
+							fontSize: fontSize / 25,
 							fontWeight: FontWeight.w600,
 						),
 					)
@@ -271,18 +275,15 @@ class _UserAccountState extends State<UserAccount>
 						)
 					],
 				),
-				style: ButtonStyle
+				style: OutlinedButton.styleFrom
 				(
-					shape: MaterialStateProperty.all<RoundedRectangleBorder>
+      				shape: RoundedRectangleBorder
 					(
-						RoundedRectangleBorder
-						(
-							side: BorderSide(color: Colors.white)
-						)
-					)
-				),
-
-			),
+         				borderRadius: BorderRadius.circular(8.0),
+      				),
+      				side: BorderSide(width: 1, color: Colors.white38),
+   				)
+			)
 		);
 	}
 
@@ -321,17 +322,14 @@ class _UserAccountState extends State<UserAccount>
 						)
 					],
 				),
-				style: ButtonStyle
+				style: OutlinedButton.styleFrom
 				(
-					shape: MaterialStateProperty.all<RoundedRectangleBorder>
+      				shape: RoundedRectangleBorder
 					(
-						RoundedRectangleBorder
-						(
-							side: BorderSide(color: Colors.white)
-						)
-					)
-				),
-
+         				borderRadius: BorderRadius.circular(8.0),
+      				),
+      				side: BorderSide(width: 1, color: Colors.white38),
+   				)
 			),
 		);
 	}
@@ -396,16 +394,14 @@ class _UserAccountState extends State<UserAccount>
 						)
 					],
 				),
-				style: ButtonStyle
+				style: OutlinedButton.styleFrom
 				(
-					shape: MaterialStateProperty.all<RoundedRectangleBorder>
+      				shape: RoundedRectangleBorder
 					(
-						RoundedRectangleBorder
-						(
-							side: BorderSide(color: Colors.white)
-						)
-					)
-				),
+         				borderRadius: BorderRadius.circular(8.0),
+      				),
+      				side: BorderSide(width: 1, color: Colors.white38),
+   				)
 			),
 		);
 	}
@@ -445,16 +441,14 @@ class _UserAccountState extends State<UserAccount>
 						)
 					],
 				),
-				style: ButtonStyle
+				style: OutlinedButton.styleFrom
 				(
-					shape: MaterialStateProperty.all<RoundedRectangleBorder>
+      				shape: RoundedRectangleBorder
 					(
-						RoundedRectangleBorder
-						(
-							side: BorderSide(color: Colors.white)
-						)
-					)
-				),
+         				borderRadius: BorderRadius.circular(8.0),
+      				),
+      				side: BorderSide(width: 1, color: Colors.white38),
+   				)
 
 			),
 		);
@@ -478,91 +472,105 @@ class _UserAccountState extends State<UserAccount>
 					mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 					children:
 					[
-						Container
+						Expanded
 						(
-							margin: EdgeInsets.only(top: 20),
-							child: Column
+							child:
+							 Container
 							(
-								crossAxisAlignment: CrossAxisAlignment.start,
-								mainAxisAlignment: MainAxisAlignment.start,
-								children: 
-								[
-									Text
-									(
-										"Refer a friend",
-										style: GoogleFonts.montserrat
+								// color: Colors.red,
+								// width: width * .55,
+								margin: EdgeInsets.only(top: 20, right: 10),
+								child: Column
+								(
+									crossAxisAlignment: CrossAxisAlignment.start,
+									// mainAxisAlignment: MainAxisAlignment.start,
+									children: 
+									[
+										Text
 										(
-											fontWeight: FontWeight.bold,
-											color: Colors.black,
-										),
-									),
-									SizedBox(height: height / 25,),
-									Text
-									(
-										"Invite your friends to Ruvieroy and",
-										style: GoogleFonts.montserrat
-										(
-											fontSize: 13,
-											fontWeight: FontWeight.w300,
-											color: Colors.black54,
-										),
-										textAlign: TextAlign.left,
-									),
-									Text
-									(
-										"enjoy shopping togethere!",
-										style: GoogleFonts.montserrat
-										(
-											fontSize: 13,
-											fontWeight: FontWeight.w300,
-											color: Colors.black54,
-										),
-										textAlign: TextAlign.left,
-									),
-									SizedBox(height: height / 30,),
-									Container
-									(
-										height: height / 13,
-										width: width / 2.5,
-										child: ElevatedButton
-										(
-											child: Text
+											"Refer a friend",
+											style: GoogleFonts.montserrat
 											(
-												"Invite Friends",
-												style: GoogleFonts.montserrat
-												(
-													fontWeight: FontWeight.bold,
-													fontSize: 14,
-													color: Colors.white
-												)
+												fontWeight: FontWeight.bold,
+												color: Colors.black,
 											),
-											style: ButtonStyle
-											(
-												foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-												backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
-												shape: MaterialStateProperty.all<RoundedRectangleBorder>
+										),
+										SizedBox(height: height / 25,),
+										Wrap
+										(
+											children: 
+											[
+												Text
 												(
-													RoundedRectangleBorder
+													"Invite your friends to Baby Munchkins and enjoy shopping togethere!",
+													style: GoogleFonts.montserrat
 													(
-														borderRadius: BorderRadius.circular(15.5),
-														side: BorderSide(color: Colors.white38)
+														fontSize: fontSize / 30,
+														fontWeight: FontWeight.w300,
+														color: Colors.black54,
+													),
+													textAlign: TextAlign.left,
+												),
+											],
+										),
+										// Text
+										// (
+										// 	"enjoy shopping togethere!",
+										// 	style: GoogleFonts.montserrat
+										// 	(
+										// 		fontSize: 13,
+										// 		fontWeight: FontWeight.w300,
+										// 		color: Colors.black54,
+										// 	),
+										// 	textAlign: TextAlign.left,
+										// ),
+										SizedBox(height: height / 30,),
+										Container
+										(
+											height: height / 13,
+											width: width / 2.5,
+											child: ElevatedButton
+											(
+												child: Text
+												(
+													"Invite Friends",
+													style: GoogleFonts.montserrat
+													(
+														fontWeight: FontWeight.bold,
+														fontSize: 14,
+														color: Colors.white
 													)
-												)
-											),
-											onPressed: ()
-											{
-												// Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AddUserDetails()));
-											}
+												),
+												style: ButtonStyle
+												(
+													foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+													backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
+													shape: MaterialStateProperty.all<RoundedRectangleBorder>
+													(
+														RoundedRectangleBorder
+														(
+															borderRadius: BorderRadius.circular(15.5),
+															side: BorderSide(color: Colors.white38)
+														)
+													)
+												),
+												onPressed: ()
+												{
+													// Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AddUserDetails()));
+												}
+											)
 										)
-									)
-								],
-							),
+									],
+								),
+							)
 						),
-						Container
+						Expanded
 						(
-							height: height / 2,
-							width: width / 3,
-							child: (Image.asset("assets/images/59347-gift-box (2).gif", fit: BoxFit.cover,))
+							child: FittedBox
+							(
+								fit: BoxFit.cover,
+								child: Image.asset("assets/images/59347-gift-box (2).gif", fit: BoxFit.contain,),
+							)
 						)
 					],
 				),

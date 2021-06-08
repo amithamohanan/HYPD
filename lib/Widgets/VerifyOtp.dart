@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/AddUserDetails.dart';
+import 'package:hypd/global.dart';
 
 class VerifyOTP extends StatefulWidget 
 {
@@ -15,6 +16,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 {
 	var height;
 	var width;
+	var fontSize;
 
 	late Timer _timer;
 
@@ -56,8 +58,10 @@ class _VerifyOTPState extends State<VerifyOTP>
 	@override
 	Widget build(BuildContext context) 
 	{
-		height = MediaQuery.of(context).size.height;
-		width = MediaQuery.of(context).size.width;
+
+		fontSize = getFontSize(context);
+		height = getHeight(context);
+		width = getWidth(context);
 
 		return SafeArea
 		(
@@ -83,26 +87,30 @@ class _VerifyOTPState extends State<VerifyOTP>
 		(
 			leadingWidth: 50,
 			elevation: 0,
-			leading: Container
+			leading: Transform
 			(
-				padding: EdgeInsets.all(7),
-				decoration: BoxDecoration
+				transform:  Matrix4.translationValues(20.0, 0.0, 0.0),
+				child: Container
 				(
-					color: Colors.white,
-					borderRadius: BorderRadius.circular(20)
-				),
-				height: height / 12,
-				width: width / 7,
-				child: Center
-				(
-					child: IconButton
+					// padding: EdgeInsets.all(7),
+					decoration: BoxDecoration
 					(
-						onPressed: ()
-						{
-							Navigator.pop(context);
-						}, 
-						icon: Icon(Icons.arrow_back_ios),
-						color: Colors.black,
+						color: Colors.white,
+						borderRadius: BorderRadius.circular(20)
+					),
+					height: 40,
+					width: 40,
+					child: FittedBox
+					(
+						child: IconButton
+						(
+							onPressed: ()
+							{
+								Navigator.pop(context);
+							}, 
+							icon: Icon(Icons.arrow_back_ios),
+							color: Colors.black,
+						),
 					),
 				),
 			),
@@ -113,7 +121,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 				style: GoogleFonts.montserrat
 				(
 					color: Colors.white,
-					fontSize: 13
+					fontSize: fontSize / 25
 				),
 			),
 			backgroundColor: Color(int.parse("0xff312247")),
@@ -144,7 +152,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 						style: GoogleFonts.montserrat
 						(
 							color: Colors.black,
-							fontSize: 15,
+							fontSize: fontSize / 25,
 							fontWeight: FontWeight.bold
 						),
 					),
@@ -155,7 +163,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 						style: GoogleFonts.montserrat
 						(
 							color: Colors.grey,
-							fontSize: 12,
+							fontSize: fontSize / 30,
 							// fontWeight: FontWeight.bold
 						),
 					),
@@ -404,7 +412,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 				text: TextSpan
 				(
 					text: "Didn't receive OTP? ",
-					style: TextStyle(color: Colors.grey, fontSize: 13), /*defining default style is optional */
+					style: TextStyle(color: Colors.grey, fontSize: fontSize / 35), /*defining default style is optional */
 					children:
 					[
 						TextSpan
@@ -429,8 +437,8 @@ class _VerifyOTPState extends State<VerifyOTP>
 	{
 		return Container
 		(
-			height: height / 12,
-			width: width / 4,
+			height: 60,
+			width: 110,
 			child: ElevatedButton
 			(
 				child: Text
@@ -438,7 +446,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 					"Confirm",
 					style: GoogleFonts.montserrat
 					(
-						fontSize: 14,
+						fontSize: fontSize / 25,
 						color: Colors.white
 					)
 				),

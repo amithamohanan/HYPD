@@ -1,5 +1,3 @@
-// import 'package:carousel_slider/carousel_slider.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -160,36 +158,41 @@ class _ShoppingPageState extends State<ShoppingPage>
 							)
 						]
 					),
-					Positioned
+					Positioned.fill
 					(
-						left: width / 3.8,
-						bottom: height / 20,
-						child: Column
+						child: Align
 						(
-							crossAxisAlignment: CrossAxisAlignment.center,
-							children: 
-							[
-								Text
-								(
-									"Supplements",
-									style: GoogleFonts.montserrat
+							alignment: Alignment.topCenter,
+							child: Column
+							(
+								mainAxisAlignment: MainAxisAlignment.end,
+								crossAxisAlignment: CrossAxisAlignment.center,
+								children: 
+								[
+									Text
 									(
-										fontSize: 20,
-										fontWeight: FontWeight.bold,
-										color: Colors.white
+										"Supplements",
+										style: GoogleFonts.montserrat
+										(
+											fontSize: 20,
+											fontWeight: FontWeight.bold,
+											color: Colors.white
+										),
 									),
-								),
-								Text
-								(
-									"upto 50% off",
-									style: GoogleFonts.montserrat
+									Text
 									(
-										fontSize: 20,
-										fontWeight: FontWeight.bold,
-										color: Color(int.parse("0xffd6a62b"))
+										"upto 50% off",
+										style: GoogleFonts.montserrat
+										(
+											fontSize: 20,
+											fontWeight: FontWeight.bold,
+											color: Color(int.parse("0xffd6a62b"))
+										),
 									),
-								),
-							],
+									SizedBox(height: 10)
+								],
+							
+							)
 						),
 					)
 				],
@@ -266,7 +269,7 @@ class _ShoppingPageState extends State<ShoppingPage>
 			(
 				margin: EdgeInsets.only(left: 15),
 				color: Colors.white,
-				height: height / 2.3,
+				height: 250,
 				child: Stack
 				(
 					children: 
@@ -275,7 +278,7 @@ class _ShoppingPageState extends State<ShoppingPage>
 						(
 							child: Container
 							(
-								height: height / 3,
+								height: 230,
 								width: width / 2.5,
 								child: FittedBox
 								(
@@ -284,70 +287,72 @@ class _ShoppingPageState extends State<ShoppingPage>
 										borderRadius: BorderRadius.circular(50.0),
 										child: Image.network("https://images.pexels.com/photos/2866119/pexels-photo-2866119.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
 									),
-									fit: BoxFit.fill,
+									fit: BoxFit.contain,
+								)
+							)
+						),
+						Positioned.fill
+						(
+							child: Align
+							(
+								alignment: Alignment.bottomLeft,
+								child: Container
+								(
+									height: 80,
+									width: width / 2.8,
+									decoration: BoxDecoration
+									(
+										borderRadius: BorderRadius.circular(50)
+									),
+									child: Card
+									(
+										elevation: 10,
+										shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+										child: ListTile
+										(
+											leading: Column
+											(
+												crossAxisAlignment: CrossAxisAlignment.start,
+												children: 
+												[
+													SizedBox(height: 5),
+													Text
+													(
+														"Travis Scott Tee",
+														style: GoogleFonts.montserrat
+														(
+															color: Colors.black,
+															fontWeight: FontWeight.w500,
+															fontSize: 10,
+														),
+													),
+													SizedBox(height: 20),
+													Text
+													(
+														" ₹ 12000",
+														style: GoogleFonts.montserrat
+														(
+															color: Colors.black,
+															fontWeight: FontWeight.bold,
+															fontSize: 10,
+														),
+													),
+												],
+											)
+										),
+									),
 								)
 							)
 						),
 						Positioned
 						(
-							left: 0,
-							bottom: height / 30,
-							child: Container
-							(
-								height: height / 8,
-								width: width / 2.8,
-								decoration: BoxDecoration
-								(
-									borderRadius: BorderRadius.circular(50)
-								),
-								child: Card
-								(
-									elevation: 10,
-									shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-									child: ListTile
-									(
-										leading: Column
-										(
-											crossAxisAlignment: CrossAxisAlignment.start,
-											children: 
-											[
-												SizedBox(height: 5),
-												Text
-												(
-													"Travis Scott Tee",
-													style: GoogleFonts.montserrat
-													(
-														color: Colors.black,
-														fontWeight: FontWeight.w500,
-														fontSize: 10,
-													),
-												),
-												SizedBox(height: 20),
-												Text
-												(
-													" ₹ 12000",
-													style: GoogleFonts.montserrat
-													(
-														color: Colors.black,
-														fontWeight: FontWeight.bold,
-														fontSize: 10,
-													),
-												),
-											],
-										)
-									),
-								),
-							)
-						),
-						Positioned
-						(
 							top: 5,
-							right: 2,
+							right: 5,
 							child:Container
 							(
 								margin: EdgeInsets.all(5),
-								height: height / 16,
-								width: width / 10,
+								height: 45,
+								width: 45,
 								decoration: BoxDecoration
 								(
 									color: Color(int.parse("0xfff2f2f0")),
@@ -509,32 +514,21 @@ class _ShoppingPageState extends State<ShoppingPage>
 	{
 		return Container
 		(
-			height: height / 4,
+			color: Colors.white,
+			height: height / 7,
 			width: width,
-			margin: EdgeInsets.only(top: 15, bottom: 5, left: 15),
+			margin: EdgeInsets.only(top: 15, left: 15),
 			child:ListView.builder
 			(
 				scrollDirection: Axis.horizontal,
 				itemCount: 10,
 				itemBuilder: (BuildContext context, int index)
 				{
-					return  Row
+					return  
+					CircleAvatar
 					(
-						children: 
-						[
-							Column
-							(
-								children: 
-								[
-									CircleAvatar
-									(
-										radius: 60,
-										backgroundImage: NetworkImage("https://images.pexels.com/photos/974911/pexels-photo-974911.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500")
-									),
-								],
-							),
-							SizedBox(width: 15,)
-						],
+						radius: 60,
+						backgroundImage: NetworkImage("https://images.pexels.com/photos/974911/pexels-photo-974911.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500")
 					);
 				}
 			)

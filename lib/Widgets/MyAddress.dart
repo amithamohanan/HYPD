@@ -20,29 +20,34 @@ class _MyAddressState extends State<MyAddress>
 		height = MediaQuery.of(context).size.height;
 		width = MediaQuery.of(context).size.width;
 
-		return Scaffold
+		return  SafeArea
 		(
-			resizeToAvoidBottomInset: false,
-			backgroundColor: Colors.white,
-			body: Container
+			top: false,
+			child: Scaffold
 			(
-				padding: EdgeInsets.all(25),
-				child: Column
+				resizeToAvoidBottomInset: false,
+				backgroundColor: Colors.white,
+				body: Container
 				(
-					crossAxisAlignment: CrossAxisAlignment.center,
-					children: 
-					[
-						closeButton(),
-						locationImage(),
-						SizedBox(height: height / 25,),
-						mainText(),
-						SizedBox(height: height / 35,),
-						subText(),
-						SizedBox(height: height / 10,),
-						addAddrssButton()
-					],
+					padding: EdgeInsets.all(25),
+					child: Column
+					(
+						crossAxisAlignment: CrossAxisAlignment.center,
+						children: 
+						[
+							SizedBox(height: height / 25,),
+							closeButton(),
+							locationImage(),
+							SizedBox(height: height / 25,),
+							mainText(),
+							SizedBox(height: height / 35,),
+							subText(),
+							SizedBox(height: height / 10,),
+							addAddrssButton()
+						],
+					),
 				),
-			),
+			)
 		);
 	}
 
@@ -62,9 +67,9 @@ class _MyAddressState extends State<MyAddress>
 						color: Color(int.parse("0xfff2f2f0")),
 						borderRadius: BorderRadius.circular(20)
 					),
-					height: height / 12,
-					width: width / 7,
-					child: Center
+					height: 45,
+					width: 45,
+					child: FittedBox
 					(
 						child: IconButton
 						(
@@ -187,38 +192,42 @@ class _MyAddressState extends State<MyAddress>
 			isScrollControlled: true,
 			shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
 			context: context,
-			builder: (context) 
+			builder: (BuildContext context) 
 			{
-				return FractionallySizedBox
+    			return Padding
 				(
-        			heightFactor: 0.7,
+        			padding: MediaQuery.of(context).viewInsets,
 					child: Container
 					(
 						decoration: BoxDecoration
 						(
 							borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))
 						),
-						child: Column
+						child: SingleChildScrollView
 						(
-							children: 
-							[
-								topButton(),
-								SizedBox(height: height / 25,),
-								title(),
-								SizedBox(height: height / 25,),
-								address1(),
-								SizedBox(height: height / 25,),
-								address2(),
-								SizedBox(height: height / 25,),
-								address3(),
-								SizedBox(height: height / 25,),
-								address4(),
-								SizedBox(height: height / 25,),
-								address5(),
-								SizedBox(height: height / 20,),
-								submitButton()
-							],
-						),
+							child: Column
+							(
+								mainAxisSize: MainAxisSize.min,
+								children: 
+								[
+									topButton(),
+									SizedBox(height: height / 25,),
+									title(),
+									SizedBox(height: height / 25,),
+									address1(),
+									SizedBox(height: height / 25,),
+									address2(),
+									SizedBox(height: height / 25,),
+									address3(),
+									SizedBox(height: height / 25,),
+									address4(),
+									SizedBox(height: height / 25,),
+									address5(),
+									SizedBox(height: height / 20,),
+									submitButton()
+								],
+							)
+						)
 					)
 				);
 			}

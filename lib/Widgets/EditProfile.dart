@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/global.dart';
 
 class EditProfile extends StatefulWidget 
 {
@@ -12,12 +13,14 @@ class _EditProfileState extends State<EditProfile>
 {
 	var height;
 	var width;
+	var fontSize;
 
 	@override
 	Widget build(BuildContext context)
 	{
-		height = MediaQuery.of(context).size.height;
-		width = MediaQuery.of(context).size.width;
+		height = getHeight(context);
+		width = getWidth(context);
+		fontSize = getFontSize(context);
 
 		return SafeArea
 		(
@@ -79,12 +82,13 @@ class _EditProfileState extends State<EditProfile>
 						color: Colors.black12,
 						borderRadius: BorderRadius.circular(20)
 					),
-					height: height / 12,
-					width: width / 7,
-					child: Center
+					height: 50,
+					width: 50,
+					child: FittedBox
 					(
 						child: IconButton
 						(
+							iconSize: 25,
 							onPressed: ()
 							{
 								Navigator.pop(context);
@@ -139,83 +143,43 @@ class _EditProfileState extends State<EditProfile>
 
 	Widget imageUpload()
 	{
-		return  Row
+		return Stack
 		(
-			children: 
+			children:
 			[
-				Stack
-				(
-					children:
-					[
-						Container
-						(
-							height: 90,
-							width: 90,
-							decoration: BoxDecoration
-							(
-								color: Colors.transparent,
-								// borderRadius: BorderRadius.circular(25)
-							),
-							child: Container
-							(
-								margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-								height: 50,
-								width: 60,
-								decoration: BoxDecoration
-								(
-									color: Colors.black,
-									borderRadius: BorderRadius.circular(25)
-								),
-							),
-						),
-						Positioned
-						(
-							top: height / 15,
-							right: 0,
-							child: CircleAvatar
-							(
-								backgroundColor: Color(int.parse("0xff2497DE")),
-								child: IconButton
-								(
-									color: Colors.white,
-									onPressed: ()
-									{
-
-									},
-									icon: Icon(Icons.camera_alt)
-								)
-							)
-						)
-					],
-				),
 				Container
 				(
-					margin: EdgeInsets.only(left: 10),
-					child: Column
+					height: 100,
+					width: 100,
+					child: Container
 					(
-						crossAxisAlignment: CrossAxisAlignment.start,
-						children: 
-						[
-							Text
-							(
-								"sample@gamil.com",
-								style: GoogleFonts.montserrat
-								(
-									fontWeight: FontWeight.bold,
-									color: Colors.black
-								),
-							),
-							Text
-							(
-								"9996663332",
-								style: GoogleFonts.montserrat
-								(
-									fontWeight: FontWeight.w300,
-									color: Colors.black
-								),
-							)
-						],
+						margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+						height: 50,
+						width: 60,
+						decoration: BoxDecoration
+						(
+							color: Colors.black,
+							borderRadius: BorderRadius.circular(25)
+						),
 					),
+				),
+				Positioned
+				(
+					bottom: 3,
+					right: 0,
+					child: CircleAvatar
+					(
+						backgroundColor: Color(int.parse("0xff2497DE")),
+						child: IconButton
+						(
+							color: Colors.white,
+							onPressed: ()
+							{
+
+							},
+							icon: Icon(Icons.camera_alt)
+						)
+					)
 				)
 			],
 		);
@@ -268,6 +232,7 @@ class _EditProfileState extends State<EditProfile>
 				SizedBox(height: height / 25,),
 				Row
 				(
+					mainAxisAlignment: MainAxisAlignment.spaceBetween,
 					children:
 					[
 						Container
@@ -291,7 +256,7 @@ class _EditProfileState extends State<EditProfile>
 									(
 										fontWeight: FontWeight.w500,
 										color: Colors.black26,
-										fontSize: 12
+										fontSize: fontSize / 35
 									),
 									counterText: "",
 									contentPadding: EdgeInsets.all(0),
@@ -301,7 +266,7 @@ class _EditProfileState extends State<EditProfile>
 								),
 							),
 						),
-						SizedBox(width: 25,),
+						SizedBox(width: 5,),
 						Container
 						(
 							height: 25,
@@ -323,7 +288,7 @@ class _EditProfileState extends State<EditProfile>
 									(
 										fontWeight: FontWeight.w500,
 										color: Colors.black26,
-										fontSize: 12
+										fontSize: fontSize / 35
 									),
 									counterText: "",
 									contentPadding: EdgeInsets.all(0),
@@ -333,7 +298,7 @@ class _EditProfileState extends State<EditProfile>
 								),
 							),
 						),
-						SizedBox(width: 25,),
+						SizedBox(width: 5,),
 						Container
 						(
 							height: 25,
@@ -355,7 +320,7 @@ class _EditProfileState extends State<EditProfile>
 									(
 										fontWeight: FontWeight.w500,
 										color: Colors.black26,
-										fontSize: 12
+										fontSize: fontSize / 35
 									),
 									counterText: "",
 									contentPadding: EdgeInsets.all(0),
@@ -455,8 +420,40 @@ class _EditProfileState extends State<EditProfile>
 						)
 					],
 				),
-				SizedBox(height: height / 15,),
-			],
+				SizedBox(height: 20),
+				Center
+				(
+					child: Container
+					(
+						height: height / 14,
+						width: double.infinity,
+						child: ElevatedButton
+						(
+							child: Text
+							(
+								"Submit",
+								style: GoogleFonts.montserrat(fontSize: fontSize / 20,)
+							),
+							style: ButtonStyle
+							(
+								foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+								backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
+								shape: MaterialStateProperty.all<RoundedRectangleBorder>
+								(
+									RoundedRectangleBorder
+									(
+										borderRadius: BorderRadius.circular(20.5),
+										side: BorderSide(color: Colors.white38)
+									)
+								)
+							),
+							onPressed: () =>  null
+
+						)
+					)
+				),
+				SizedBox(height: 10)
+			]
 		);
 	}
 }
