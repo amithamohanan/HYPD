@@ -67,6 +67,12 @@ class _RegisterState extends State<Register>
 							),
 							TextFormField
 							(
+								style:  GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.bold,
+									color: Colors.black,
+									fontSize: fontSize / 30,
+								),
 								decoration: InputDecoration
 								(
 									hintStyle:  GoogleFonts.montserrat
@@ -93,6 +99,12 @@ class _RegisterState extends State<Register>
 							),
 							TextFormField
 							(
+								style:  GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.bold,
+									color: Colors.black,
+									fontSize: fontSize / 30,
+								),
 								decoration: InputDecoration
 								(
 									hintStyle:  GoogleFonts.montserrat
@@ -119,6 +131,12 @@ class _RegisterState extends State<Register>
 							),
 							TextFormField
 							(
+								style:  GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.bold,
+									color: Colors.black,
+									fontSize: fontSize / 30,
+								),
 								decoration: InputDecoration
 								(
 									hintStyle:  GoogleFonts.montserrat
@@ -164,7 +182,7 @@ class _RegisterState extends State<Register>
 										style: ButtonStyle
 										(
 											foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-											backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
+											backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xff674094"))),
 											shape: MaterialStateProperty.all<RoundedRectangleBorder>
 											(
 												RoundedRectangleBorder

@@ -156,7 +156,7 @@ class _SettingsState extends State<Settings>
 				),
 				trailing: Switch
 				(
-					activeColor: Color(int.parse("0xff3BA7AA")),
+					activeColor: Color(int.parse("0xffEF5C99")),
 					value: changed,
 					onChanged: (bool newValue)
 					{
@@ -302,7 +302,7 @@ class _SettingsState extends State<Settings>
 			height: height / 15,
 			child: DottedBorder
 			(
-				color: Color(int.parse("0xffF56C27")),
+				color: Color(int.parse("0xff674094")),
   				borderType: BorderType.RRect,
   				radius: Radius.circular(12),
   				padding: EdgeInsets.all(6),
@@ -318,7 +318,7 @@ class _SettingsState extends State<Settings>
 								"Log Out",
 								style: GoogleFonts.montserrat
 								(
-									color: Color(int.parse("0xffF56C27")),
+									color: Color(int.parse("0xff674094")),
 									fontWeight: FontWeight.bold,
 									fontSize: 18
 								),

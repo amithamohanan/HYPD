@@ -28,8 +28,25 @@ class _LoginState extends State<Login>
 	@override
 	void initState()
 	{
-		_controller = VideoPlayerController.asset("assets/images/introPlayer.mp4");
-		_controller.initialize();
+		// _controller = VideoPlayerController.network("https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4");
+		_controller = VideoPlayerController.asset("assets/images/introScreen.mp4")..initialize();
+
+		_controller.addListener(() 
+		{
+			if (_controller.value.hasError) 
+			{
+				print(_controller.value.errorDescription);
+			}
+			if (_controller.value.isInitialized)
+			{
+				SnackBar(content: Text("Initialised"));
+			}
+			if (_controller.value.isBuffering)
+			{
+				SnackBar(content: Text("Buffering"));
+			}
+		});
+		// _controller.initialize();
 		_controller.play();
 		_controller.setLooping(true);
 		super.initState();
@@ -39,8 +56,8 @@ class _LoginState extends State<Login>
 	@override
 	void dispose()
 	{
-		_controller.dispose();
 		super.dispose();
+		_controller.dispose();
 	}
 	
 	@override
@@ -61,7 +78,7 @@ class _LoginState extends State<Login>
 					children: <Widget>
 					[
 						videoPlayer(),
-						isNewUser ? Register() : skipText(),
+						isNewUser ? register() : skipText(),
 						!isNewUser ? Positioned
 						(
 							right: width/ 40,
@@ -241,6 +258,12 @@ class _LoginState extends State<Login>
 						SizedBox(height: 20),
 						TextFormField
 						(
+							style:  GoogleFonts.montserrat
+							(
+								fontWeight: FontWeight.bold,
+								color: Colors.black,
+								fontSize: fontSize / 30,
+							),
 							decoration: InputDecoration
 							(
 								hintStyle:  GoogleFonts.montserrat
@@ -272,7 +295,7 @@ class _LoginState extends State<Login>
 									style: ButtonStyle
 									(
 										foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-										backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
+										backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xff674094"))),
 										shape: MaterialStateProperty.all<RoundedRectangleBorder>
 										(
 											RoundedRectangleBorder
@@ -327,6 +350,223 @@ class _LoginState extends State<Login>
 					],
 				),
 			),
+		);
+	}
+	
+	Widget register()
+	{
+		return Positioned
+		(
+			right: width/ 40,
+			left: width / 40,
+			bottom: 20,
+			child: Container
+			(
+				padding: EdgeInsets.fromLTRB(25, 25, 25, 5),
+				decoration: BoxDecoration
+				(
+					color: Colors.white,
+					borderRadius: BorderRadius.circular(40.0)
+				),
+				child: Form
+				(
+					child: Column
+					(
+						crossAxisAlignment: CrossAxisAlignment.start,
+						children:
+						[
+							Text
+							(
+								"Create Account",
+								style: GoogleFonts.montserrat
+								(
+									color: Colors.black,
+									fontSize: 20,
+									fontWeight: FontWeight.bold
+								),
+							),
+							SizedBox(height: 25,),
+							Text
+							(
+								"Email",
+								style: GoogleFonts.montserrat
+								(
+									color: Colors.black38,
+									fontSize: fontSize / 30,
+								),
+							),
+							TextFormField
+							(
+								style:  GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.bold,
+									color: Colors.black,
+									fontSize: fontSize / 30,
+								),
+								decoration: InputDecoration
+								(
+									hintStyle:  GoogleFonts.montserrat
+									(
+										color: Colors.grey,
+										fontSize: fontSize / 30,
+									),
+									counterText: "",
+									contentPadding: EdgeInsets.all(0),
+									isDense: true,
+									enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+									focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+								),
+							),
+							SizedBox(height: 25,),
+							Text
+							(
+								"Phone",
+								style: GoogleFonts.montserrat
+								(
+									color: Colors.black38,
+									fontSize: fontSize / 30,
+								),
+							),
+							TextFormField
+							(
+								style:  GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.bold,
+									color: Colors.black,
+									fontSize: fontSize / 30,
+								),
+								decoration: InputDecoration
+								(
+									hintStyle:  GoogleFonts.montserrat
+									(
+										color: Colors.grey,
+										fontSize: fontSize / 30,
+									),
+									counterText: "",
+									contentPadding: EdgeInsets.all(0),
+									isDense: true,
+									enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+									focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+								)
+							),
+							SizedBox(height: 25,),
+							Text
+							(
+								"Date of Birth",
+								style: GoogleFonts.montserrat
+								(
+									color: Colors.black38,
+									fontSize: fontSize / 30,
+								),
+							),
+							TextFormField
+							(
+								style:  GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.bold,
+									color: Colors.black,
+									fontSize: fontSize / 30,
+								),
+								decoration: InputDecoration
+								(
+									hintStyle:  GoogleFonts.montserrat
+									(
+										color: Colors.grey,
+										fontSize: fontSize / 30,
+									),
+									counterText: "",
+									contentPadding: EdgeInsets.all(0),
+									isDense: true,
+									enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+									focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+								),
+								onTap: () async
+								{
+									// DateTime date = DateTime.now();
+									FocusScope.of(context).requestFocus(new FocusNode());
+									var date = await showDatePicker
+									(
+										context: context,
+										initialDate:DateTime.now(),
+										firstDate:DateTime(1900),
+										lastDate: DateTime(2100)
+									);
+									// DateFormat formatter = DateFormat('dd-MM-yyyy');
+									// dobController.text = formatter.format(date);
+								},
+							),
+							SizedBox(height: 30,),
+							Center
+							(
+								child: Container
+								(
+									height: height / 11,
+									width: double.infinity,
+									child: ElevatedButton
+									(
+										child: Text
+										(
+											"Register",
+											style: GoogleFonts.montserrat(fontSize: fontSize / 20,)
+										),
+										style: ButtonStyle
+										(
+											foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+											backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xff674094"))),
+											shape: MaterialStateProperty.all<RoundedRectangleBorder>
+											(
+												RoundedRectangleBorder
+												(
+													borderRadius: BorderRadius.circular(20.5),
+													side: BorderSide(color: Colors.white38)
+												)
+											)
+										),
+										onPressed: () => null
+									)
+								)
+							),
+							SizedBox(height: 10,),
+							Container
+							(
+								width: double.infinity,
+								child: GestureDetector
+								(
+									child: RichText
+									(
+										textAlign: TextAlign.center,
+										text: TextSpan
+										(
+											text: "Already have an account? ",
+											style: GoogleFonts.montserrat(color: Colors.grey, fontSize: fontSize / 30,), /*defining default style is optional */
+											children:
+											[
+												TextSpan
+												(
+													text: "Log In",
+													style: GoogleFonts.montserrat
+													(
+														color: Colors.black,
+														fontWeight: FontWeight.bold
+													)
+												),
+											],
+										),
+									),
+									onTap: ()
+									{
+										setState(() 
+										{
+											isNewUser = false;
+										});
+									},
+								)
+							),
+							SizedBox(height: 10,),
+						],
+					),
+				),
+			)
 		);
 	}
 }

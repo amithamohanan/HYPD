@@ -75,7 +75,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 		return  Scaffold
 		(
 			resizeToAvoidBottomInset: false,
-			backgroundColor: Color(int.parse("0xff312247")),
+			backgroundColor: Color(int.parse("0xff674094")),
 			appBar: appBar(),
 			body: otpForm()
 		);
@@ -124,7 +124,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 					fontSize: fontSize / 25
 				),
 			),
-			backgroundColor: Color(int.parse("0xff312247")),
+			backgroundColor: Color(int.parse("0xff674094")),
 		);
 	}
 
@@ -453,7 +453,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 				style: ButtonStyle
 				(
 					foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-					backgroundColor:  isOtpEntered ? MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))) : MaterialStateProperty.all<Color>(Colors.white70),
+					backgroundColor:  isOtpEntered ? MaterialStateProperty.all<Color>(Color(int.parse("0xff674094"))) : MaterialStateProperty.all<Color>(Colors.white70),
 					shape: MaterialStateProperty.all<RoundedRectangleBorder>
 					(
 						RoundedRectangleBorder

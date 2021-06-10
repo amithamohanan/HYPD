@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/ProductPage.dart';
 
 class TaggedProducts extends StatefulWidget
 {
@@ -12,6 +13,8 @@ class _TaggedProductsState extends State<TaggedProducts>
 {
 	var height;
 	var width;
+
+	bool isFavourite = false;
 
 	List size = ["S", "M", "L", "XL", "XXL", "XXXL"];
 
@@ -27,7 +30,7 @@ class _TaggedProductsState extends State<TaggedProducts>
 			top: false,
 			child: Scaffold
 			(
-				backgroundColor: Color(int.parse("0xff312247")),
+				backgroundColor: Color(int.parse("0xff674094")),
 				body: Container
 				(
 					child: Column
@@ -54,11 +57,22 @@ class _TaggedProductsState extends State<TaggedProducts>
 				(
 					height: height / 1.4,
 					width: width,
-					color: Color(int.parse("0xff312247")),
+					color: Color(int.parse("0xff674094")),
 				),
 				Container
 				(
 					height: height / 1.6,
+					width: width,
+					decoration: BoxDecoration
+					(
+						color: Colors.white,
+						borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25), bottomRight: Radius.circular(25))
+					),
+					// child: taggedProducts(),
+				),
+				Container
+				(
+					height: height / 2.8,
 					width: width,
 					decoration: BoxDecoration
 					(
@@ -133,8 +147,8 @@ class _TaggedProductsState extends State<TaggedProducts>
 					(
 						child: Container
 						(
-							margin: EdgeInsets.only(left: 35),
-							height: 10,
+							margin: EdgeInsets.only(left: 15),
+							// color: Colors.red,
 							child: Stack
 							(
 								children: 
@@ -143,8 +157,8 @@ class _TaggedProductsState extends State<TaggedProducts>
 									(
 										child: Container
 										(
-											height: 250,
-											width: width / 2.5,
+											height: 200,
+											width: width / 2.7,
 											child: FittedBox
 											(
 												child:ClipRRect
@@ -152,63 +166,109 @@ class _TaggedProductsState extends State<TaggedProducts>
 													borderRadius: BorderRadius.circular(50.0),
 													child: Image.network("https://images.pexels.com/photos/2866119/pexels-photo-2866119.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
 												),
-												fit: BoxFit.fill,
+												fit: BoxFit.contain,
 											)
 										)
 									),
 									Positioned
 									(
-										left: 0,
-										top: height / 4.5,
-										child: Container
+										child: Align
 										(
-											height: 100,
-											width: width / 2.8,
-											decoration: BoxDecoration
+											alignment: Alignment.bottomCenter,
+											child: Container
 											(
-												borderRadius: BorderRadius.circular(50)
-											),
-											child:Card
-											(
-												elevation: 10,
-												shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-												child: ListTile
+												height: 80,
+												width: width / 3,
+												decoration: BoxDecoration
 												(
-													isThreeLine: true,
-													title: Text
+													borderRadius: BorderRadius.circular(50)
+												),
+												child: Card
+												(
+													elevation: 10,
+													shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+													child: ListTile
 													(
-														"Yellow Blossom Print Shirt",
-														style: GoogleFonts.montserrat
+														leading: Column
 														(
-															color: Colors.black,
-															fontWeight: FontWeight.w400,
-															fontSize: 12,
-														),
+															crossAxisAlignment: CrossAxisAlignment.start,
+															children: 
+															[
+																SizedBox(height: 5),
+																Text
+																(
+																	"Travis Scott Tee",
+																	style: GoogleFonts.montserrat
+																	(
+																		color: Colors.black,
+																		fontWeight: FontWeight.w500,
+																		fontSize: 10,
+																	),
+																),
+																SizedBox(height: 20),
+																Text
+																(
+																	" ₹ 12000",
+																	style: GoogleFonts.montserrat
+																	(
+																		color: Colors.black,
+																		fontWeight: FontWeight.bold,
+																		fontSize: 10,
+																	),
+																),
+															],
+														)
 													),
-													subtitle: Padding
-													(
-														padding: EdgeInsets.only(top: 5),
-														child: Text
-														(
-															" ₹ 12000",
-															style: GoogleFonts.montserrat
-															(
-																color: Colors.black,
-																fontWeight: FontWeight.bold,
-																fontSize: 12,
-															),
-														),
-													)
-												)
+												),
 											)
 										)
 									),
+									Positioned
+									(
+										top: 5,
+										right: 5,
+										child:Container
+										(
+											margin: EdgeInsets.all(5),
+											height: 45,
+											width: 45,
+											decoration: BoxDecoration
+											(
+												color: Color(int.parse("0xfff2f2f0")),
+												borderRadius: BorderRadius.circular(10)
+											),
+											child: FittedBox
+											(
+												child: IconButton
+												(
+													onPressed: ()
+													{
+														setState(() 
+														{
+															// isFavourite = !isFavourite;
+														});
+													},
+													icon: isFavourite 
+													? Icon
+													(
+														Icons.favorite,
+														color: Color(int.parse("0xffA12C2A"))
+													)
+													: Icon
+													(
+														Icons.favorite_border,
+														color: Colors.black,
+													),
+												),
+											)
+										),
+									)
 								],
 							)
 						),
 						onTap:()
 						{
-							// Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage()));
+							Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage()));
 						},
 					);
 				}
@@ -220,7 +280,7 @@ class _TaggedProductsState extends State<TaggedProducts>
 	{
 		return Container
 		(
-			color: Color(int.parse("0xff312247")),
+			color: Color(int.parse("0xff674094")),
 			height: 100,
 			child: Row
 			(
@@ -287,7 +347,7 @@ class _TaggedProductsState extends State<TaggedProducts>
 								style: ButtonStyle
 								(
 									foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-									backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
+									backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffEF5C99"))),
 									shape: MaterialStateProperty.all<RoundedRectangleBorder>
 									(
 										RoundedRectangleBorder
@@ -540,7 +600,7 @@ class _TaggedProductsState extends State<TaggedProducts>
 								style: ButtonStyle
 								(
 									foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-									backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
+									backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffEF5C99"))),
 									shape: MaterialStateProperty.all<RoundedRectangleBorder>
 									(
 										RoundedRectangleBorder

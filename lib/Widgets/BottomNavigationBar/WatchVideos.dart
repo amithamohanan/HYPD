@@ -4,16 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/TaggedProductsPage.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/VideoPlayer.dart';
+import 'package:hypd/Widgets/ProductPage.dart';
 import 'package:hypd/global.dart';
 
 class WatchVideo extends StatefulWidget
 {
+	WatchVideo(this.hasChanged);
+	final hasChanged;
+
 	@override
-	_WatchVideoState createState() => _WatchVideoState();
+	_WatchVideoState createState() => _WatchVideoState(this.hasChanged);
 }
 
 class _WatchVideoState extends State<WatchVideo>
 {
+	_WatchVideoState(this.hasChanged);
+	final hasChanged;
+
 	var height;
 	var width;
 	var fontSize;
@@ -28,6 +35,7 @@ class _WatchVideoState extends State<WatchVideo>
 		"https://vod-progressive.akamaized.net/exp=1622717966~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F993%2F20%2F504965980%2F2312203141.mp4~hmac=bed1903c8f3d7462eb7f7605f5e9a5ef47cb7d07888c088e97f8fc70787eee68/vimeo-prod-skyfire-std-us/01/993/20/504965980/2312203141.mp4?filename=pexels-roman-odintsov-6609500.mp4",
 		"https://vod-progressive.akamaized.net/exp=1622718679~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F4949%2F20%2F524748008%2F2459605317.mp4~hmac=c254e665e62355907c625f25c00095ec779108b4864aee905e2513fcc9008200/vimeo-prod-skyfire-std-us/01/4949/20/524748008/2459605317.mp4?filename=pexels-cottonbro-7169950.mp4",
 		"https://vod-progressive.akamaized.net/exp=1622717966~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F993%2F20%2F504965980%2F2312203141.mp4~hmac=bed1903c8f3d7462eb7f7605f5e9a5ef47cb7d07888c088e97f8fc70787eee68/vimeo-prod-skyfire-std-us/01/993/20/504965980/2312203141.mp4?filename=pexels-roman-odintsov-6609500.mp4",
+		"https://vod-progressive.akamaized.net/exp=1623314662~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F3337%2F19%2F491685707%2F2210309174.mp4~hmac=00002b236d82dc69694325e97aaaf4dc55eb5c5f102f0063ce72f5f71cb8c865/vimeo-prod-skyfire-std-us/01/3337/19/491685707/2210309174.mp4?filename=pexels-roman-odintsov-6205681.mp4"
 	];
 
 	var temp = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non venenatis ligula. Praesent massa ex, vestibulum eget nisl sit amet, rutrum ullamcorper augue. Aliquam erat leo, hendrerit non ipsum sit amet, auctor sollicitudin odio. Donec aliquet accumsan nunc. Vestibulum condimentum et urna eget porttitor. Mauris ultrices id augue et convallis. Etiam lobortis tincidunt libero, eget efficitur orci commodo euismod.";
@@ -80,12 +88,13 @@ class _WatchVideoState extends State<WatchVideo>
                     			setState(()
 								{
                       				isFullScreen = true;
+									this.hasChanged(true);
                     			});
                   			}
               			),
               			itemBuilder: (BuildContext context,index, i)
 						{
-                			return Player("https://vod-progressive.akamaized.net/exp=1622717966~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F993%2F20%2F504965980%2F2312203141.mp4~hmac=bed1903c8f3d7462eb7f7605f5e9a5ef47cb7d07888c088e97f8fc70787eee68/vimeo-prod-skyfire-std-us/01/993/20/504965980/2312203141.mp4?filename=pexels-roman-odintsov-6609500.mp4");
+                			return Player(videos[index]);
               			},
             		),
 				),
@@ -384,22 +393,18 @@ class _WatchVideoState extends State<WatchVideo>
 
 		return showModalBottomSheet
 		(
-			isScrollControlled: true,
 			shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30))),
 			context: context,
-			builder: (context)
+			builder: (BuildContext context) 
 			{
-				return FractionallySizedBox
-				(
-        			heightFactor: 0.55,
-					child: Container
+    			return  Container
 					(
 						decoration: BoxDecoration
 						(
 							color: Colors.white,
 							borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))
 						),
-						child: Column
+						child: Wrap
 						(
 							children:
 							[
@@ -407,10 +412,11 @@ class _WatchVideoState extends State<WatchVideo>
 								SizedBox(height: height / 25,),
 								title(),
 								SizedBox(height: height / 25,),
-								taggedProducts()
+								taggedProducts(),
+								SizedBox(height: 20),
 							],
 						),
-					)
+					// )
 				);
 			}
 		);
@@ -456,8 +462,9 @@ class _WatchVideoState extends State<WatchVideo>
 	{
 		return  Container
 		(
+			color: Colors.white,
 			margin: EdgeInsets.only(top: 2, bottom: 0),
-			height: height * .40,
+			height: 260,
 			child: ListView.builder
 			(
 				scrollDirection: Axis.horizontal,
@@ -467,118 +474,127 @@ class _WatchVideoState extends State<WatchVideo>
 					(
 						child: Container
 						(
-							margin: EdgeInsets.only(left: 35),
-							// height: 10,
+							margin: EdgeInsets.only(left: 15),
 							child: Stack
 							(
-								children:
+								children: 
 								[
 									Positioned
 									(
 										child: Container
 										(
-											height: 250,
+											height: 230,
 											width: width / 2.5,
 											child: FittedBox
 											(
 												child:ClipRRect
 												(
 													borderRadius: BorderRadius.circular(50.0),
-													child: Image.network("https://images.pexels.com/photos/3526923/pexels-photo-3526923.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
+													child: Image.network("https://images.pexels.com/photos/2866119/pexels-photo-2866119.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
 												),
-												fit: BoxFit.fill,
+												fit: BoxFit.contain,
+											)
+										)
+									),
+									Positioned.fill
+									(
+										child: Align
+										(
+											alignment: Alignment.bottomLeft,
+											child: Container
+											(
+												height: 80,
+												width: width / 2.8,
+												decoration: BoxDecoration
+												(
+													borderRadius: BorderRadius.circular(50)
+												),
+												child: Card
+												(
+													elevation: 10,
+													shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+													child: ListTile
+													(
+														leading: Column
+														(
+															crossAxisAlignment: CrossAxisAlignment.start,
+															children: 
+															[
+																SizedBox(height: 5),
+																Text
+																(
+																	"Travis Scott Tee",
+																	style: GoogleFonts.montserrat
+																	(
+																		color: Colors.black,
+																		fontWeight: FontWeight.w500,
+																		fontSize: 10,
+																	),
+																),
+																SizedBox(height: 20),
+																Text
+																(
+																	" ₹ 12000",
+																	style: GoogleFonts.montserrat
+																	(
+																		color: Colors.black,
+																		fontWeight: FontWeight.bold,
+																		fontSize: 10,
+																	),
+																),
+															],
+														)
+													),
+												),
 											)
 										)
 									),
 									Positioned
 									(
-										left: 0,
-										bottom: 50,
-										child: Container
+										top: 5,
+										right: 5,
+										child:Container
 										(
-											height: 100,
-											width: width / 2.6,
+											margin: EdgeInsets.all(5),
+											height: 45,
+											width: 45,
 											decoration: BoxDecoration
 											(
-												borderRadius: BorderRadius.circular(50)
+												color: Color(int.parse("0xfff2f2f0")),
+												borderRadius: BorderRadius.circular(10)
 											),
-											child: Card
+											child: FittedBox
 											(
-												elevation: 10,
-												shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-												child: ListTile
+												child: IconButton
 												(
-													isThreeLine: true,
-													title: Text
+													onPressed: ()
+													{
+														setState(() 
+														{
+															isFavourite = !isFavourite;
+														});
+													},
+													icon: isFavourite 
+													? Icon
 													(
-														"Yellow Blossom Print Shirt",
-														style: GoogleFonts.montserrat
-														(
-															color: Colors.black,
-															fontWeight: FontWeight.w400,
-															fontSize: 12,
-														),
-													),
-													subtitle: Padding
-													(
-														padding: EdgeInsets.only(top: 3),
-														child: Text
-														(
-															" ₹ 12000",
-															style: GoogleFonts.montserrat
-															(
-																color: Colors.black,
-																fontWeight: FontWeight.bold,
-																fontSize: 12,
-															),
-														),
+														Icons.favorite,
+														color: Color(int.parse("0xffA12C2A"))
 													)
-													// leading: Column
-													// (
-													// 	mainAxisAlignment: MainAxisAlignment.spaceAround,
-													// 	crossAxisAlignment: CrossAxisAlignment.start,
-													// 	children:
-													// 	[
-													// 		SizedBox(height: 5),
-													// 		Expanded
-													// 		(
-													// 			child:
-
-													// 				Text
-													// 				(
-													// 					"Yello Blossom Print Shirt",
-													// 					style: GoogleFonts.montserrat
-													// 					(
-													// 						color: Colors.black,
-													// 						fontWeight: FontWeight.w500,
-													// 						fontSize: 10,
-													// 					),
-													// 				),
-													// 			// ],
-													// 		),
-													// 		SizedBox(height: 5),
-													// 		Expanded(child: Text
-													// 		(
-													// 			" ₹ 12000",
-													// 			style: GoogleFonts.montserrat
-													// 			(
-													// 				color: Colors.black,
-													// 				fontWeight: FontWeight.bold,
-													// 				fontSize: 10,
-													// 			),
-													// 		),)
-													// 	],
-													// )
+													: Icon
+													(
+														Icons.favorite_border,
+														color: Colors.black,
+													),
 												),
-											),
-										)
-									),
+											)
+										),
+									)
 								],
 							)
 						),
 						onTap:()
 						{
-							// Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage()));
+							Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage()));
 						},
 					);
 				}

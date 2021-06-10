@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,13 +12,13 @@ import 'package:hypd/Widgets/Notifications.dart';
 import 'package:hypd/Widgets/Search..dart';
 import 'package:hypd/global.dart';
 
-class HomePage extends StatefulWidget 
+class HomePage extends StatefulWidget
 {
 	@override
 	_HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> 
+class _HomePageState extends State<HomePage>
 {
 	final PageController controller = PageController(initialPage: 1);
 
@@ -30,6 +29,7 @@ class _HomePageState extends State<HomePage>
 	bool isScrollLeft = false;
 	bool isScrollRight = false;
 	bool isFavourite = false;
+	bool isFullScreen = false;
 
 	@override
 	Widget build(BuildContext context)
@@ -40,17 +40,17 @@ class _HomePageState extends State<HomePage>
 
 		return Scaffold
 		(
-			// extendBodyBehindAppBar: true,
+			extendBodyBehindAppBar: isFullScreen ? true : false,
 			backgroundColor: Colors.white,
 			appBar: appBar(),
 			body:  PageView
 			(
       			scrollDirection: Axis.horizontal,
       			controller: controller,
-      			children: 
+      			children:
 				[
 					ShoppingPage(),
-					WatchVideo(),
+					WatchVideo(this.hasChanged),
 					SearchPage(),
 				],
 				onPageChanged: pageChanged
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage>
 		return AppBar
 		(
 				elevation: 0,
-				backgroundColor: Colors.white,
+				backgroundColor: isFullScreen ? Colors.transparent : Colors.white,
 				centerTitle: false,
 				titleSpacing: 0.0,
 				leading: Text(""),
@@ -77,12 +77,12 @@ class _HomePageState extends State<HomePage>
 						style: GoogleFonts.montserrat
 						(
 							fontSize: fontSize / 20,
-							color: Colors.black,
+							color: isFullScreen ? Colors.white : Colors.black,
 							fontWeight: FontWeight.bold
 						),
 					),
 				),
-				actions: 
+				actions:
 				[
 					Container
 					(
@@ -145,11 +145,11 @@ class _HomePageState extends State<HomePage>
 						)
 					)
 				],
-				bottom: PreferredSize
+				bottom: !isFullScreen ?  PreferredSize
 				(
         			preferredSize: Size.fromHeight(height / 9),
 					child: header(),
-				),
+				) : null
 		);
 	}
 
@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage>
 			// color: Colors.pinkAccent,
 			child: Row
 			(
-				children: 
+				children:
 				[
 					Container
 					(
@@ -176,12 +176,12 @@ class _HomePageState extends State<HomePage>
 						),
 						child: Center
 						(
-							child: isScrollLeft 
+							child: isScrollLeft
 							? IconButton
 							(
 								icon: Icon(Icons.search),
 								onPressed: () => null,
-							) 
+							)
 							: isScrollRight ?
 							IconButton
 							(
@@ -191,7 +191,7 @@ class _HomePageState extends State<HomePage>
 									size: 23,
 								),
 								onPressed: () => null,
-							) 
+							)
 							:IconButton
 							(
 								icon: Icon
@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage>
 									size: 15,
 								),
 								onPressed: () => null,
-							) 
+							)
 						),
 					),
 					SizedBox(width: width / 25,),
@@ -213,9 +213,9 @@ class _HomePageState extends State<HomePage>
 							(
 								prefixIcon:Icon
 								(
-									isScrollLeft 
+									isScrollLeft
 									? FontAwesomeIcons.store
-									: isScrollRight 
+									: isScrollRight
 									? Icons.search
 									: Icons.smart_display_outlined,
 									color: Colors.black,
@@ -256,12 +256,12 @@ class _HomePageState extends State<HomePage>
 						),
 						child: Center
 						(
-							child: isScrollLeft 
+							child: isScrollLeft
 							? IconButton
 							(
 								icon: Icon(Icons.smart_display_outlined),
 								onPressed: () => null,
-							) 
+							)
 							: isScrollRight ?
 							IconButton
 							(
@@ -271,7 +271,7 @@ class _HomePageState extends State<HomePage>
 									size: 15,
 								),
 								onPressed: () => null,
-							) 
+							)
 							:IconButton
 							(
 								icon: Icon
@@ -308,5 +308,16 @@ class _HomePageState extends State<HomePage>
 		}
 
 		setState(() {});
+	}
+
+	hasChanged(value)
+	{
+		print(value);
+		print("value");
+
+		setState(()
+		{
+			isFullScreen = true;
+		});
 	}
 }

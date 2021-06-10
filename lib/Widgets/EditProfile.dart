@@ -169,7 +169,7 @@ class _EditProfileState extends State<EditProfile>
 					right: 0,
 					child: CircleAvatar
 					(
-						backgroundColor: Color(int.parse("0xff2497DE")),
+						backgroundColor: Color(int.parse("0xffEF5C99")),
 						child: IconButton
 						(
 							color: Colors.white,
@@ -437,7 +437,7 @@ class _EditProfileState extends State<EditProfile>
 							style: ButtonStyle
 							(
 								foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-								backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
+								backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xff674094"))),
 								shape: MaterialStateProperty.all<RoundedRectangleBorder>
 								(
 									RoundedRectangleBorder

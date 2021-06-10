@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/MyBag.dart';
 import 'package:hypd/Widgets/MyWishlist.dart';
-import 'package:hypd/Widgets/Notifications.dart';
+import 'package:responsive_grid/responsive_grid.dart';
+
 
 class ViewAll extends StatefulWidget 
 {
@@ -18,19 +19,19 @@ class _ViewAllState extends State<ViewAll>
 
 	bool isFavourite = false;
 
-	@override
-	Widget build(BuildContext context) 
-	{
-		height = MediaQuery.of(context).size.height;
-		width = MediaQuery.of(context).size.width;
+	// @override
+	// Widget build(BuildContext context) 
+	// {
+		// height = MediaQuery.of(context).size.height;
+		// width = MediaQuery.of(context).size.width;
 
-		return Scaffold
-		(
-			backgroundColor: Colors.white,
-			appBar: appBar(),
-			body: gridView(context),
-		);
-	}
+	// 	return Scaffold
+	// 	(
+	// 		backgroundColor: Colors.white,
+	// 		appBar: appBar(),
+	// 		body: gridView(context),
+	// 	);
+	// }
 
 	appBar()
 	{
@@ -105,144 +106,155 @@ class _ViewAllState extends State<ViewAll>
 		);
 	}
 
-	gridView(context)
+	Widget build(BuildContext context) 
 	{
-		// print(temp[0]);
-		return Container
+		height = MediaQuery.of(context).size.height;
+		width = MediaQuery.of(context).size.width;
+
+    	return Scaffold
 		(
-			padding: EdgeInsets.all(20),
-			child: GridView.count
+      		appBar: appBar(),
+      		body: SingleChildScrollView
 			(
-				crossAxisCount: 2,
-				mainAxisSpacing: 8,
-				crossAxisSpacing: 9,
-				childAspectRatio: 0.55,
-				children: List.generate(15, (index)
-				{
-					return InkWell
+				child: Container
+				(
+					child: ResponsiveGridRow
 					(
-						child: Container
-						(
-							margin: EdgeInsets.only(left: 15),
-							color: Colors.white,
-							child: Stack
+						children:  List.generate(15, (index)
+						{
+							return ResponsiveGridCol
 							(
-								children: 
-								[
-									Positioned
+								lg: 3,
+								xs: 6,
+								md: 4,
+								child: Container
+								(
+									margin: EdgeInsets.only(left: 15, bottom: 15),
+									color: Colors.white,
+									height: 250,
+									child: Stack
 									(
-										child: Container
-										(
-											height: 250,
-											width: width / 2.5,
-											child: FittedBox
+										children: 
+										[
+											Positioned
 											(
-												child:ClipRRect
+												child: Container
 												(
-													borderRadius: BorderRadius.circular(50.0),
-													child: Image.network("https://images.pexels.com/photos/908934/pexels-photo-908934.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
-												),
-												fit: BoxFit.fill,
-											)
-										)
-									),
-									Positioned
-									(
-										left: 0,
-										bottom: 50,
-										child: Container
-										(
-											height: 100,
-											width: width / 2.8,
-											decoration: BoxDecoration
-											(
-												borderRadius: BorderRadius.circular(50)
-											),
-											child: Card
-											(
-												elevation: 10,
-												shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-												child: ListTile
-												(
-													leading: Column
+													height: 230,
+													width: width / 2.5,
+													child: FittedBox
 													(
-														crossAxisAlignment: CrossAxisAlignment.start,
-														children: 
-														[
-															SizedBox(height: 5),
-															Text
-															(
-																"Travis Scott Tee",
-																style: GoogleFonts.montserrat
-																(
-																	color: Colors.black,
-																	fontWeight: FontWeight.w500,
-																	fontSize: 10,
-																),
-															),
-															SizedBox(height: 20),
-															Text
-															(
-																" ₹ 12000",
-																style: GoogleFonts.montserrat
-																(
-																	color: Colors.black,
-																	fontWeight: FontWeight.bold,
-																	fontSize: 10,
-																),
-															),
-														],
+														child:ClipRRect
+														(
+															borderRadius: BorderRadius.circular(50.0),
+															child: Image.network("https://images.pexels.com/photos/908934/pexels-photo-908934.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
+														),
+														fit: BoxFit.fill,
 													)
-												),
+												)
 											),
-										)
-									),
-									Positioned
-									(
-										top: 5,
-										right: 2,
-										child:Container
-										(
-											margin: EdgeInsets.all(5),
-											height: 45,
-											width: 45,
-											decoration: BoxDecoration
+											Positioned.fill
 											(
-												color: Color(int.parse("0xfff2f2f0")),
-												borderRadius: BorderRadius.circular(10)
-											),
-											child: FittedBox
-											(
-												child: IconButton
+												child: Align
 												(
-													onPressed: ()
-													{
-														setState(() 
-														{
-															isFavourite = !isFavourite;
-														});
-													},
-													icon: isFavourite 
-													? Icon
+													alignment: Alignment.bottomLeft,
+													child: Container
 													(
-														Icons.favorite,
-														color: Color(int.parse("0xffA12C2A"))
+														height: 80,
+														width: width / 2.8,
+														decoration: BoxDecoration
+														(
+															borderRadius: BorderRadius.circular(50)
+														),
+														child: Card
+														(
+															elevation: 10,
+															shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+															child: ListTile
+															(
+																leading: Column
+																(
+																	crossAxisAlignment: CrossAxisAlignment.start,
+																	children: 
+																	[
+																		SizedBox(height: 5),
+																		Text
+																		(
+																			"Travis Scott Tee",
+																			style: GoogleFonts.montserrat
+																			(
+																				color: Colors.black,
+																				fontWeight: FontWeight.w500,
+																				fontSize: 10,
+																			),
+																		),
+																		SizedBox(height: 20),
+																		Text
+																		(
+																			" ₹ 12000",
+																			style: GoogleFonts.montserrat
+																			(
+																				color: Colors.black,
+																				fontWeight: FontWeight.bold,
+																				fontSize: 10,
+																			),
+																		),
+																	],
+																)
+															),
+														),
 													)
-													: Icon
+												)
+											),
+											Positioned
+											(
+												top: 5,
+												right: width / 2.5 - width / 2.8,
+												child:Container
+												(
+													margin: EdgeInsets.all(5),
+													height: 45,
+													width: 45,
+													decoration: BoxDecoration
 													(
-														Icons.favorite_border,
-														color: Colors.black,
+														color: Color(int.parse("0xfff2f2f0")),
+														borderRadius: BorderRadius.circular(10)
 													),
+													child: FittedBox
+													(
+														child: IconButton
+														(
+															onPressed: ()
+															{
+																setState(() 
+																{
+																	isFavourite = !isFavourite;
+																});
+															},
+															icon: isFavourite 
+															? Icon
+															(
+																Icons.favorite,
+																color: Color(int.parse("0xffA12C2A"))
+															)
+															: Icon
+															(
+																Icons.favorite_border,
+																color: Colors.black,
+															),
+														),
+													)
 												),
 											)
-										),
+										],
 									)
-								],
-							)
-						)
-					);
-				}),
+								)
+							);
+						}
+					),
+				),
+     	 	),
 			)
-		);
+    	);
 	}
 }

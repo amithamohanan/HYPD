@@ -45,19 +45,55 @@ class _UserAccountState extends State<UserAccount>
 	{
 		return Container
 		(
-			child: Column
+			child: Stack
 			(
-				crossAxisAlignment: CrossAxisAlignment.start,
-				mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-				children:
+				children: 
 				[
-					SizedBox(height:  20),
-					userAccount(),
-					Expanded(child: Text("")),
-					inviteLink(),
-					// SizedBox(height:  5,),
+					Container
+					(
+						color: Colors.white,
+						height: height,
+						width: width,
+						child: Text(""),
+					),
+					Positioned
+					(
+						// top: 0,
+						bottom: 5,
+						left: 0,
+						right: 0,
+						child: inviteLink()
+					),
+					Positioned
+					(
+						left: 0,
+						right: 0,
+						top: 5,
+						child: userAccount()
+					)
 				],
 			),
+			// child: Column
+			// (
+			// 	crossAxisAlignment: CrossAxisAlignment.center,
+			// 	mainAxisAlignment: MainAxisAlignment.spaceBetween,
+			// 	children:
+			// 	[
+			// 		SizedBox(height:  20),
+			// 		userAccount(),
+			// 		SizedBox(height:  20),
+			// 		// Expanded
+			// 		// (
+			// 		// 	child: 
+			// 			Container
+			// 			(
+			// 				height: 250,
+			// 				width: width,
+			// 				color: Colors.blue,
+			// 			),
+			// 		// )
+			// 	],
+			// ),
 		);
 	}
 
@@ -65,12 +101,12 @@ class _UserAccountState extends State<UserAccount>
 	{
 		return Container
 		(
-			margin: EdgeInsets.only(top: 30, left: 10, right: 10, bottom: 25),
+			margin: EdgeInsets.only(top: 50, left: 10, right: 10, bottom: 25),
 			padding: EdgeInsets.all(5),
 			decoration: BoxDecoration
 			(
 				borderRadius: BorderRadius.circular(25),
-				color: Color(int.parse("0xff312247"))
+				color: Color(int.parse("0xff674094"))
 			),
 			child: Column
 			(
@@ -457,19 +493,20 @@ class _UserAccountState extends State<UserAccount>
 	Widget inviteLink()
 	{
 
-		return  Expanded
-		(
-			child: Container
+		return  
+		// Expanded
+		// (
+		// 	child: 
+			Container
 			(
-				padding: EdgeInsets.only(left: 20),
+				padding: EdgeInsets.only(left: 20, top: 15),
 				decoration: BoxDecoration
 				(
-					color: Colors.white,
 					borderRadius: BorderRadius.only(topRight: Radius.circular(40), topLeft: Radius.circular(40),),
 				),
 				child: Row
 				(
-					mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+					crossAxisAlignment: CrossAxisAlignment.center,
 					children:
 					[
 						Expanded
@@ -479,7 +516,7 @@ class _UserAccountState extends State<UserAccount>
 							(
 								// color: Colors.red,
 								// width: width * .55,
-								margin: EdgeInsets.only(top: 20, right: 10),
+								// margin: EdgeInsets.only(top: 20, right: 10),
 								child: Column
 								(
 									crossAxisAlignment: CrossAxisAlignment.start,
@@ -544,7 +581,7 @@ class _UserAccountState extends State<UserAccount>
 												style: ButtonStyle
 												(
 													foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-													backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
+													backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xff674094"))),
 													shape: MaterialStateProperty.all<RoundedRectangleBorder>
 													(
 														RoundedRectangleBorder
@@ -574,7 +611,7 @@ class _UserAccountState extends State<UserAccount>
 						)
 					],
 				),
-			)
+			// )
 		);
 	}
 }

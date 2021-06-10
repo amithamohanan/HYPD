@@ -52,11 +52,13 @@ class _ProductPageState extends State<ProductPage>
 			bottomSheet: BottomSheet
 			(
             	elevation: 0,
-				shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-              	backgroundColor: Colors.red,
+				shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+              	backgroundColor: Colors.transparent,
               	onClosing: () 
 				{
-                // Do something
+					setState(() {
+					  _showBottomSheet = false;
+					});
               	},
               	builder: (BuildContext ctx)
 				{
@@ -317,8 +319,8 @@ class _ProductPageState extends State<ProductPage>
 			(
 				decoration: BoxDecoration
 				(
-					color: _showBottomSheet ? Colors.white : Color(int.parse("0xff312247")),
-					borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight:  Radius.circular(20))
+					color: _showBottomSheet ? Colors.white : Color(int.parse("0xff674094")),
+					borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight:  Radius.circular(10))
 				),
 				width: double.infinity,
 				height: _showBottomSheet ? height / 1.2 : height / 7,
@@ -589,7 +591,7 @@ class _ProductPageState extends State<ProductPage>
 				width: width,
 				decoration: BoxDecoration
 				(
-					color: Color(int.parse("0xff312247")),
+					color: Color(int.parse("0xff674094")),
 					borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
 				),
 				child: Column
@@ -780,7 +782,7 @@ class _ProductPageState extends State<ProductPage>
 											style: ButtonStyle
 											(
 												foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-												backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
+												backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffEF5C99"))),
 												shape: MaterialStateProperty.all<RoundedRectangleBorder>
 												(
 													RoundedRectangleBorder
@@ -801,48 +803,6 @@ class _ProductPageState extends State<ProductPage>
 			)
 		);
 	}
-
-	// showSizeModal()
-	// {
-	// 	return showModalBottomSheet
-	// 	(	
-	// 		// isScrollControlled: true,
-	// 		shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-	// 		context: context,
-	// 		builder: (context) 
-	// 		{
-	// 			return FractionallySizedBox
-	// 			(
-    //     			heightFactor: 0.7,
-	// 				child: Container
-	// 				(
-	// 					margin: EdgeInsets.only(left: 10, right: 10),
-	// 					decoration: BoxDecoration
-	// 					(
-	// 						borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))
-	// 					),
-	// 					child: Column
-	// 					(
-	// 						crossAxisAlignment: CrossAxisAlignment.start,
-	// 						children: 
-	// 						[
-	// 							topButton(),
-	// 							SizedBox(height: height / 25,),
-	// 							sizeTitle(),
-	// 							SizedBox(height: height / 25,),
-	// 							selectSizeText(),
-	// 							SizedBox(height: 3,),
-	// 							chooseSize(),
-	// 							SizedBox(height: height / 25,),
-	// 							submitButton(),
-	// 							SizedBox(height: 5,),
-	// 						],
-	// 					),
-	// 				)
-	// 			);
-	// 		}
-	// 	);
-	// }
 
 	sizeTitle()
 	{
@@ -912,43 +872,6 @@ class _ProductPageState extends State<ProductPage>
 					);
 				}
 			),
-		);
-	}
-
-	submitButton()
-	{
-		return 
-		// Expanded
-		// (
-		// 	child: 
-			Container
-			(
-				margin: EdgeInsets.only(right: 15),
-				height: 50,
-				width: double.infinity,
-				child: ElevatedButton
-				(
-					child: Text
-					(
-						"Done",
-						style: TextStyle(fontSize: 14)
-					),
-					style: ButtonStyle
-					(
-						foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-						backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
-						shape: MaterialStateProperty.all<RoundedRectangleBorder>
-						(
-							RoundedRectangleBorder
-							(
-								borderRadius: BorderRadius.circular(15.5),
-								side: BorderSide(color: Colors.white38)
-							)
-						)
-					),
-					onPressed: () => null
-				)
-			// )
 		);
 	}
 }

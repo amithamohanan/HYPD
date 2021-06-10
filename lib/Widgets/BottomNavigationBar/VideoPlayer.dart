@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class Player extends StatefulWidget 
@@ -24,8 +25,24 @@ class _PlayerState extends State<Player>
 	{
 		print(url);
 		print("url");
-		_controller = VideoPlayerController.asset("assets/images/introPlayer.mp4");
-		_controller.initialize();
+		_controller = VideoPlayerController.network(url.toString());
+
+		_controller.addListener(() 
+		{
+			if (_controller.value.hasError) 
+			{
+				print(_controller.value.errorDescription);
+			}
+			if (_controller.value.isInitialized)
+			{
+				SnackBar(content: Text("Initialised"));
+			}
+			if (_controller.value.isBuffering)
+			{
+				SnackBar(content: Text("Buffering"));
+			}
+		});
+		// _controller.initialize();
 		_controller.play();
 		_controller.setLooping(true);
 		super.initState();

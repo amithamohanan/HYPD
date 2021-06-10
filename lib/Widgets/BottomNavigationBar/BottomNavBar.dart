@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
-import 'package:hypd/Widgets/BottomNavigationBar/LiveSessionPage.dart';
+import 'package:hypd/Widgets/Utilities/LiveSessionPage.dart';
 import 'package:hypd/Widgets/UserAccount.dart';
 
 class BottomNavBar extends StatefulWidget
@@ -26,9 +26,6 @@ class _BottomNavBarState extends State<BottomNavBar>
 		HomePage(),
 		LiveSession(),
 		UserAccount(),
-		// Login(),
-		// Register(),
-		// VerifyOTP()
 	];
 
 	@override

@@ -21,7 +21,7 @@ class _MyWalletState extends State<MyWallet>
 
 		return Scaffold
 		(
-			backgroundColor: Color(int.parse("0xff312247")),
+			backgroundColor: Color(int.parse("0xff674094")),
 			appBar: appBar(),
 			body: Container
 			(
@@ -48,7 +48,7 @@ class _MyWalletState extends State<MyWallet>
 		return AppBar
 		(
 			elevation: 0,
-			backgroundColor: Color(int.parse("0xff312247")),
+			backgroundColor: Color(int.parse("0xff674094")),
 			leading: Container
 			(
 				margin: EdgeInsets.only(left: 15, top: 5, bottom: 5),

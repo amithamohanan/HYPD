@@ -6,6 +6,7 @@ import 'package:hypd/Widgets/BottomNavigationBar/ImageView.dart';
 import 'package:hypd/Widgets/CollectionsPgae.dart';
 import 'package:hypd/Widgets/ProductPage.dart';
 import 'package:hypd/Widgets/ViewAll.dart';
+import 'package:hypd/global.dart';
 
 class ShoppingPage extends StatefulWidget 
 {
@@ -17,14 +18,16 @@ class _ShoppingPageState extends State<ShoppingPage>
 {
 	var height;
 	var width;
+	var fontSize;
 
 	bool isFavourite = false;
 
 	@override
 	Widget build(BuildContext context)
 	{
-		height = MediaQuery.of(context).size.height;
-		width = MediaQuery.of(context).size.width;
+		height = getHeight(context);
+		width = getWidth(context);
+		fontSize = getFontSize(context);
 
 		return SingleChildScrollView
 		(
@@ -310,23 +313,28 @@ class _ShoppingPageState extends State<ShoppingPage>
 										shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
 										child: ListTile
 										(
-											leading: Column
+											title: Column
 											(
 												crossAxisAlignment: CrossAxisAlignment.start,
+												mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 												children: 
 												[
-													SizedBox(height: 5),
-													Text
+													Wrap
 													(
-														"Travis Scott Tee",
-														style: GoogleFonts.montserrat
-														(
-															color: Colors.black,
-															fontWeight: FontWeight.w500,
-															fontSize: 10,
-														),
+														children: 
+														[
+															Text
+															(
+																"Travis Scott Tee ",
+																style: GoogleFonts.montserrat
+																(
+																	color: Colors.black,
+																	fontWeight: FontWeight.w500,
+																	fontSize: 10,
+																),
+															),
+														],
 													),
-													SizedBox(height: 20),
 													Text
 													(
 														" ₹ 12000",
@@ -410,7 +418,7 @@ class _ShoppingPageState extends State<ShoppingPage>
 						"A smile costs nothing 😃 ",
 						style: GoogleFonts.montserrat
 						(
-							fontSize: 13,
+							fontSize: fontSize * 0.04,
 							color: Colors.black,
 							fontWeight: FontWeight.bold
 						),
@@ -502,7 +510,7 @@ class _ShoppingPageState extends State<ShoppingPage>
 				"Featured Brands",
 				style: GoogleFonts.montserrat
 				(
-					fontSize: 13,
+					fontSize: fontSize * 0.04,
 					color: Colors.black,
 					fontWeight: FontWeight.bold
 				),
@@ -515,7 +523,7 @@ class _ShoppingPageState extends State<ShoppingPage>
 		return Container
 		(
 			color: Colors.white,
-			height: height / 7,
+			height: height / 5,
 			width: width,
 			margin: EdgeInsets.only(top: 15, left: 15),
 			child:ListView.builder
@@ -524,11 +532,14 @@ class _ShoppingPageState extends State<ShoppingPage>
 				itemCount: 10,
 				itemBuilder: (BuildContext context, int index)
 				{
-					return  
-					CircleAvatar
+					return Padding
 					(
-						radius: 60,
-						backgroundImage: NetworkImage("https://images.pexels.com/photos/974911/pexels-photo-974911.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500")
+						padding: EdgeInsets.only(left: 15),
+						child: CircleAvatar
+						(
+							radius: 60,
+							backgroundImage: NetworkImage("https://images.pexels.com/photos/974911/pexels-photo-974911.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500")
+						),
 					);
 				}
 			)
@@ -546,7 +557,7 @@ class _ShoppingPageState extends State<ShoppingPage>
 				"New Arrivals",
 				style: GoogleFonts.montserrat
 				(
-					fontSize: 13,
+					fontSize: fontSize * 0.04,
 					color: Colors.black,
 					fontWeight: FontWeight.bold
 				),

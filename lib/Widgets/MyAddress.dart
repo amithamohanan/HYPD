@@ -152,7 +152,7 @@ class _MyAddressState extends State<MyAddress>
 				height: height / 15,
 				child: DottedBorder
 				(
-					color: Color(int.parse("0xffF56C27")),
+					color: Color(int.parse("0xff674094")),
 					borderType: BorderType.RRect,
 					radius: Radius.circular(12),
 					padding: EdgeInsets.all(6),
@@ -168,7 +168,7 @@ class _MyAddressState extends State<MyAddress>
 									"Add New Address",
 									style: GoogleFonts.montserrat
 									(
-										color: Color(int.parse("0xffF56C27")),
+										color: Color(int.parse("0xff674094")),
 										fontWeight: FontWeight.bold,
 										fontSize: 18
 									),
@@ -529,7 +529,7 @@ class _MyAddressState extends State<MyAddress>
 		return  Container
 		(
 
-			margin: EdgeInsets.only(left: 25, right: 25),
+			margin: EdgeInsets.only(left: 25, right: 25, bottom: 25),
 			height: MediaQuery.of(context).size.height / 15,
 			width: double.infinity,
 			child: ElevatedButton
@@ -542,7 +542,7 @@ class _MyAddressState extends State<MyAddress>
 				style: ButtonStyle
 				(
 					foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-					backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffF56C27"))),
+					backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xff674094"))),
 					shape: MaterialStateProperty.all<RoundedRectangleBorder>
 					(
 						RoundedRectangleBorder
