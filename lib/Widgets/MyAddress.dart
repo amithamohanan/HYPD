@@ -2,6 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/Utilities/SnackBar.dart';
 
 class MyAddress extends StatefulWidget
 {
@@ -11,6 +12,15 @@ class MyAddress extends StatefulWidget
 
 class _MyAddressState extends State<MyAddress>
 {
+	final _formKey = GlobalKey<FormState>();
+
+	TextEditingController pinCodeController = new TextEditingController();
+	TextEditingController phoneController = new TextEditingController();
+	TextEditingController addressController = new TextEditingController();
+	TextEditingController stateController = new TextEditingController();
+	TextEditingController localityController = new TextEditingController();
+	TextEditingController districtController = new TextEditingController();
+
 	var height;
 	var width;
 
@@ -205,27 +215,31 @@ class _MyAddressState extends State<MyAddress>
 						),
 						child: SingleChildScrollView
 						(
-							child: Column
+							child: Form
 							(
-								mainAxisSize: MainAxisSize.min,
-								children: 
-								[
-									topButton(),
-									SizedBox(height: height / 25,),
-									title(),
-									SizedBox(height: height / 25,),
-									address1(),
-									SizedBox(height: height / 25,),
-									address2(),
-									SizedBox(height: height / 25,),
-									address3(),
-									SizedBox(height: height / 25,),
-									address4(),
-									SizedBox(height: height / 25,),
-									address5(),
-									SizedBox(height: height / 20,),
-									submitButton()
-								],
+								key: _formKey,
+								child:  Column
+								(
+									mainAxisSize: MainAxisSize.min,
+									children: 
+									[
+										topButton(),
+										SizedBox(height: height / 25,),
+										title(),
+										SizedBox(height: height / 25,),
+										address1(),
+										SizedBox(height: height / 25,),
+										address2(),
+										SizedBox(height: height / 25,),
+										address3(),
+										SizedBox(height: height / 25,),
+										address4(),
+										SizedBox(height: height / 25,),
+										address5(),
+										SizedBox(height: height / 20,),
+										submitButton()
+									],
+								)
 							)
 						)
 					)
@@ -276,6 +290,9 @@ class _MyAddressState extends State<MyAddress>
 					(
 						child: TextFormField
 						(
+							controller: pinCodeController,
+							keyboardType: TextInputType.number,
+							maxLength: 6,
 							style:  GoogleFonts.montserrat
 							(
 								fontWeight: FontWeight.bold,
@@ -291,12 +308,30 @@ class _MyAddressState extends State<MyAddress>
 									color: Colors.black38,
 									fontSize: 12
 								),
+								errorStyle: GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.w300,
+									color: Colors.pink,
+									fontSize: 12
+								),
 								counterText: "",
 								contentPadding: EdgeInsets.all(0),
 								isDense: true,
 								enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 								focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 							),
+							validator: (value)
+							{
+								if(value == null || value.isEmpty)
+								{
+									return "*Pincode cannot be empty";
+								}
+								else if(value.length != 6)
+								{
+									return "*Enter a valid pincode";
+								}
+							},
+							onSaved: (value) => pinCodeController.text = value.toString()
 						),
 					),
 					SizedBox(width: 25),
@@ -304,6 +339,8 @@ class _MyAddressState extends State<MyAddress>
 					(
 						child: TextFormField
 						(
+							controller: stateController,
+							keyboardType: TextInputType.name,
 							style:  GoogleFonts.montserrat
 							(
 								fontWeight: FontWeight.bold,
@@ -319,12 +356,25 @@ class _MyAddressState extends State<MyAddress>
 									color: Colors.black38,
 									fontSize: 12
 								),
+								errorStyle: GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.w300,
+									color: Colors.pink,
+									fontSize: 12
+								),
 								counterText: "",
 								contentPadding: EdgeInsets.all(0),
 								isDense: true,
 								enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 								focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 							),
+							validator: (value)
+							{
+								if(value == null || value.isEmpty)
+								{
+									return "*State cannot be empty";
+								}
+							},
 						),
 					)
 				],
@@ -345,6 +395,9 @@ class _MyAddressState extends State<MyAddress>
 					(
 						child: TextFormField
 						(
+							controller: phoneController,
+							keyboardType: TextInputType.phone,
+							maxLength: 10,
 							style:  GoogleFonts.montserrat
 							(
 								fontWeight: FontWeight.bold,
@@ -360,12 +413,30 @@ class _MyAddressState extends State<MyAddress>
 									color: Colors.black38,
 									fontSize: 12
 								),
+								errorStyle: GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.w300,
+									color: Colors.pink,
+									fontSize: 12
+								),
 								counterText: "",
 								contentPadding: EdgeInsets.all(0),
 								isDense: true,
 								enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 								focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 							),
+							validator: (value)
+							{
+								if(value == null || value.isEmpty)
+								{
+									return "*Phone cannot be empty";
+								}
+								else if(value.length != 10)
+								{
+									return "*Enter a valid phone number";
+								}
+							},
+							onSaved: (value) => phoneController.text = value.toString(),
 						),
 					),
 				],
@@ -386,6 +457,8 @@ class _MyAddressState extends State<MyAddress>
 					(
 						child: TextFormField
 						(
+							controller: addressController,
+							keyboardType: TextInputType.streetAddress,
 							style:  GoogleFonts.montserrat
 							(
 								fontWeight: FontWeight.bold,
@@ -401,12 +474,26 @@ class _MyAddressState extends State<MyAddress>
 									color: Colors.black38,
 									fontSize: 12
 								),
+								errorStyle: GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.w300,
+									color: Colors.pink,
+									fontSize: 12
+								),
 								counterText: "",
 								contentPadding: EdgeInsets.all(0),
 								isDense: true,
 								enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 								focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 							),
+							validator: (value)
+							{
+								if(value == null || value.isEmpty)
+								{
+									return "*Address cannot be empty";
+								}
+							},
+							onSaved: (value) => addressController.text = value.toString(),
 						),
 					),
 				],
@@ -468,6 +555,8 @@ class _MyAddressState extends State<MyAddress>
 					(
 						child: TextFormField
 						(
+							controller: localityController,
+							keyboardType: TextInputType.streetAddress,
 							style:  GoogleFonts.montserrat
 							(
 								fontWeight: FontWeight.bold,
@@ -483,12 +572,26 @@ class _MyAddressState extends State<MyAddress>
 									color: Colors.black38,
 									fontSize: 12
 								),
+								errorStyle: GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.w300,
+									color: Colors.pink,
+									fontSize: 12
+								),
 								counterText: "",
 								contentPadding: EdgeInsets.all(0),
 								isDense: true,
 								enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 								focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 							),
+							validator: (value)
+							{
+								if(value == null || value.isEmpty)
+								{
+									return "*Locality cannot be empty";
+								}
+							},
+							onSaved: (value) => localityController.text = value.toString(),
 						),
 					),
 					SizedBox(width: 25),
@@ -496,6 +599,8 @@ class _MyAddressState extends State<MyAddress>
 					(
 						child: TextFormField
 						(
+							controller: districtController,
+							keyboardType: TextInputType.streetAddress,
 							style:  GoogleFonts.montserrat
 							(
 								fontWeight: FontWeight.bold,
@@ -511,12 +616,26 @@ class _MyAddressState extends State<MyAddress>
 									color: Colors.black38,
 									fontSize: 12
 								),
+								errorStyle: GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.w300,
+									color: Colors.black38,
+									fontSize: 12
+								),
 								counterText: "",
 								contentPadding: EdgeInsets.all(0),
 								isDense: true,
 								enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 								focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 							),
+							validator: (value)
+							{
+								if(value == null || value.isEmpty)
+								{
+									return "*State cannot be empty";
+								}
+							},
+							onSaved: (value) => stateController.text = value.toString(),
 						),
 					),
 				],
@@ -537,7 +656,7 @@ class _MyAddressState extends State<MyAddress>
 				child: Text
 				(
 					"Submit",
-					style: TextStyle(fontSize: 14)
+					style: GoogleFonts.montserrat(fontSize: 14)
 				),
 				style: ButtonStyle
 				(
@@ -554,7 +673,11 @@ class _MyAddressState extends State<MyAddress>
 				),
 				onPressed: ()
 				{
-					// Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+					if(_formKey.currentState!.validate())
+					{
+						Navigator.pop(context);
+						showSnackBar(context, "Your address is updated");
+					}
 				}
 			)
 		);

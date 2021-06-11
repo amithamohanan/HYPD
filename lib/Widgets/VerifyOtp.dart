@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/AddUserDetails.dart';
+import 'package:hypd/Widgets/Utilities/SnackBar.dart';
 import 'package:hypd/global.dart';
 
 class VerifyOTP extends StatefulWidget 
@@ -192,7 +193,12 @@ class _VerifyOTPState extends State<VerifyOTP>
 					margin: EdgeInsets.only(right:8, bottom:10),
 					child: TextFormField
 					(
-						style: TextStyle(fontSize: 18, color: Colors.grey),
+						style:   GoogleFonts.montserrat
+						(
+							fontWeight: FontWeight.bold,
+							color: Colors.black,
+							fontSize: fontSize / 30,
+						),
 						controller: f1Controller,
 						textInputAction: TextInputAction.next,
 						focusNode: focus1,
@@ -225,7 +231,12 @@ class _VerifyOTPState extends State<VerifyOTP>
 					margin: EdgeInsets.only(right:8, bottom:10),
 					child: TextFormField
 					(
-						style: TextStyle(fontSize: 18, color: Colors.grey),
+						style:   GoogleFonts.montserrat
+						(
+							fontWeight: FontWeight.bold,
+							color: Colors.black,
+							fontSize: fontSize / 30,
+						),
 						controller: f2Controller,
 						textInputAction: TextInputAction.next,
 						focusNode: focus2,
@@ -258,7 +269,12 @@ class _VerifyOTPState extends State<VerifyOTP>
 					margin: EdgeInsets.only(right:8, bottom:10),
 					child: TextFormField
 					(
-						style: TextStyle(fontSize: 18, color: Colors.grey),
+						style:   GoogleFonts.montserrat
+						(
+							fontWeight: FontWeight.bold,
+							color: Colors.black,
+							fontSize: fontSize / 30,
+						),
 						controller: f3Controller,
 						textInputAction: TextInputAction.next,
 						focusNode: focus3,
@@ -291,7 +307,12 @@ class _VerifyOTPState extends State<VerifyOTP>
 					margin: EdgeInsets.only(right:8, bottom:10),
 					child: TextFormField
 					(
-						style: TextStyle(fontSize: 18, color: Colors.grey),
+						style:   GoogleFonts.montserrat
+						(
+							fontWeight: FontWeight.bold,
+							color: Colors.black,
+							fontSize: fontSize / 30,
+						),
 						controller: f4Controller,
 						textInputAction: TextInputAction.next,
 						focusNode: focus4,
@@ -324,7 +345,12 @@ class _VerifyOTPState extends State<VerifyOTP>
 					margin: EdgeInsets.only(right:8, bottom:10),
 					child: TextFormField
 					(
-						style: TextStyle(fontSize: 18, color: Colors.grey),
+						style:   GoogleFonts.montserrat
+						(
+							fontWeight: FontWeight.bold,
+							color: Colors.black,
+							fontSize: fontSize / 30,
+						),
 						controller: f5Controller,
 						textInputAction: TextInputAction.next,
 						focusNode: focus5,
@@ -357,7 +383,12 @@ class _VerifyOTPState extends State<VerifyOTP>
 					margin: EdgeInsets.only(right:8, bottom:10),
 					child: TextFormField
 					(
-						style: TextStyle(fontSize: 18, color: Colors.grey),
+						style:   GoogleFonts.montserrat
+						(
+							fontWeight: FontWeight.bold,
+							color: Colors.black,
+							fontSize: fontSize / 30,
+						),
 						controller: f6Controller,
 						textInputAction: TextInputAction.next,
 						focusNode: focus6,
@@ -428,7 +459,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 			),
 			onTap: ()
 			{
-				// Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+				showSnackBar(context, "OTP send, please check your phone");
 			},
 		);
 	}
@@ -465,7 +496,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 				),
 				onPressed: ()
 				{
-					Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AddUserDetails()));
+				    isOtpEntered ? Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AddUserDetails())) : showSnackBar(context, "Please enter the OTP");
 				}
 			)
 		);

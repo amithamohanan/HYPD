@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/Utilities/SnackBar.dart';
 import 'package:hypd/global.dart';
 
 class EditProfile extends StatefulWidget 
@@ -11,9 +12,21 @@ class EditProfile extends StatefulWidget
 
 class _EditProfileState extends State<EditProfile> 
 {
+	final _profileKey = GlobalKey<FormState>();
+
+	TextEditingController dateController = new TextEditingController();
+	TextEditingController monthController = new TextEditingController();
+	TextEditingController yearController = new TextEditingController();
+	TextEditingController nameController = new TextEditingController();
+
 	var height;
 	var width;
 	var fontSize;
+
+	bool isMale = false;
+	bool isFemale = false;
+	bool isOther = false;
+	bool isDateEnter = false;
 
 	@override
 	Widget build(BuildContext context)
@@ -187,273 +200,329 @@ class _EditProfileState extends State<EditProfile>
 
 	Widget textFormField()
 	{
-		return Column
+		return Form
 		(
-			crossAxisAlignment: CrossAxisAlignment.start,
-			children:
-			[
-				Text
-				(
-					"Your Full Name",
-					style: GoogleFonts.montserrat
+			key: _profileKey,
+			child: Column
+			(
+				crossAxisAlignment: CrossAxisAlignment.start,
+				children:
+				[
+					Text
 					(
-						color: Colors.black38,
-						fontSize: 12,
-					),
-				),
-				SizedBox(height: height / 25,),
-				TextFormField
-				(
-					style:  GoogleFonts.montserrat
-					(
-						fontWeight: FontWeight.bold,
-						color: Colors.black,
-						fontSize: 12
-					),
-					decoration: InputDecoration
-					(
-						counterText: "",
-						contentPadding: EdgeInsets.all(0),
-						isDense: true,
-						enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
-						focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
-					),
-				),
-				SizedBox(height: height / 25,),
-				Text
-				(
-					"Date of birth",
-					style: GoogleFonts.montserrat
-					(
-						color: Colors.black38,
-						fontSize: 12,
-					),
-				),
-				SizedBox(height: height / 25,),
-				Row
-				(
-					mainAxisAlignment: MainAxisAlignment.spaceBetween,
-					children:
-					[
-						Container
+						"Your Full Name",
+						style: GoogleFonts.montserrat
 						(
-							height: 25,
-							width: 25,
-							child: TextFormField
+							color: Colors.black38,
+							fontSize: 12,
+						),
+					),
+					SizedBox(height: height / 25,),
+					TextFormField
+					(
+						keyboardType: TextInputType.name,
+						controller: nameController,
+						style:  GoogleFonts.montserrat
+						(
+							fontWeight: FontWeight.bold,
+							color: Colors.black,
+							fontSize: 12
+						),
+						decoration: InputDecoration
+						(
+							errorStyle: GoogleFonts.montserrat
 							(
-								keyboardType: TextInputType.number,
-								maxLength: 2,
-								style:  GoogleFonts.montserrat
+								color: Colors.pink,
+								fontSize: 12,
+							),
+							counterText: "",
+							contentPadding: EdgeInsets.all(0),
+							isDense: true,
+							enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+							focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+						),
+						validator: (value)
+						{
+							if(value == null || value.isEmpty)
+							{
+								return "*Name cannot be empty";
+							}
+						},
+						onSaved: (value) => nameController.text = value.toString(),
+					),
+					SizedBox(height: height / 25,),
+					Text
+					(
+						"Date of birth",
+						style: GoogleFonts.montserrat
+						(
+							color: Colors.black38,
+							fontSize: 12,
+						),
+					),
+					SizedBox(height: height / 25,),
+					Row
+					(
+						mainAxisAlignment: MainAxisAlignment.spaceBetween,
+						children:
+						[
+							Container
+							(
+								height: 25,
+								width: 25,
+								child: TextFormField
 								(
-									fontWeight: FontWeight.bold,
-									color: Colors.black,
-									fontSize: 12
-								),
-								decoration: InputDecoration
-								(
-									hintText: "DD",
-									hintStyle:  GoogleFonts.montserrat
+									controller: dateController,
+									keyboardType: TextInputType.number,
+									maxLength: 2,
+									style:  GoogleFonts.montserrat
 									(
-										fontWeight: FontWeight.w500,
-										color: Colors.black26,
-										fontSize: fontSize / 35
+										fontWeight: FontWeight.bold,
+										color: Colors.black,
+										fontSize: 12
 									),
-									counterText: "",
-									contentPadding: EdgeInsets.all(0),
-									isDense: true,
-									enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
-									focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+									textAlign: TextAlign.center,
+									decoration: InputDecoration
+									(
+										hintText: "DD",
+										hintStyle:  GoogleFonts.montserrat
+										(
+											fontWeight: FontWeight.w500,
+											color: Colors.black26,
+											fontSize: fontSize / 35
+										),
+										counterText: "",
+										contentPadding: EdgeInsets.all(0),
+										isDense: true,
+										enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+										focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+									),
+									onSaved: (value) => dateController.text = value.toString(),
 								),
 							),
-						),
-						SizedBox(width: 5,),
-						Container
-						(
-							height: 25,
-							width: 25,
-							child: TextFormField
+							SizedBox(width: 5,),
+							Container
 							(
-								keyboardType: TextInputType.number,
-								maxLength: 2,
-								style:  GoogleFonts.montserrat
+								height: 25,
+								width: 25,
+								child: TextFormField
 								(
-									fontWeight: FontWeight.bold,
-									color: Colors.black,
-									fontSize: 12
-								),
-								decoration: InputDecoration
-								(
-									hintText: "MM",
-									hintStyle:  GoogleFonts.montserrat
+									controller: monthController,
+									keyboardType: TextInputType.number,
+									maxLength: 2,
+									style:  GoogleFonts.montserrat
 									(
-										fontWeight: FontWeight.w500,
-										color: Colors.black26,
-										fontSize: fontSize / 35
+										fontWeight: FontWeight.bold,
+										color: Colors.black,
+										fontSize: 12
 									),
-									counterText: "",
-									contentPadding: EdgeInsets.all(0),
-									isDense: true,
-									enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
-									focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+									textAlign: TextAlign.center,
+									decoration: InputDecoration
+									(
+										hintText: "MM",
+										hintStyle:  GoogleFonts.montserrat
+										(
+											fontWeight: FontWeight.w500,
+											color: Colors.black26,
+											fontSize: fontSize / 35
+										),
+										counterText: "",
+										contentPadding: EdgeInsets.all(0),
+										isDense: true,
+										enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+										focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+									),
 								),
 							),
-						),
-						SizedBox(width: 5,),
-						Container
-						(
-							height: 25,
-							width: 40,
-							child: TextFormField
+							SizedBox(width: 5,),
+							Container
 							(
-								keyboardType: TextInputType.number,
-								maxLength: 4,
-								style:  GoogleFonts.montserrat
+								height: 25,
+								width: 40,
+								child: TextFormField
 								(
-									fontWeight: FontWeight.bold,
-									color: Colors.black,
-									fontSize: 12
-								),
-								decoration: InputDecoration
-								(
-									hintText: "YYYY",
-									hintStyle:  GoogleFonts.montserrat
+									controller: yearController,
+									keyboardType: TextInputType.number,
+									maxLength: 4,
+									style:  GoogleFonts.montserrat
 									(
-										fontWeight: FontWeight.w500,
-										color: Colors.black26,
-										fontSize: fontSize / 35
+										fontWeight: FontWeight.bold,
+										color: Colors.black,
+										fontSize: 12
 									),
-									counterText: "",
-									contentPadding: EdgeInsets.all(0),
-									isDense: true,
-									enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
-									focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+									textAlign: TextAlign.center,
+									decoration: InputDecoration
+									(
+										hintText: "YYYY",
+										hintStyle:  GoogleFonts.montserrat
+										(
+											fontWeight: FontWeight.w500,
+											color: Colors.black26,
+											fontSize: fontSize / 35
+										),
+										counterText: "",
+										contentPadding: EdgeInsets.all(0),
+										isDense: true,
+										enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+										focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+									),
 								),
 							),
-						),
-						SizedBox(width: width / 3),
-						Container
-						(
-							child: IconButton
+							SizedBox(width: width / 3),
+							Container
 							(
-								color: Colors.black12,
-								icon: Icon(Icons.calendar_today_outlined),
-								onPressed: () async
+								child: IconButton
+								(
+									color: isDateEnter ? Colors.black12 : Color(int.parse("0xffEF5C99")),
+									icon: Icon(Icons.calendar_today_outlined),
+									onPressed: () async
+									{
+										FocusScope.of(context).requestFocus(new FocusNode());
+										var date = await showDatePicker
+										(
+											context: context,
+											initialDate:DateTime.now(),
+											firstDate:DateTime(1900),
+											lastDate: DateTime(2100)
+										);
+										var x = date.toString().split("-");
+										var temp = x[2].toString().split(" ");
+
+										yearController.text = x[0];
+										monthController.text = x[1];
+										dateController.text = temp[0];
+									},
+								),
+							)
+						],
+					),
+					SizedBox(height: height / 25,),
+					Text
+					(
+						"Gender",
+						style: GoogleFonts.montserrat
+						(
+							color: Colors.black38,
+							fontSize: 12,
+						),
+					),
+					Row
+					(
+						mainAxisAlignment: MainAxisAlignment.spaceBetween,
+						children:
+						[
+							OutlinedButton
+							(
+								child: Text
+								(
+									"Male",
+									style: GoogleFonts.montserrat
+									(
+										fontSize: fontSize / 30,
+										color: isMale ? Colors.white : Colors.black26
+									),
+								),
+								style: ButtonStyle
+								(
+									backgroundColor: isMale ? MaterialStateProperty.all<Color>(Color(int.parse("0xffEF5C99"))) :  MaterialStateProperty.all<Color>(Colors.white),
+								),
+								onPressed: ()
 								{
-									// DateTime date = DateTime.now();
-									FocusScope.of(context).requestFocus(new FocusNode());
-									var date = await showDatePicker
-									(
-										context: context,
-										initialDate:DateTime.now(),
-										firstDate:DateTime(1900),
-										lastDate: DateTime(2100)
-									);
-									// DateFormat formatter = DateFormat('dd-MM-yyyy');
-									// dobController.text = formatter.format(date);
-								},
+									setState(() 
+									{
+										isMale = true;
+										isOther = false;
+										isFemale = false;
+									});
+								}
 							),
-						)
-					],
-				),
-				SizedBox(height: height / 25,),
-				Text
-				(
-					"Gender",
-					style: GoogleFonts.montserrat
-					(
-						color: Colors.black38,
-						fontSize: 12,
+							OutlinedButton
+							(
+								child: Text
+								(
+									"Female",
+									style: GoogleFonts.montserrat
+									(
+										fontSize: fontSize / 30,
+										color: isFemale ? Colors.white : Colors.black26
+									),
+								),
+								style: ButtonStyle
+								(
+									backgroundColor: isFemale ? MaterialStateProperty.all<Color>(Color(int.parse("0xffEF5C99"))) :  MaterialStateProperty.all<Color>(Colors.white),
+								),
+								onPressed: ()
+								{
+									setState(() 
+									{
+										isFemale = true;
+										isMale = false;
+										isOther = false;
+									});
+								}
+							),
+							OutlinedButton
+							(
+								style: ButtonStyle
+								(
+									backgroundColor: isOther ? MaterialStateProperty.all<Color>(Color(int.parse("0xffEF5C99"))) :  MaterialStateProperty.all<Color>(Colors.white),
+								),
+								child: Text
+								(
+									"Other",
+									style: GoogleFonts.montserrat
+									(
+										fontSize: fontSize / 35,
+										color: isOther ? Colors.white : Colors.black26
+									),
+								),
+								onPressed: ()
+								{
+									setState(() 
+									{
+										isOther = true;
+										isMale = false;
+										isFemale = false;
+									});
+								}
+							)
+						],
 					),
-				),
-				Row
-				(
-					mainAxisAlignment: MainAxisAlignment.spaceBetween	,
-					children:
-					[
-						OutlinedButton
-						(
-							child: Text
-							(
-								"Male",
-								style: GoogleFonts.montserrat
-								(
-									fontSize: 13,
-									color: Colors.black26	
-								),
-							),
-							onPressed: ()
-							{
-
-							}
-						),
-						OutlinedButton
-						(
-							child: Text
-							(
-								"Female",
-								style: GoogleFonts.montserrat
-								(
-									fontSize: 15,
-									color: Colors.black26	
-								),
-							),
-							onPressed: ()
-							{
-
-							}
-						),
-						OutlinedButton
-						(
-							child: Text
-							(
-								"Other",
-								style: GoogleFonts.montserrat
-								(
-									fontSize: 15,
-									color: Colors.black26	
-								),
-							),
-							onPressed: ()
-							{
-
-							}
-						)
-					],
-				),
-				SizedBox(height: 20),
-				Center
-				(
-					child: Container
+					SizedBox(height: 20),
+					Center
 					(
-						height: height / 14,
-						width: double.infinity,
-						child: ElevatedButton
+						child: Container
 						(
-							child: Text
+							height: height / 14,
+							width: double.infinity,
+							child: ElevatedButton
 							(
-								"Submit",
-								style: GoogleFonts.montserrat(fontSize: fontSize / 20,)
-							),
-							style: ButtonStyle
-							(
-								foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-								backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xff674094"))),
-								shape: MaterialStateProperty.all<RoundedRectangleBorder>
+								child: Text
 								(
-									RoundedRectangleBorder
+									"Submit",
+									style: GoogleFonts.montserrat(fontSize: fontSize / 20,)
+								),
+								style: ButtonStyle
+								(
+									foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+									backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xff674094"))),
+									shape: MaterialStateProperty.all<RoundedRectangleBorder>
 									(
-										borderRadius: BorderRadius.circular(20.5),
-										side: BorderSide(color: Colors.white38)
+										RoundedRectangleBorder
+										(
+											borderRadius: BorderRadius.circular(20.5),
+											side: BorderSide(color: Colors.white38)
+										)
 									)
-								)
-							),
-							onPressed: () =>  null
+								),
+								onPressed: () =>  showSnackBar(context, "Profile updated successfully")
 
+							)
 						)
-					)
-				),
-				SizedBox(height: 10)
-			]
+					),
+					SizedBox(height: 10)
+				]
+			)
 		);
 	}
 }

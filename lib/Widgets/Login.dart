@@ -3,9 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
-import 'package:hypd/Widgets/Register.dart';
+import 'package:hypd/Widgets/Utilities/SnackBar.dart';
 import 'package:hypd/Widgets/VerifyOtp.dart';
 import 'package:hypd/global.dart';
+import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
 
 class Login extends StatefulWidget 
@@ -16,6 +17,12 @@ class Login extends StatefulWidget
 
 class _LoginState extends State<Login> 
 {
+	final _formKeyRegister = GlobalKey<FormState>();
+	final _formKeyLogin = GlobalKey<FormState>();
+
+	TextEditingController emailField = new TextEditingController();
+	TextEditingController phoneField = new TextEditingController();
+	TextEditingController dobField = new TextEditingController(text: "");
 
 	late VideoPlayerController _controller;
 
@@ -73,12 +80,12 @@ class _LoginState extends State<Login>
 			child: Scaffold
 			(
 				resizeToAvoidBottomInset: true,
-				body:  Stack
+				body: Stack
 				(
 					children: <Widget>
 					[
 						videoPlayer(),
-						isNewUser ? register() : skipText(),
+						isNewUser ? register(context) : skipText(),
 						!isNewUser ? Positioned
 						(
 							right: width/ 40,
@@ -229,6 +236,7 @@ class _LoginState extends State<Login>
 			),
 			child: Form
 			(
+				key: _formKeyLogin,
 				child: Column
 				(
 					crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,6 +266,8 @@ class _LoginState extends State<Login>
 						SizedBox(height: 20),
 						TextFormField
 						(
+							controller: emailField,
+							keyboardType: TextInputType.emailAddress,
 							style:  GoogleFonts.montserrat
 							(
 								fontWeight: FontWeight.bold,
@@ -277,6 +287,25 @@ class _LoginState extends State<Login>
 								enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 								focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 							),
+							validator: (value)
+							{
+								if(value == null || value.isEmpty)
+								{
+									return "*Email cannot be empty";
+								}
+								else
+								{
+									if (!value.contains('@'))
+									{
+										return 'Invalid Email';
+									}
+									else
+									{
+										return null;
+									}
+								}
+							},
+							onSaved: (value) => emailField.text = value.toString(),
 						),
 						SizedBox(height: 25,),
 						Center
@@ -305,7 +334,14 @@ class _LoginState extends State<Login>
 											)
 										)
 									),
-									onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyOTP()))
+									onPressed: ()
+									{
+										if (_formKeyLogin.currentState!.validate()) 
+										{
+											showSnackBar(context, "OTP send successfully");
+											Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyOTP()));
+										}
+									}
 
 								)
 							)
@@ -353,7 +389,7 @@ class _LoginState extends State<Login>
 		);
 	}
 	
-	Widget register()
+	Widget register(context)
 	{
 		return Positioned
 		(
@@ -370,6 +406,7 @@ class _LoginState extends State<Login>
 				),
 				child: Form
 				(
+					key: _formKeyRegister,
 					child: Column
 					(
 						crossAxisAlignment: CrossAxisAlignment.start,
@@ -395,8 +432,10 @@ class _LoginState extends State<Login>
 									fontSize: fontSize / 30,
 								),
 							),
+							SizedBox(height: 20),
 							TextFormField
 							(
+								keyboardType: TextInputType.emailAddress,
 								style:  GoogleFonts.montserrat
 								(
 									fontWeight: FontWeight.bold,
@@ -410,12 +449,36 @@ class _LoginState extends State<Login>
 										color: Colors.grey,
 										fontSize: fontSize / 30,
 									),
+									errorStyle: GoogleFonts.montserrat
+									(
+										color: Colors.pink,
+										fontSize: fontSize / 30,
+									),
 									counterText: "",
 									contentPadding: EdgeInsets.all(0),
 									isDense: true,
 									enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 									focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 								),
+								validator: (value)
+								{
+									if(value == null || value.isEmpty)
+									{
+										return "*Email cannot be empty";
+									}
+									else
+									{
+										if (!value.contains('@'))
+										{
+											return 'Invalid Email';
+										}
+										else
+										{
+											return null;
+										}
+									}
+								},
+								onSaved: (value) => emailField.text = value.toString(),
 							),
 							SizedBox(height: 25,),
 							Text
@@ -427,8 +490,11 @@ class _LoginState extends State<Login>
 									fontSize: fontSize / 30,
 								),
 							),
+							SizedBox(height: 20),
 							TextFormField
 							(
+								keyboardType: TextInputType.phone,
+								maxLength: 10,
 								style:  GoogleFonts.montserrat
 								(
 									fontWeight: FontWeight.bold,
@@ -437,6 +503,11 @@ class _LoginState extends State<Login>
 								),
 								decoration: InputDecoration
 								(
+									errorStyle: GoogleFonts.montserrat
+									(
+										color: Colors.pink,
+										fontSize: fontSize / 30,
+									),
 									hintStyle:  GoogleFonts.montserrat
 									(
 										color: Colors.grey,
@@ -447,7 +518,26 @@ class _LoginState extends State<Login>
 									isDense: true,
 									enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 									focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
-								)
+								),
+								validator: (value)
+								{
+									if(value == null || value.isEmpty)
+									{
+										return "*Phone cannot be empty";
+									}
+									else
+									{
+										if (value.length != 10)
+										{
+											return 'Enter a valid phone number';
+										}
+										else
+										{
+											return null;
+										}
+									}
+								},
+								onSaved: (value) => phoneField.text = value.toString(),
 							),
 							SizedBox(height: 25,),
 							Text
@@ -459,8 +549,10 @@ class _LoginState extends State<Login>
 									fontSize: fontSize / 30,
 								),
 							),
+							SizedBox(height: 20),
 							TextFormField
 							(
+								controller: dobField,
 								style:  GoogleFonts.montserrat
 								(
 									fontWeight: FontWeight.bold,
@@ -480,10 +572,23 @@ class _LoginState extends State<Login>
 									enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 									focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 								),
+								validator: (value)
+								{
+									if(value == null || value.isEmpty)
+									{
+										return "*Date of birth cannot be empty";
+									}
+									else
+									{
+										return null;
+									}
+								},
+								onSaved: (value) => dobField.text = value.toString(),
 								onTap: () async
 								{
-									// DateTime date = DateTime.now();
+									// DateTime date = DateTime(1900);
 									FocusScope.of(context).requestFocus(new FocusNode());
+									DateFormat formatter = DateFormat('dd-MM-yyyy');
 									var date = await showDatePicker
 									(
 										context: context,
@@ -491,8 +596,10 @@ class _LoginState extends State<Login>
 										firstDate:DateTime(1900),
 										lastDate: DateTime(2100)
 									);
-									// DateFormat formatter = DateFormat('dd-MM-yyyy');
-									// dobController.text = formatter.format(date);
+									print(date);
+									print("date");
+									// formatter.format(date.t)
+									dobField.text = date.toString();
 								},
 							),
 							SizedBox(height: 30,),
@@ -522,7 +629,14 @@ class _LoginState extends State<Login>
 												)
 											)
 										),
-										onPressed: () => null
+										onPressed: ()
+										{
+											if (_formKeyRegister.currentState!.validate()) 
+											{
+												showSnackBar(context, "OTP send, please check your phone");
+												Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyOTP()));
+											}
+										}
 									)
 								)
 							),

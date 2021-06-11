@@ -32,10 +32,10 @@ class _WatchVideoState extends State<WatchVideo>
 
 	List videos =
 	[
-		"https://vod-progressive.akamaized.net/exp=1622717966~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F993%2F20%2F504965980%2F2312203141.mp4~hmac=bed1903c8f3d7462eb7f7605f5e9a5ef47cb7d07888c088e97f8fc70787eee68/vimeo-prod-skyfire-std-us/01/993/20/504965980/2312203141.mp4?filename=pexels-roman-odintsov-6609500.mp4",
-		"https://vod-progressive.akamaized.net/exp=1622718679~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F4949%2F20%2F524748008%2F2459605317.mp4~hmac=c254e665e62355907c625f25c00095ec779108b4864aee905e2513fcc9008200/vimeo-prod-skyfire-std-us/01/4949/20/524748008/2459605317.mp4?filename=pexels-cottonbro-7169950.mp4",
-		"https://vod-progressive.akamaized.net/exp=1622717966~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F993%2F20%2F504965980%2F2312203141.mp4~hmac=bed1903c8f3d7462eb7f7605f5e9a5ef47cb7d07888c088e97f8fc70787eee68/vimeo-prod-skyfire-std-us/01/993/20/504965980/2312203141.mp4?filename=pexels-roman-odintsov-6609500.mp4",
-		"https://vod-progressive.akamaized.net/exp=1623314662~acl=%2Fvimeo-prod-skyfire-std-us%2F01%2F3337%2F19%2F491685707%2F2210309174.mp4~hmac=00002b236d82dc69694325e97aaaf4dc55eb5c5f102f0063ce72f5f71cb8c865/vimeo-prod-skyfire-std-us/01/3337/19/491685707/2210309174.mp4?filename=pexels-roman-odintsov-6205681.mp4"
+		"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+		"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+		"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+		"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
 	];
 
 	var temp = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non venenatis ligula. Praesent massa ex, vestibulum eget nisl sit amet, rutrum ullamcorper augue. Aliquam erat leo, hendrerit non ipsum sit amet, auctor sollicitudin odio. Donec aliquet accumsan nunc. Vestibulum condimentum et urna eget porttitor. Mauris ultrices id augue et convallis. Etiam lobortis tincidunt libero, eget efficitur orci commodo euismod.";
@@ -50,14 +50,12 @@ class _WatchVideoState extends State<WatchVideo>
 		return Scaffold
 		(
 			backgroundColor: Colors.white,
-			// appBar: appBar(),
 			body: Container
 			(
 				height: height,
 				width: width,
 				child: videoPlayer(),
 			),
-			// bottomNavigationBar: BottomNavBar(pageInd: 0,),
 		);
 	}
 
@@ -67,10 +65,8 @@ class _WatchVideoState extends State<WatchVideo>
 		(
 			children:
 			[
-				// video player
 				Container
 				(
-					// color: Colors.red,
 					height: height,
 					width: width,
 					child: CarouselSlider.builder
@@ -78,7 +74,6 @@ class _WatchVideoState extends State<WatchVideo>
               			itemCount: 1,
               			options:CarouselOptions
 						(
-							// aspectRatio: 16 / 9,
 							height: height,
 							autoPlay: false,
 							viewportFraction: 1.0,

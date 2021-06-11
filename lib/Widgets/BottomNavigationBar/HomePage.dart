@@ -292,12 +292,13 @@ class _HomePageState extends State<HomePage>
 	{
 		if(page == 0)
 		{
+			isPlaying = false;
 			isScrollLeft = true;
 			isScrollRight = false;
 		}
 		else if(page == 2)
 		{
-			print(page);
+			isPlaying = false;
 			isScrollRight = true;
 			isScrollLeft = false;
 		}
