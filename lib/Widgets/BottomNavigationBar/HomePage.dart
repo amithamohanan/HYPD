@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -31,6 +30,13 @@ class _HomePageState extends State<HomePage>
 	bool isFavourite = false;
 	bool isFullScreen = false;
 
+
+	@override
+	void initState()
+	{
+    	super.initState();
+  	}
+
 	@override
 	Widget build(BuildContext context)
 	{
@@ -43,11 +49,11 @@ class _HomePageState extends State<HomePage>
 			extendBodyBehindAppBar: isFullScreen ? true : false,
 			backgroundColor: Colors.white,
 			appBar: appBar(),
-			body:  PageView
+			body: PageView
 			(
-      			scrollDirection: Axis.horizontal,
-      			controller: controller,
-      			children:
+				scrollDirection: Axis.horizontal,
+				controller: controller,
+				children:
 				[
 					ShoppingPage(),
 					WatchVideo(this.hasChanged),
@@ -98,6 +104,7 @@ class _HomePageState extends State<HomePage>
 						(
 							onPressed: ()
 							{
+								playVideo(null);
 								Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications()));
 							},
 							icon: Icon(Icons.notifications_none_outlined),
@@ -118,6 +125,7 @@ class _HomePageState extends State<HomePage>
 						(
 							onPressed: ()
 							{
+								playVideo(null);
 								Navigator.push(context, MaterialPageRoute(builder: (context) => MyWishlist()));
 							},
 							icon: Icon(Icons.favorite_border),
@@ -138,6 +146,7 @@ class _HomePageState extends State<HomePage>
 						(
 							onPressed: ()
 							{
+								playVideo(null);
 								Navigator.push(context, MaterialPageRoute(builder: (context) => MyBag()));
 							},
 							icon: Icon(Icons.shopping_bag_outlined),
@@ -288,37 +297,41 @@ class _HomePageState extends State<HomePage>
 		);
 	}
 
-	pageChanged(int page)
+	pageChanged(int page) async
 	{
+		print(page);
+		print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 		if(page == 0)
 		{
-			isPlaying = false;
 			isScrollLeft = true;
 			isScrollRight = false;
 		}
 		else if(page == 2)
 		{
-			isPlaying = false;
 			isScrollRight = true;
 			isScrollLeft = false;
 		}
 		else
 		{
+			isPlaying = true;
 			isScrollLeft = false;
 			isScrollRight = false;
 		}
 
-		setState(() {});
+		setState(() 
+		{
+			isFullScreen = false;
+		});
 	}
 
 	hasChanged(value)
 	{
 		print(value);
-		print("value");
+		print("valueeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 
 		setState(()
 		{
-			isFullScreen = true;
+			isFullScreen = value;
 		});
 	}
 }

@@ -124,83 +124,90 @@ class _ShoppingPageState extends State<ShoppingPage>
 	// carousel slider
 	carouselSlider()
 	{
-		return Container
+		return  GestureDetector
 		(
-			margin: EdgeInsets.symmetric(horizontal: 2),
-        	height: height / 2.5,
-          	width: width,
-			child: Stack
+			child: Container
 			(
-				children: 
-				[
-					CarouselSlider
-					(
-						options: CarouselOptions
+				margin: EdgeInsets.symmetric(horizontal: 2),
+				height: height / 2.5,
+				width: width,
+				child: Stack
+				(
+					children: 
+					[
+						CarouselSlider
 						(
-							aspectRatio: 4 /3,
-							height: height / 2 ,
-							autoPlay: true,
-							enlargeCenterPage: true
+							options: CarouselOptions
+							(
+								aspectRatio: 4 /3,
+								height: height / 2 ,
+								autoPlay: true,
+								enlargeCenterPage: true
+							),
+							items: 
+							[
+								ClipRRect
+								(
+									borderRadius: BorderRadius.circular(16.0),
+									child: MyImageView('https://images.pexels.com/photos/6945696/pexels-photo-6945696.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'),
+								),
+								ClipRRect
+								(
+									borderRadius: BorderRadius.circular(16.0),
+									child: MyImageView('https://images.pexels.com/photos/3913589/pexels-photo-3913589.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'),
+								),
+								ClipRRect
+								(
+									borderRadius: BorderRadius.circular(16.0),
+									child: MyImageView('https://images.pexels.com/photos/7404985/pexels-photo-7404985.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500')
+								)
+							]
 						),
-						items: 
-						[
-							ClipRRect
-							(
-								borderRadius: BorderRadius.circular(16.0),
-								child: MyImageView('https://images.pexels.com/photos/6945696/pexels-photo-6945696.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'),
-							),
-							ClipRRect
-							(
-								borderRadius: BorderRadius.circular(16.0),
-								child: MyImageView('https://images.pexels.com/photos/3913589/pexels-photo-3913589.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'),
-							),
-							ClipRRect
-							(
-								borderRadius: BorderRadius.circular(16.0),
-								child: MyImageView('https://images.pexels.com/photos/7404985/pexels-photo-7404985.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500')
-							)
-						]
-					),
-					Positioned.fill
-					(
-						child: Align
+						Positioned.fill
 						(
-							alignment: Alignment.topCenter,
-							child: Column
+							child: Align
 							(
-								mainAxisAlignment: MainAxisAlignment.end,
-								crossAxisAlignment: CrossAxisAlignment.center,
-								children: 
-								[
-									Text
-									(
-										"Supplements",
-										style: GoogleFonts.montserrat
+								alignment: Alignment.topCenter,
+								child: Column
+								(
+									mainAxisAlignment: MainAxisAlignment.end,
+									crossAxisAlignment: CrossAxisAlignment.center,
+									children: 
+									[
+										Text
 										(
-											fontSize: 20,
-											fontWeight: FontWeight.bold,
-											color: Colors.white
+											"Supplements",
+											style: GoogleFonts.montserrat
+											(
+												fontSize: 20,
+												fontWeight: FontWeight.bold,
+												color: Colors.white
+											),
 										),
-									),
-									Text
-									(
-										"upto 50% off",
-										style: GoogleFonts.montserrat
+										Text
 										(
-											fontSize: 20,
-											fontWeight: FontWeight.bold,
-											color: Color(int.parse("0xffd6a62b"))
+											"upto 50% off",
+											style: GoogleFonts.montserrat
+											(
+												fontSize: 20,
+												fontWeight: FontWeight.bold,
+												color: Color(int.parse("0xffd6a62b"))
+											),
 										),
-									),
-									SizedBox(height: 10)
-								],
-							
-							)
-						),
-					)
-				],
-			)
-        );
+										SizedBox(height: 10)
+									],
+								
+								)
+							),
+						)
+					],
+				)
+			),
+			onTap: ()
+			{
+				Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAll()));
+			},
+		);
 	}
 
 	// title for individual cards

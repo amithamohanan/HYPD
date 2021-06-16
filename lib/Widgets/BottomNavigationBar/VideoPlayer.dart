@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hypd/global.dart';
 import 'package:video_player/video_player.dart';
+import 'package:hypd/global.dart';
 
 class Player extends StatefulWidget
 {
@@ -19,30 +19,46 @@ class _PlayerState extends State<Player>
 	_PlayerState(this.url);
 	final url;
 
-	late VideoPlayerController _controller;
+	var _controller;
 
 	@override
 	void initState()
 	{
-		print(url);
-		print("url");
-		_controller = VideoPlayerController.network(url.toString());
+		_controller = playVideo(url);
+		// _controller = VideoPlayerController.network(url.toString());
 
-		_controller.initialize();
-		_controller.play();
-		isPlaying = true;
-		_controller.setLooping(true);
+		// _controller.initialize();
+		// _controller.play();
+		// isPlaying = true;
+		// _controller.setLooping(true);
+
+		// playVideo(url.toString());
 		super.initState();
 	}
 
+  	@override
+  	void dispose() 
+	{
+    	super.dispose();
+    	_controller.pause();
+    	_controller.dispose();
+  	}
 
+	// playVideo(value)
+	// {
+	// 	value ? _controller.play() : _controller.pause();
+	// }
 
 	@override
 	Widget build(BuildContext context)
 	{
 		return GestureDetector
 		(
-			child: VideoPlayer(_controller),
+			child: Container
+			(
+				color: Colors.black,
+				child: VideoPlayer(_controller),
+			),
 			onTap: ()
 			{
 				isPlaying ? _controller.pause() : _controller.play();
@@ -50,7 +66,7 @@ class _PlayerState extends State<Player>
 				{
 					isPlaying = !isPlaying;
 				});
-			},
+			}
 		);
 	}
 }

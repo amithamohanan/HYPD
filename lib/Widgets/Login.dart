@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
+import 'package:hypd/Widgets/InflunecerSignUpPage.dart';
 import 'package:hypd/Widgets/Utilities/SnackBar.dart';
 import 'package:hypd/Widgets/VerifyOtp.dart';
 import 'package:hypd/global.dart';
@@ -63,8 +64,8 @@ class _LoginState extends State<Login>
 	@override
 	void dispose()
 	{
-		super.dispose();
 		_controller.dispose();
+		super.dispose();
 	}
 	
 	@override
@@ -673,6 +674,43 @@ class _LoginState extends State<Login>
 										{
 											isNewUser = false;
 										});
+									},
+								)
+							),
+							SizedBox(height: 10,),
+							Container
+							(
+								width: double.infinity,
+								child: GestureDetector
+								(
+									child: RichText
+									(
+										textAlign: TextAlign.center,
+										text: TextSpan
+										(
+											text: "Sign up as ",
+											style: GoogleFonts.montserrat(color: Colors.grey, fontSize: fontSize / 30,), /*defining default style is optional */
+											children:
+											[
+												TextSpan
+												(
+													text: "Influencer",
+													style: GoogleFonts.montserrat
+													(
+														color: Colors.black,
+														fontWeight: FontWeight.bold
+													)
+												),
+											],
+										),
+									),
+									onTap: ()
+									{
+										setState(() 
+										{
+											isInfluencer = true;
+										});
+										Navigator.push(context, MaterialPageRoute(builder: (context) => InfluencerSignUp()));
 									},
 								)
 							),

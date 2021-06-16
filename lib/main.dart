@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hypd/Widgets/Login.dart';
 import 'package:hypd/Widgets/SpalshScreen.dart';
 
 void main()
@@ -22,7 +23,7 @@ class SplashScreen extends StatelessWidget
 				primaryColor: Colors.white,
 				fontFamily: "montserrat"
 			),
-			home: Spalsh(),
+			home: Login(),
 		);
 	}
 }

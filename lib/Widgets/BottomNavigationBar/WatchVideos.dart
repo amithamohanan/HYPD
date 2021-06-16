@@ -6,6 +6,7 @@ import 'package:hypd/Widgets/BottomNavigationBar/TaggedProductsPage.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/VideoPlayer.dart';
 import 'package:hypd/Widgets/ProductPage.dart';
 import 'package:hypd/global.dart';
+import 'package:video_player/video_player.dart';
 
 class WatchVideo extends StatefulWidget
 {
@@ -18,6 +19,8 @@ class WatchVideo extends StatefulWidget
 
 class _WatchVideoState extends State<WatchVideo>
 {
+  	late PageController _pageController;
+
 	_WatchVideoState(this.hasChanged);
 	final hasChanged;
 
@@ -32,13 +35,55 @@ class _WatchVideoState extends State<WatchVideo>
 
 	List videos =
 	[
+		// "https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4",
 		"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
-		"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
-		"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
-		"https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4",
+		"https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4",
+		"https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4",
 	];
 
 	var temp = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non venenatis ligula. Praesent massa ex, vestibulum eget nisl sit amet, rutrum ullamcorper augue. Aliquam erat leo, hendrerit non ipsum sit amet, auctor sollicitudin odio. Donec aliquet accumsan nunc. Vestibulum condimentum et urna eget porttitor. Mauris ultrices id augue et convallis. Etiam lobortis tincidunt libero, eget efficitur orci commodo euismod.";
+
+	
+	VideoPlayerController _controller = new VideoPlayerController.network("");
+
+  	@override
+	void initState()
+	{
+		super.initState();
+		// Future.delayed(Duration(seconds: 0)).then((_) 
+		// {
+		// 	showModalPage(context);
+		// });
+
+    	_pageController = PageController()..addListener(scrollListener);
+	}
+
+	@override
+	void dispose()
+	{
+		isPlaying = false;
+		_controller.dispose();
+		super.dispose();
+	}
+
+	void scrollListener() 
+	{
+    	if (_pageController.page == _pageController.page?.roundToDouble()) 
+		{
+
+    	}
+  	}
+
+
+	playVideo(url)
+	{
+		_controller = VideoPlayerController.network(url.toString());
+
+		_controller.initialize();
+		_controller.play();
+		isPlaying = true;
+		_controller.setLooping(true);
+	}
 
 	@override
 	Widget build(BuildContext context)
@@ -59,6 +104,49 @@ class _WatchVideoState extends State<WatchVideo>
 		);
 	}
 
+	body()
+	{
+		return SingleChildScrollView
+		(
+      		child: Column
+			(
+        		mainAxisSize: MainAxisSize.min,
+        		children: <Widget>
+				[
+          			Flexible
+					(
+						child: videoPlayer(),
+					)
+				]
+			)
+		);
+	}
+	showModalPage(context)
+	{
+		return showModalBottomSheet
+		(
+			
+			isScrollControlled: true,
+			shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+			context: context,
+			builder: (BuildContext context) 
+			{
+    			return Padding
+				(
+        			padding: MediaQuery.of(context).viewInsets,
+					child: Container
+					(
+						decoration: BoxDecoration
+						(
+							borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))
+						),
+						child: videoPlayer(),
+					)
+				);
+			}
+		);
+	}
+
 	videoPlayer()
 	{
 		return Stack
@@ -69,29 +157,17 @@ class _WatchVideoState extends State<WatchVideo>
 				(
 					height: height,
 					width: width,
-					child: CarouselSlider.builder
+					child: PageView.builder
 					(
-              			itemCount: 1,
-              			options:CarouselOptions
-						(
-							height: height,
-							autoPlay: false,
-							viewportFraction: 1.0,
-							scrollDirection: Axis.vertical,
-                  			onPageChanged: (index, reason)
-							{
-                    			setState(()
-								{
-                      				isFullScreen = true;
-									this.hasChanged(true);
-                    			});
-                  			}
-              			),
-              			itemBuilder: (BuildContext context,index, i)
+						controller: _pageController,
+						scrollDirection: Axis.vertical,
+						itemCount: videos.length,
+						itemBuilder: (context, position)
 						{
-                			return Player(videos[index]);
-              			},
-            		),
+							return Player(videos[position].toString());
+						},
+						onPageChanged: pageChanged,
+					)
 				),
 				// buttons
 				buttons(context),
@@ -417,7 +493,6 @@ class _WatchVideoState extends State<WatchVideo>
 		);
 	}
 
-
 	topButton()
 	{
 		return Center
@@ -595,5 +670,14 @@ class _WatchVideoState extends State<WatchVideo>
 				}
 			),
 		);
+	}
+
+	pageChanged(int page) async
+	{
+		print("PAGE CHANGEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+		setState(()
+		{
+			page == 0 ? this.hasChanged(false) : this.hasChanged(true);
+		});
 	}
 }

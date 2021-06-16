@@ -3,20 +3,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/VideoPlayer.dart';
+import 'package:hypd/Widgets/Influencer/InProfilePage.dart';
+import 'package:hypd/Widgets/Influencer/Influencerdashboard.dart';
 import 'package:hypd/Widgets/Utilities/LiveSessionPage.dart';
 import 'package:hypd/Widgets/UserAccount.dart';
 import 'package:hypd/global.dart';
 
-class BottomNavBar extends StatefulWidget
+class InBottomNavBar extends StatefulWidget
 {
-	BottomNavBar({this.pageInd});
+	InBottomNavBar({this.pageInd});
 	final pageInd;
 
 	@override
-	_BottomNavBarState createState() => _BottomNavBarState();
+	_InBottomNavBarState createState() => _InBottomNavBarState();
 }
 
-class _BottomNavBarState extends State<BottomNavBar>
+class _InBottomNavBarState extends State<InBottomNavBar>
 {
     int _currentIndex = 0;
 	var currentBackPressTime;
@@ -26,9 +28,11 @@ class _BottomNavBarState extends State<BottomNavBar>
 
 	static List<Widget> _widgetOptions = <Widget>
 	[
-		HomePage(),
-		LiveSession(),
-		UserAccount(),
+		InfluenceDashBoard(),
+		InProfilePage(),
+		InProfilePage(),
+		InProfilePage(),
+		InProfilePage(),
 	];
 
 	@override
@@ -40,10 +44,6 @@ class _BottomNavBarState extends State<BottomNavBar>
 
 	void _onItemTapped(int index)
 	{
-		if(_currentIndex != 2)
-		{
-			playVideo(null);
-		}
 		if (_currentIndex == index)
 		{
 			return;
@@ -72,13 +72,15 @@ class _BottomNavBarState extends State<BottomNavBar>
 		(
 			child:  BottomNavigationBar
 			(
-				elevation: 0,
+				elevation: 25,
 				type: BottomNavigationBarType.fixed,
 				backgroundColor: Colors.white,
 				items: const <BottomNavigationBarItem>
 				[
 					BottomNavigationBarItem(label: "", icon: Icon(Icons.home_outlined)),
-					BottomNavigationBarItem(label: "", icon: Icon(Icons.smart_display_outlined)),
+					BottomNavigationBarItem(label: "", icon: Icon(Icons.search)),
+					BottomNavigationBarItem(label: "", icon: Icon(Icons.add_circle_outline_sharp)),
+					BottomNavigationBarItem(label: "", icon: Icon(Icons.inbox)),
 					BottomNavigationBarItem(label: "", icon: Icon(Icons.account_circle_outlined))
 				],
 				currentIndex: _currentIndex,

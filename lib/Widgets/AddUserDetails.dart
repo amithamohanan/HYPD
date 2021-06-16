@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:hypd/Widgets/Influencer/Influencerdashboard.dart';
+import 'package:hypd/Widgets/Influencer/PendingVerification.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -610,6 +612,9 @@ class _AddUserDetailsState extends State<AddUserDetails>
 							),
 							onPressed: ()
 							{
+
+								print(isInfluencer);
+								
 								if(dateController.text != "0" && monthController.text != "0" && yearController.text != "0")
 								{
 									setState(()
@@ -617,11 +622,12 @@ class _AddUserDetailsState extends State<AddUserDetails>
 										isDateEnter = false;
 									});
 								}
-								if(_profileKey.currentState!.validate())
-								{
-									showSnackBar(context, "Profile Added Successfully");
-									Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
-								}
+								// if(_profileKey.currentState!.validate())
+								// {
+									// showSnackBar(context, "Profile Added Successfully");
+									!isInfluencer  ? Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()))
+									: Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PendingVerification()));
+								// }
 							}
 						)
 					),
