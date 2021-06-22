@@ -2,8 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hypd/Widgets/Login.dart';
-import 'package:hypd/Widgets/SpalshScreen.dart';
 
 void main()
 {
@@ -14,6 +14,9 @@ class SplashScreen extends StatelessWidget
 {
 	Widget build(BuildContext context)
 	{
+		WidgetsFlutterBinding.ensureInitialized();
+		SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
 		return MaterialApp
 		(
 			debugShowCheckedModeBanner: false,
@@ -27,3 +30,7 @@ class SplashScreen extends StatelessWidget
 		);
 	}
 }
+
+
+
+

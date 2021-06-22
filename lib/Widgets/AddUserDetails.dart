@@ -1,12 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:hypd/Widgets/Influencer/Influencerdashboard.dart';
 import 'package:hypd/Widgets/Influencer/PendingVerification.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
-import 'package:hypd/Widgets/Utilities/SnackBar.dart';
 import 'package:hypd/global.dart';
 
 class AddUserDetails extends StatefulWidget
@@ -625,7 +623,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 								// if(_profileKey.currentState!.validate())
 								// {
 									// showSnackBar(context, "Profile Added Successfully");
-									!isInfluencer  ? Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()))
+									!isInfluencer  ? Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()))
 									: Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PendingVerification()));
 								// }
 							}

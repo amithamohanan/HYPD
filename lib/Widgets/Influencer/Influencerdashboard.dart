@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/Influencer/InBottomNavBar.dart';
 
 class InfluenceDashBoard extends StatefulWidget
@@ -17,7 +18,17 @@ class _InfluenceDashBoardState extends State<InfluenceDashBoard>
 		(
 			body: Container
 			(
-				child: Text("Welcome to home page"),
+				child: Center
+				(
+					child: Text
+					(
+						"Welcome to home page",
+						style: GoogleFonts.montserrat
+						(
+							fontSize: 25
+						),
+					),
+				)
 			),
 			bottomNavigationBar: InBottomNavBar(pageInd: 0,),
 		);

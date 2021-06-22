@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
+import 'package:hypd/Widgets/Influencer/InfluencerWatchVideo.dart';
+import 'package:hypd/Widgets/Influencer/Influencerdashboard.dart';
 import 'package:hypd/Widgets/InflunecerSignUpPage.dart';
 import 'package:hypd/Widgets/Utilities/SnackBar.dart';
 import 'package:hypd/Widgets/VerifyOtp.dart';
@@ -36,8 +38,8 @@ class _LoginState extends State<Login>
 	@override
 	void initState()
 	{
-		// _controller = VideoPlayerController.network("https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4");
-		_controller = VideoPlayerController.asset("assets/images/introScreen.mp4")..initialize();
+		_controller = VideoPlayerController.network("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")..initialize();
+		// _controller = VideoPlayerController.asset("assets/images/introScreen.mp4")..initialize();
 
 		_controller.addListener(() 
 		{
@@ -56,6 +58,7 @@ class _LoginState extends State<Login>
 		});
 		// _controller.initialize();
 		_controller.play();
+		_controller.setVolume(0.0);
 		_controller.setLooping(true);
 		super.initState();
 
@@ -80,6 +83,7 @@ class _LoginState extends State<Login>
 			top: false,
 			child: Scaffold
 			(
+				backgroundColor: Colors.black,
 				resizeToAvoidBottomInset: true,
 				body: Stack
 				(
@@ -119,7 +123,8 @@ class _LoginState extends State<Login>
 		(
 			height: height,
 			width: width,
-			child: VideoPlayer(_controller));
+			child: VideoPlayer(_controller)
+		);
 	}
 
 	// skip text
@@ -143,7 +148,8 @@ class _LoginState extends State<Login>
 				),
 				onTap: ()
 				{
-					Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+					// Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+					Navigator.push(context, MaterialPageRoute(builder: (context) => InfluecnerWatchVideo()));
 				},
 			)
 		);

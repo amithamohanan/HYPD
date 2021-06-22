@@ -1,5 +1,6 @@
+
+import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/ImageView.dart';
@@ -8,24 +9,32 @@ import 'package:hypd/Widgets/MyWishlist.dart';
 import 'package:hypd/Widgets/Notifications.dart';
 import 'package:hypd/Widgets/Utilities/SelectSizeModal.dart';
 import 'package:hypd/global.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-class ProductPage extends StatefulWidget
+
+class ProductPage extends StatefulWidget 
 {
 	@override
 	_ProductPageState createState() => _ProductPageState();
 }
 
-class _ProductPageState extends State<ProductPage>
+class _ProductPageState extends State<ProductPage> 
 {
+	final double _initFabHeight = 120.0;
+	double _fabHeight = 0;
+	double _panelHeightOpen = 0;
+	double _panelHeightClosed = 95.0;
 	var height;
 	var width;
+	var fontSize;
+
+	int currentPos = 0;
 
 	bool isFavourite = false;
 	bool _showBottomSheet = false;
 
-	int currentPos = 0;
 
- 	List<String> listPaths = 
+	 	List<String> listPaths = 
 	[
     	"https://images.pexels.com/photos/6945696/pexels-photo-6945696.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
     	"https://images.pexels.com/photos/3913589/pexels-photo-3913589.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
@@ -34,36 +43,59 @@ class _ProductPageState extends State<ProductPage>
 
 	List size = ["S", "M", "L", "XL", "XXL", "XXXL"];
 
+
 	@override
-	Widget build(BuildContext context)
+	void initState() 
+	{
+		super.initState();
+		_fabHeight = _initFabHeight;
+	}
+
+	@override
+	Widget build(BuildContext context) 
 	{
 		height = getHeight(context);
 		width = getWidth(context);
-		
+		fontSize = getFontSize(context);
+
+		_panelHeightOpen = MediaQuery.of(context).size.height * .80;
+
 		return Scaffold
 		(
 			extendBodyBehindAppBar: true,
-			backgroundColor: Colors.white,
 			appBar: appBar(),
-			body: Container
+			body: SlidingUpPanel
 			(
-				child: stack(),
-			),
-			bottomSheet: BottomSheet
-			(
-            	elevation: 0,
-				shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))),
-              	backgroundColor: Colors.transparent,
-              	onClosing: () 
+				color: !_showBottomSheet ? Color(int.parse("0xff674094")) : Colors.white,
+				maxHeight: height,
+				minHeight: _panelHeightClosed,
+				parallaxEnabled: true,
+				parallaxOffset: .5,
+				body: stack(),
+				panelBuilder: (sc) => scroller(sc),
+				borderRadius: BorderRadius.only(
+				topLeft: Radius.circular(18.0),
+				topRight: Radius.circular(18.0)),
+				onPanelOpened: ()
 				{
-					setState(() {
-					  _showBottomSheet = false;
+					setState(() 
+					{
+						_showBottomSheet = true;
 					});
-              	},
-              	builder: (BuildContext ctx)
+				},
+				onPanelClosed: ()
 				{
-					return productDetails();
-				}
+					setState(() 
+					{
+						_showBottomSheet = false;
+					});
+				},
+				onPanelSlide: (double pos) => setState(() 
+				{
+					_fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
+
+					
+				}),
 			)
 		);
 	}
@@ -228,7 +260,6 @@ class _ProductPageState extends State<ProductPage>
 		);
 	}
 
-
 	title()
 	{
 		return Container
@@ -311,75 +342,53 @@ class _ProductPageState extends State<ProductPage>
 		);
 	}
 
-	productDetails()
+	Widget scroller(ScrollController sc)
 	{
-		return GestureDetector
-		(
-			child: Container
-			(
-				decoration: BoxDecoration
-				(
-					color: _showBottomSheet ? Colors.white : Color(int.parse("0xff674094")),
-					borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight:  Radius.circular(10))
-				),
-				width: double.infinity,
-				height: _showBottomSheet ? height / 1.2 : height / 7,
-				alignment: Alignment.center,
-				child: Column
-				(
-					crossAxisAlignment: CrossAxisAlignment.start,
-					children: 
-					[
-						topButton(),
-						SizedBox(height: height / 30),
-						title(),
-						_showBottomSheet ? Container
-						(
-							height: height / 2.3,
-							child: SingleChildScrollView
-							(
-								// height: 500,
-								child: Column
-								(
-									crossAxisAlignment: CrossAxisAlignment.start,
-									children: 
-									[
-										SizedBox(height: height / 30),
-										howItWorsk(),
-										SizedBox(height: height / 30),
-										productTitle("Product Description"),
-										SizedBox(height: height / 55),
-										productDescription(),
-										SizedBox(height: height / 30),
-										productTitle("Specifications"),
-										SizedBox(height: 10),
-										specifications(),
-										SizedBox(height: height / 30),
-									]
-								),
-							),
-						): SizedBox.shrink(),
-						_showBottomSheet ? sizePicker() : SizedBox.shrink(),
+		var height = getHeight(context);
 
-					],
-				),
-			),
-			onVerticalDragStart: (DragStartDetails d)
-			{
-				setState(() 
-				{
-					_showBottomSheet = !_showBottomSheet;
-				});
-			},
-			// onVerticalDragEnd: (DragEndDetails d)
-			// {
-			// 	setState(() 
-			// 	{
-			// 		// _showBottomSheet = !_showBottomSheet;
-			// 	});
-			// },
+		return MediaQuery.removePadding
+		(
+        	removeTop: true,
+			context: context, 
+			child: ListView
+			(
+				children: 
+				[
+					topButton(),
+					SizedBox(height: height / 30),
+					title(),
+					Container
+					(
+						height: height / 2.3,
+						child: SingleChildScrollView
+						(
+							// height: 500,
+							child: Column
+							(
+								crossAxisAlignment: CrossAxisAlignment.start,
+								children: 
+								[
+									SizedBox(height: height / 30),
+									howItWorsk(),
+									SizedBox(height: height / 30),
+									productTitle("Product Description"),
+									SizedBox(height: height / 55),
+									productDescription(),
+									SizedBox(height: height / 30),
+									productTitle("Specifications"),
+									SizedBox(height: 10),
+									specifications(),
+									SizedBox(height: height / 30),
+								]
+							),
+						),
+					),
+					sizePicker()
+				],
+			)
 		);
 	}
+
 
 	howItWorsk()
 	{
@@ -584,77 +593,33 @@ class _ProductPageState extends State<ProductPage>
 
 	Widget sizePicker()
 	{
-		return  Expanded
+		var height = getHeight(context);
+		var width = getWidth(context);
+
+		return Container
 		(
-			child: Container
+			width: width,
+			decoration: BoxDecoration
 			(
-				width: width,
-				decoration: BoxDecoration
-				(
-					color: Color(int.parse("0xff674094")),
-					borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
-				),
-				child: Column
-				(
-					children: 
-					[
-						Row
-						(
-							children: 
-							[
-								Expanded
-								(
-									child: GestureDetector
-									(
-										child: Container
-										(
-											padding: EdgeInsets.only(left: 15, right: 15, top: 5), 
-											margin: EdgeInsets.only(left: 15, right: 15, top: 25),
-											height: height / 12,
-											decoration: BoxDecoration
-											(
-												border: Border.all(color: Colors.white12),
-												borderRadius: BorderRadius.circular(15)
-											),
-											child: Column
-											(
-												crossAxisAlignment: CrossAxisAlignment.start,
-												children: 
-												[
-													Text
-													(
-														"Select Size",
-														style: GoogleFonts.montserrat
-														(
-															color: Colors.white,
-															fontWeight: FontWeight.w200,
-															fontSize: 10
-														),
-													),
-													Text
-													(
-														"Pick One",
-														style: GoogleFonts.montserrat
-														(
-															color: Colors.white,
-															fontWeight: FontWeight.w300
-														),
-													),
-												],
-											),
-										),
-										onTap: ()
-										{
-											showSizeModal(context, height, width, size);
-										},
-									)
-								),
-								SizedBox(width: 10),
-								Expanded
+				color: Color(int.parse("0xff674094")),
+				borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
+			),
+			child: 
+			Column
+			(
+				children: 
+				[
+					Row
+					(
+						children: 
+						[
+							Expanded
+							(
+								child: GestureDetector
 								(
 									child: Container
 									(
-										padding: EdgeInsets.only(left: 15, right: 15), 
+										padding: EdgeInsets.only(left: 15, right: 15, top: 5), 
 										margin: EdgeInsets.only(left: 15, right: 15, top: 25),
 										height: height / 12,
 										decoration: BoxDecoration
@@ -662,144 +627,185 @@ class _ProductPageState extends State<ProductPage>
 											border: Border.all(color: Colors.white12),
 											borderRadius: BorderRadius.circular(15)
 										),
-										child: Row
+										child: Column
 										(
+											crossAxisAlignment: CrossAxisAlignment.start,
 											children: 
 											[
-												Expanded
+												Text
 												(
-													child: Container
+													"Select Size",
+													style: GoogleFonts.montserrat
 													(
-														decoration: BoxDecoration
-														(
-															border: Border.all(color: Colors.white12),
-															borderRadius: BorderRadius.circular(15)
-														),
-														child: FittedBox
-														(
-															child: IconButton
-															(
-																onPressed: null, 
-																icon: Icon(Icons.remove, color: Colors.white),
-															),
-														),
-													)
+														color: Colors.white,
+														fontWeight: FontWeight.w200,
+														fontSize: 10
+													),
 												),
-												Expanded
+												Text
 												(
-													child:  Container
+													"Pick One",
+													style: GoogleFonts.montserrat
 													(
-														child: Center
-														(
-															child: Text
-															(
-																"1",
-																style: GoogleFonts.montserrat
-																(
-																	color: Colors.white,
-																	fontWeight: FontWeight.w300
-																),
-															),
-														),
-													)
-												),
-												Expanded
-												(
-													child: Container
-													(
-														decoration: BoxDecoration
-														(
-															border: Border.all(color: Colors.white12),
-															borderRadius: BorderRadius.circular(15)
-														),
-														child: FittedBox
-														(
-															child: IconButton
-															(
-																onPressed: null, 
-																icon: Icon(Icons.add_outlined, color: Colors.white),
-															),
-														),
-													)
+														color: Colors.white,
+														fontWeight: FontWeight.w300
+													),
 												),
 											],
 										),
-									)
-								),
-							],
-						),
-						SizedBox(height: 20),
-						Row
-						(
-							children: 
-							[
-								Container
+									),
+									onTap: ()
+									{
+										showSizeModal(context, height, width, size);
+									},
+								)
+							),
+							SizedBox(width: 10),
+							Expanded
+							(
+								child: Container
 								(
-									margin: EdgeInsets.only(left: 15),
-									height: height / 13,
-									width: width / 6,
+									padding: EdgeInsets.only(left: 15, right: 15), 
+									margin: EdgeInsets.only(left: 15, right: 15, top: 25),
+									height: height / 12,
 									decoration: BoxDecoration
 									(
 										border: Border.all(color: Colors.white12),
-										borderRadius: BorderRadius.circular(20)
+										borderRadius: BorderRadius.circular(15)
 									),
-									child: IconButton
+									child: Row
 									(
-										onPressed: ()
-										{
-											setState(() 
-											{
-												isFavourite = !isFavourite;
-											});
-										},
-										icon: isFavourite ? Icon
-										(
-											Icons.favorite,
-											color: Color(int.parse("0xffA12C2A"))
-										)
-										: Icon
-										(
-											Icons.favorite_border,
-											color: Colors.white70,
-										),
-									),
-								),
-								SizedBox(width: 10),
-								Expanded
-								(
-									child: Container
-									(
-										margin: EdgeInsets.only(right: 15),
-										height: height / 13,
-										width: double.infinity,
-										child: ElevatedButton
-										(
-											child: Text
+										children: 
+										[
+											Expanded
 											(
-												"Add to Bag",
-												style: TextStyle(fontSize: 14)
-											),
-											style: ButtonStyle
-											(
-												foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-												backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffEF5C99"))),
-												shape: MaterialStateProperty.all<RoundedRectangleBorder>
+												child: Container
 												(
-													RoundedRectangleBorder
+													decoration: BoxDecoration
 													(
-														borderRadius: BorderRadius.circular(20.5),
-														side: BorderSide(color: Colors.white38)
-													)
+														border: Border.all(color: Colors.white12),
+														borderRadius: BorderRadius.circular(15)
+													),
+													child: FittedBox
+													(
+														child: IconButton
+														(
+															onPressed: null, 
+															icon: Icon(Icons.remove, color: Colors.white),
+														),
+													),
 												)
 											),
-											onPressed: () => null
-										)
+											Expanded
+											(
+												child:  Container
+												(
+													child: Center
+													(
+														child: Text
+														(
+															"1",
+															style: GoogleFonts.montserrat
+															(
+																color: Colors.white,
+																fontWeight: FontWeight.w300
+															),
+														),
+													),
+												)
+											),
+											Expanded
+											(
+												child: Container
+												(
+													decoration: BoxDecoration
+													(
+														border: Border.all(color: Colors.white12),
+														borderRadius: BorderRadius.circular(15)
+													),
+													child: FittedBox
+													(
+														child: IconButton
+														(
+															onPressed: null, 
+															icon: Icon(Icons.add_outlined, color: Colors.white),
+														),
+													),
+												)
+											),
+										],
+									),
+								)
+							),
+						],
+					),
+					SizedBox(height: 20),
+					Row
+					(
+						children: 
+						[
+							Container
+							(
+								margin: EdgeInsets.only(left: 15),
+								height: height / 13,
+								width: width / 6,
+								decoration: BoxDecoration
+								(
+									border: Border.all(color: Colors.white12),
+									borderRadius: BorderRadius.circular(20)
+								),
+								child: IconButton
+								(
+									onPressed: ()
+									{
+										setState(() 
+										{
+											isFavourite = !isFavourite;
+										});
+									},
+									icon: Icon
+									(
+										Icons.favorite_border,
+										color: Colors.white70,
+									),
+								),
+							),
+							SizedBox(width: 10),
+							Expanded
+							(
+								child: Container
+								(
+									margin: EdgeInsets.only(right: 15),
+									height: height / 13,
+									width: double.infinity,
+									child: ElevatedButton
+									(
+										child: Text
+										(
+											"Add to Bag",
+											style: TextStyle(fontSize: 14)
+										),
+										style: ButtonStyle
+										(
+											foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+											backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffEF5C99"))),
+											shape: MaterialStateProperty.all<RoundedRectangleBorder>
+											(
+												RoundedRectangleBorder
+												(
+													borderRadius: BorderRadius.circular(20.5),
+													side: BorderSide(color: Colors.white38)
+												)
+											)
+										),
+										onPressed: () => null
 									)
 								)
-							],
-						)
-					],
-				)
+							)
+						],
+					),
+					SizedBox(height: 20),
+				],
 			)
 		);
 	}
@@ -831,46 +837,6 @@ class _ProductPageState extends State<ProductPage>
 				fontWeight: FontWeight.w500,
 				color: Colors.black38,
 				fontSize: 18
-			),
-		);
-	}
-
-	chooseSize()
-	{
-		return Container
-		(
-			height: height / 15,
-			width: width,
-			child: ListView.builder
-			(
-				scrollDirection: Axis.horizontal,
-				itemCount: size.length,
-				itemBuilder: (BuildContext context, int index)
-				{
-					return  Container
-					(
-						margin: EdgeInsets.only(left: 15),
-						height: 30,
-						width: 50,
-						decoration: BoxDecoration
-						(
-							border: Border.all(color: Colors.black12),
-							borderRadius: BorderRadius.circular(15)
-						),
-						child: Center
-						(
-							child: Text
-							(
-								size[index].toString(),
-								style: GoogleFonts.montserrat
-								(
-									color: Colors.black,
-									fontWeight: FontWeight.bold
-								),
-							),
-						)
-					);
-				}
 			),
 		);
 	}

@@ -39,7 +39,7 @@ class _InProfilePageState extends State<InProfilePage>
 				backgroundColor: Colors.white,
 				appBar: appBar(),
 				body: body(),
-				bottomNavigationBar: InBottomNavBar(pageInd: 4),
+				bottomNavigationBar: InBottomNavBar(pageInd: 3),
 			)
 		);
 	}

@@ -3,10 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/VideoPlayer.dart';
+import 'package:hypd/Widgets/Influencer/CameraRecord.dart';
 import 'package:hypd/Widgets/Influencer/InProfilePage.dart';
+import 'package:hypd/Widgets/Influencer/InfluencerShoppinPage.dart';
+import 'package:hypd/Widgets/Influencer/InfluencerWatchVideo.dart';
 import 'package:hypd/Widgets/Influencer/Influencerdashboard.dart';
-import 'package:hypd/Widgets/Utilities/LiveSessionPage.dart';
-import 'package:hypd/Widgets/UserAccount.dart';
+import 'package:hypd/Widgets/Influencer/RecordVideo.dart';
 import 'package:hypd/global.dart';
 
 class InBottomNavBar extends StatefulWidget
@@ -28,10 +30,10 @@ class _InBottomNavBarState extends State<InBottomNavBar>
 
 	static List<Widget> _widgetOptions = <Widget>
 	[
-		InfluenceDashBoard(),
-		InProfilePage(),
-		InProfilePage(),
-		InProfilePage(),
+		InfluecnerWatchVideo(),
+		InfluencerShoppingPage(),
+		// RecordVideo(),
+		CameraApp(),
 		InProfilePage(),
 	];
 
@@ -39,22 +41,32 @@ class _InBottomNavBarState extends State<InBottomNavBar>
 	void initState()
 	{
 		super.initState();
+		print(widget.pageInd);
+		print("widget.pageInd");
 		_currentIndex = widget.pageInd != null ? widget.pageInd : 0;
 	}
 
 	void _onItemTapped(int index)
 	{
+		print(index);
+
 		if (_currentIndex == index)
 		{
+			print("888888888888888888888888888888888888888888");
 			return;
 		}
 
 		setState(()
 		{
+			print(index);
 			_currentIndex = index;
 
 			// if(hasNetwork == true)
 			// {
+				if(_currentIndex != 0)
+				{
+					playVideo(null);
+				}
 				Navigator.push(context,MaterialPageRoute(builder: (context) => _widgetOptions[_currentIndex]));
 			// }
 			// else
@@ -78,13 +90,12 @@ class _InBottomNavBarState extends State<InBottomNavBar>
 				items: const <BottomNavigationBarItem>
 				[
 					BottomNavigationBarItem(label: "", icon: Icon(Icons.home_outlined)),
-					BottomNavigationBarItem(label: "", icon: Icon(Icons.search)),
+					BottomNavigationBarItem(label: "", icon: Icon(Icons.shopping_bag_outlined)),
 					BottomNavigationBarItem(label: "", icon: Icon(Icons.add_circle_outline_sharp)),
-					BottomNavigationBarItem(label: "", icon: Icon(Icons.inbox)),
 					BottomNavigationBarItem(label: "", icon: Icon(Icons.account_circle_outlined))
 				],
 				currentIndex: _currentIndex,
-				selectedItemColor: Color(int.parse("0xff352646")),
+				selectedItemColor: Color(int.parse("0xff2d1b57")),
 				unselectedLabelStyle: TextStyle(color: Colors.white),
 				unselectedItemColor: Colors.grey,
 				onTap: _onItemTapped,
@@ -102,7 +113,7 @@ class _InBottomNavBarState extends State<InBottomNavBar>
 	{
 		if(widget.pageInd != 0)
 		{
-			Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => HomePage()));
+			Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => InfluecnerWatchVideo()));
 		}
 		else
 		{

@@ -25,14 +25,6 @@ class _PlayerState extends State<Player>
 	void initState()
 	{
 		_controller = playVideo(url);
-		// _controller = VideoPlayerController.network(url.toString());
-
-		// _controller.initialize();
-		// _controller.play();
-		// isPlaying = true;
-		// _controller.setLooping(true);
-
-		// playVideo(url.toString());
 		super.initState();
 	}
 
@@ -44,11 +36,6 @@ class _PlayerState extends State<Player>
     	_controller.dispose();
   	}
 
-	// playVideo(value)
-	// {
-	// 	value ? _controller.play() : _controller.pause();
-	// }
-
 	@override
 	Widget build(BuildContext context)
 	{
@@ -56,6 +43,8 @@ class _PlayerState extends State<Player>
 		(
 			child: Container
 			(
+				height: getHeight(context),
+				width: getWidth(context),
 				color: Colors.black,
 				child: VideoPlayer(_controller),
 			),

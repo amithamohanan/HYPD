@@ -85,6 +85,7 @@ class _InfluencerSignUpState extends State<InfluencerSignUp>
 						crossAxisAlignment: CrossAxisAlignment.start,
 						children:
 						[
+							SizedBox(height: 35),
 							Text
 							(
 								"Sign up as Influencer",
