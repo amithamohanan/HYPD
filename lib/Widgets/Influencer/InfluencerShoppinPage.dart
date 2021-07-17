@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/API/Server.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/ImageView.dart';
 import 'package:hypd/Widgets/CollectionsPgae.dart';
 import 'package:hypd/Widgets/Influencer/InBottomNavBar.dart';
@@ -12,20 +13,38 @@ import 'package:hypd/Widgets/Notifications.dart';
 import 'package:hypd/Widgets/ProductPage.dart';
 import 'package:hypd/Widgets/ViewAll.dart';
 import 'package:hypd/global.dart';
+import 'package:responsive_grid/responsive_grid.dart';
 
-class InfluencerShoppingPage extends StatefulWidget 
+class InfluencerShoppingPage extends StatefulWidget
 {
+	final isCustomer;
+	InfluencerShoppingPage(this.isCustomer);
+
 	@override
-	_InfluencerShoppingPageState createState() => _InfluencerShoppingPageState();
+	_InfluencerShoppingPageState createState() => _InfluencerShoppingPageState(this.isCustomer);
 }
 
-class _InfluencerShoppingPageState extends State<InfluencerShoppingPage> 
+class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 {
+	final isCustomer;
+	_InfluencerShoppingPageState(this.isCustomer);
+
 	var height;
 	var width;
 	var fontSize;
 
-	bool isFavourite = false;
+	List <bool> isFavourites = [];
+
+	bool isFavourite = true;
+
+	@override
+	void initState()
+	{
+		super.initState();
+		getAllCategories();
+		getNewArrivedProducts();
+		getAllBrands();
+	}
 
 	@override
 	Widget build(BuildContext context)
@@ -39,16 +58,16 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 			top: true,
 			child: Scaffold
 			(
-				appBar: appBar(),
+				appBar: this.isCustomer ? null : appBar(),
 				body:  SingleChildScrollView
 				(
 					child: Column
 					(
 						crossAxisAlignment: CrossAxisAlignment.start,
-						children: 
+						children:
 						[
 							SizedBox(height: height / 50),
-							categories(),
+							categoriesList.length == 0 ? SizedBox.shrink() : categories(),
 							SizedBox(height: 10),
 							carouselSlider(),
 							SizedBox(height: height / 50),
@@ -68,14 +87,12 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 							SizedBox(height: height / 50),
 							newArrivals(),
 							SizedBox(height: height / 50),
-							itemCards(),
-							SizedBox(height: height / 50),
-							itemCards(),
+							newArrivedProductsList(),
 							SizedBox(height: height / 50),
 						]
 					)
 				),
-				bottomNavigationBar: InBottomNavBar(pageInd: 1),
+				bottomNavigationBar: this.isCustomer ? null :  InBottomNavBar(pageInd: 1),
 			)
 		);
 	}
@@ -176,7 +193,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 				)
 		);
 	}
-	
+
 	// header icons
 	header()
 	{
@@ -200,7 +217,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 						),
 						child: Center
 						(
-							child: 
+							child:
 							IconButton
 							(
 								icon: Icon
@@ -288,33 +305,33 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 			child: ListView.builder
 			(
 				scrollDirection: Axis.horizontal,
-				itemCount: 10,
+				itemCount: categoriesList.length,
 				itemBuilder: (BuildContext context, int index)
 				{
 					return  Row
 					(
-						children: 
+						children:
 						[
 							Column
 							(
-								children: 
+								children:
 								[
 									GestureDetector
 									(
 										child: CircleAvatar
 										(
 											radius: 30,
-											backgroundImage: NetworkImage("https://images.pexels.com/photos/2853909/pexels-photo-2853909.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500")
+											backgroundImage: NetworkImage(categoriesList[index]["image"])
 										),
 										onTap: ()
 										{
-											Navigator.push(context, MaterialPageRoute(builder: (context) => Collections()));
+											Navigator.push(context, MaterialPageRoute(builder: (context) => Collections(categoriesList[index]["id"])));
 										},
 									),
 									SizedBox(height: 6),
 									Text
 									(
-										"Dress",
+										categoriesList[index]["name"].toString(),
 										style: GoogleFonts.montserrat
 										(
 											fontSize: 13,
@@ -344,7 +361,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 				width: width,
 				child: Stack
 				(
-					children: 
+					children:
 					[
 						CarouselSlider
 						(
@@ -355,7 +372,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 								autoPlay: true,
 								enlargeCenterPage: true
 							),
-							items: 
+							items:
 							[
 								ClipRRect
 								(
@@ -383,7 +400,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 								(
 									mainAxisAlignment: MainAxisAlignment.end,
 									crossAxisAlignment: CrossAxisAlignment.center,
-									children: 
+									children:
 									[
 										Text
 										(
@@ -407,7 +424,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 										),
 										SizedBox(height: 10)
 									],
-								
+
 								)
 							),
 						)
@@ -416,7 +433,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 			),
 			onTap: ()
 			{
-				Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAll()));
+				// Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAll(1, 2)));
 			},
 		);
 	}
@@ -430,7 +447,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 			child: Row
 			(
 				mainAxisAlignment: MainAxisAlignment.spaceBetween,
-				children: 
+				children:
 				[
 					Text
 					(
@@ -457,7 +474,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 						),
 						onTap: ()
 						{
-							Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAll()));
+							// Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAll()));
 						},
 					)
 				],
@@ -472,7 +489,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 		(
 			child: Row
 			(
-				children: 
+				children:
 				[
 					card1(),
 					SizedBox(width: 20),
@@ -493,7 +510,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 				height: 250,
 				child: Stack
 				(
-					children: 
+					children:
 					[
 						Positioned
 						(
@@ -535,11 +552,11 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 											(
 												crossAxisAlignment: CrossAxisAlignment.start,
 												mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-												children: 
+												children:
 												[
 													Wrap
 													(
-														children: 
+														children:
 														[
 															Text
 															(
@@ -590,12 +607,12 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 									(
 										onPressed: ()
 										{
-											setState(() 
+											setState(()
 											{
-												isFavourite = !isFavourite;
+												// isFavourite = !isFavourite;
 											});
 										},
-										icon: isFavourite 
+										icon: isFavourite
 										? Icon
 										(
 											Icons.favorite,
@@ -615,7 +632,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 			),
 			onTap:()
 			{
-				Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage()));
+				Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(1)));
 			},
 		);
 	}
@@ -629,7 +646,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 			child: Row
 			(
 				mainAxisAlignment: MainAxisAlignment.spaceBetween,
-				children: 
+				children:
 				[
 					Text
 					(
@@ -641,7 +658,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 							fontWeight: FontWeight.bold
 						),
 					),
-					
+
 				],
 			),
 		);
@@ -662,7 +679,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 				{
 					return Stack
 					(
-						children: 
+						children:
 						[
 							Container
 							(
@@ -686,7 +703,7 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 								child: Column
 								(
 									crossAxisAlignment: CrossAxisAlignment.start,
-									children: 
+									children:
 									[
 										Text
 										(
@@ -747,23 +764,29 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 			child:ListView.builder
 			(
 				scrollDirection: Axis.horizontal,
-				itemCount: 10,
+				itemCount: brandList.length == null ? 0 : brandList.length,
 				itemBuilder: (BuildContext context, int index)
 				{
-					return Padding
+					return GestureDetector
 					(
-						padding: EdgeInsets.only(left: 15),
-						child: CircleAvatar
+						child: Padding
 						(
-							radius: 60,
-							backgroundImage: NetworkImage("https://images.pexels.com/photos/974911/pexels-photo-974911.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500")
+							padding: EdgeInsets.only(left: 15),
+							child: CircleAvatar
+							(
+								radius: 60,
+								backgroundImage: NetworkImage(brandList[index]["image"])
+							),
 						),
+						onTap: ()
+						{
+							Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAll(brandList[index]["id"], null)));
+						},
 					);
 				}
 			)
 		);
 	}
-
 
 	newArrivals()
 	{
@@ -781,5 +804,230 @@ class _InfluencerShoppingPageState extends State<InfluencerShoppingPage>
 				),
 			),
 		);
+	}
+
+	newArrivedProductsList()
+	{
+		return  ResponsiveGridRow
+		(
+			children:  List.generate(newArrivedList.length, (index)
+			{
+				return  ResponsiveGridCol
+				(
+					lg: 3,
+					xs: 6,
+					md: 4,
+					child: GestureDetector
+					(
+						child: Container
+						(
+							margin: EdgeInsets.only(left: 15, bottom: 15),
+							color: Colors.white,
+							height: 250,
+							child: Stack
+							(
+								children:
+								[
+									Positioned
+									(
+										child: Container
+										(
+											height: 230,
+											width: width / 2.5,
+											child: FittedBox
+											(
+												child:ClipRRect
+												(
+													borderRadius: BorderRadius.circular(50.0),
+													child: Image.network(newArrivedList[index]["productImage"][0]["image"].toString()),
+												),
+												fit: BoxFit.fill,
+											)
+										)
+									),
+									Positioned.fill
+									(
+										child: Align
+										(
+											alignment: Alignment.bottomLeft,
+											child: Container
+											(
+												height: 80,
+												width: width / 2.8,
+												decoration: BoxDecoration
+												(
+													borderRadius: BorderRadius.circular(50)
+												),
+												child: Card
+												(
+													elevation: 10,
+													shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+													child: ListTile
+													(
+														leading: Column
+														(
+															crossAxisAlignment: CrossAxisAlignment.start,
+															children:
+															[
+																SizedBox(height: 5),
+																Flexible(child:
+																Text
+																(
+																	newArrivedList[index]["name"].toString(),
+																	style: GoogleFonts.montserrat
+																	(
+																		color: Colors.black,
+																		fontWeight: FontWeight.w500,
+																		fontSize: 10,
+																	),
+																),
+																),
+																SizedBox(height: 5),
+																Text
+																(
+																	" ₹ " + newArrivedList[index]["price"].toString(),
+																	style: GoogleFonts.montserrat
+																	(
+																		color: Colors.black,
+																		fontWeight: FontWeight.bold,
+																		fontSize: 10,
+																	),
+																),
+															],
+														)
+													),
+												),
+											)
+										)
+									),
+									Positioned
+									(
+										top: 5,
+										right: width / 2.5 - width / 2.8,
+										child:Container
+										(
+											margin: EdgeInsets.all(5),
+											height: 45,
+											width: 45,
+											decoration: BoxDecoration
+											(
+												color: Color(int.parse("0xfff2f2f0")),
+												borderRadius: BorderRadius.circular(10)
+											),
+											child: FittedBox
+											(
+												child: IconButton
+												(
+													onPressed: ()
+													{
+														setState(()
+														{
+															// isFavourite = !isFavourite;
+															addProductToWishlist(newArrivedList[index]["id"], index);
+														});
+													},
+													icon: isFavourites[index] == true 
+													? Icon
+													(
+														Icons.favorite,
+														color: Color(int.parse("0xffA12C2A"))
+													)
+													: Icon
+													(
+														Icons.favorite_border,
+														color: Colors.black,
+													),
+												),
+											)
+										),
+									)
+								],
+							)
+						),
+						onTap: ()
+						{
+							Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(newArrivedList[index]["id"])));
+						},
+					),
+				);
+			})
+		);
+	}
+
+	// -----------------------------------------------------------------------API-------------------------------------------------------------//
+
+	// get all categories
+	getAllCategories() async
+	{
+		categoriesList.clear();
+
+		var response = await Server.getAllCategories();
+
+		for(int i = 0; i < response.length; i++)
+		{
+			categoriesList.add(response[i]);
+		}
+
+		setState(()
+		{
+		});
+	}
+
+	// get all brands
+	getAllBrands() async
+	{
+		brandList.clear();
+
+		var response = await Server.getAllBrands();
+
+		for(int i = 0; i < response.length; i++)
+		{
+			brandList.add(response[i]);
+		}
+
+		setState(()
+		{
+		});
+	}
+
+	getNewArrivedProducts() async
+	{
+		newArrivedList.clear();
+
+		var response = await Server.getNewArrivedProducts();
+
+		for(int i = 0; i < response.length; i++)
+		{
+			newArrivedList.add(response[i]);
+			isFavourites.add(false);
+		}
+
+		setState(()
+		{
+			print(isFavourites);
+		});
+	}
+
+	// add to wishlist
+	addProductToWishlist(productId, index) async
+	{
+		var userId = user["id"];
+
+		var response = await Server.addProductsToWishlist(userId, productId);
+
+		if(response == "Wish list added Successfully")
+		{
+			setState(()
+			{
+				isFavourites[index] = true;
+			});
+		}
+		else
+		{
+			setState(()
+			{
+				isFavourites[index] = false;
+			});
+		}
 	}
 }

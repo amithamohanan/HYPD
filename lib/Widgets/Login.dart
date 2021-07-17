@@ -1,67 +1,60 @@
 
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hypd/Widgets/API/Server.dart';
+import 'package:hypd/Widgets/AddUserDetails.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
 import 'package:hypd/Widgets/Influencer/InfluencerWatchVideo.dart';
-import 'package:hypd/Widgets/Influencer/Influencerdashboard.dart';
 import 'package:hypd/Widgets/InflunecerSignUpPage.dart';
+import 'package:hypd/Widgets/Utilities/Loader.dart';
 import 'package:hypd/Widgets/Utilities/SnackBar.dart';
 import 'package:hypd/Widgets/VerifyOtp.dart';
 import 'package:hypd/global.dart';
-import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
-class Login extends StatefulWidget 
+class Login extends StatefulWidget
 {
 	@override
 	_LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> 
+class _LoginState extends State<Login>
 {
 	final _formKeyRegister = GlobalKey<FormState>();
 	final _formKeyLogin = GlobalKey<FormState>();
 
 	TextEditingController emailField = new TextEditingController();
 	TextEditingController phoneField = new TextEditingController();
+	TextEditingController loginEmailField = new TextEditingController();
+	TextEditingController loginPasswordField = new TextEditingController();
+	TextEditingController passwordField = new TextEditingController();
+	TextEditingController confirmpasswordField = new TextEditingController();
 	TextEditingController dobField = new TextEditingController(text: "");
+
+
 
 	late VideoPlayerController _controller;
 
 	bool isNewUser = false;
+	bool isLoginWithEmail = false;
+	bool showPassword1 = false;
+	bool showPassword2 = false;
 
 	var fontSize;
 	var height;
 	var width;
+	var date;
 
 	@override
 	void initState()
 	{
-		_controller = VideoPlayerController.network("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")..initialize();
-		// _controller = VideoPlayerController.asset("assets/images/introScreen.mp4")..initialize();
-
-		_controller.addListener(() 
-		{
-			if (_controller.value.hasError) 
-			{
-				print(_controller.value.errorDescription);
-			}
-			if (_controller.value.isInitialized)
-			{
-				SnackBar(content: Text("Initialised"));
-			}
-			if (_controller.value.isBuffering)
-			{
-				SnackBar(content: Text("Buffering"));
-			}
-		});
-		// _controller.initialize();
-		_controller.play();
-		_controller.setVolume(0.0);
-		_controller.setLooping(true);
 		super.initState();
-
 	}
 
 	@override
@@ -70,9 +63,9 @@ class _LoginState extends State<Login>
 		_controller.dispose();
 		super.dispose();
 	}
-	
+
 	@override
-	Widget build(BuildContext context) 
+	Widget build(BuildContext context)
 	{
 		fontSize = getFontSize(context);
 		height = getHeight(context);
@@ -85,33 +78,36 @@ class _LoginState extends State<Login>
 			(
 				backgroundColor: Colors.black,
 				resizeToAvoidBottomInset: true,
-				body: Stack
+				body: SingleChildScrollView
 				(
-					children: <Widget>
-					[
-						videoPlayer(),
-						isNewUser ? register(context) : skipText(),
-						!isNewUser ? Positioned
-						(
-							right: width/ 40,
-							left: width / 40,
-							bottom: 20,
-							child: Form
+					child: Stack
+					(
+						children: <Widget>
+						[
+							videoPlayer(),
+							isNewUser ? register(context) : skipText(),
+							!isNewUser ? Positioned
 							(
-								child: Column
+								right: width/ 40,
+								left: width / 40,
+								bottom: 20,
+								child: Form
 								(
-									crossAxisAlignment: CrossAxisAlignment.start,
-									children: 
-									[
-										loginText(),
-										socialMediaIcons(),
-										formField(),
-									],
+									child: Column
+									(
+										crossAxisAlignment: CrossAxisAlignment.start,
+										children:
+										[
+											loginText(),
+											socialMediaIcons(),
+											formField(),
+										],
+									),
 								),
-							),
-						): SizedBox.shrink()
-					],
-				),
+							): SizedBox.shrink()
+						],
+					),
+				)
 			)
 		);
 	}
@@ -123,7 +119,7 @@ class _LoginState extends State<Login>
 		(
 			height: height,
 			width: width,
-			child: VideoPlayer(_controller)
+			child: Image.network("https://images.pexels.com/photos/1133721/pexels-photo-1133721.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500", fit: BoxFit.cover)
 		);
 	}
 
@@ -132,8 +128,8 @@ class _LoginState extends State<Login>
 	{
 		return Positioned
 		(
-			top: height / 20, 
-			right: width / 30, 
+			top: height / 20,
+			right: width / 30,
 			child: GestureDetector
 			(
 				child: Text
@@ -148,8 +144,9 @@ class _LoginState extends State<Login>
 				),
 				onTap: ()
 				{
-					// Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+				// 	Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
 					Navigator.push(context, MaterialPageRoute(builder: (context) => InfluecnerWatchVideo()));
+					// Navigator.push(context, MaterialPageRoute(builder: (context) => RecordVideo()));
 				},
 			)
 		);
@@ -180,9 +177,9 @@ class _LoginState extends State<Login>
 			padding: EdgeInsets.only(bottom: 20),
 			child: Row
 			(
-				children: 
+				children:
 				[
-					facebookLogin(),
+					facebookLoginButton(),
 					SizedBox(width: 10,),
 					googleLogin(),
 					SizedBox(width: 10,),
@@ -214,22 +211,57 @@ class _LoginState extends State<Login>
 	}
 
 	// facebook login
-	facebookLogin()
+	Widget facebookLoginButton()
 	{
 		return GestureDetector
 		(
 			child: Image.asset("assets/images/Facebook_icon.png"),
+			onTap: () async
+			{
+				initiateFacebookLogin();
+			},
 		);
 	}
 
 	// google login
-	googleLogin()
+	Widget googleLogin()
 	{
 		return GestureDetector
 		(
 			child: Image.asset("assets/images/Google_icon.png"),
+			onTap: () async
+			{
+				GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+
+				var response = _googleSignIn.signIn();
+
+				print(response);
+				_googleSignIn.signIn().then((GoogleSignInAccount? acc) async
+				{
+					GoogleSignInAuthentication auth = await acc!.authentication;
+
+					print(auth);
+					print(acc.id);
+					print(acc.email);
+					print(acc.displayName);
+					print(acc.photoUrl);
+
+					acc.authentication.then((GoogleSignInAuthentication auth) async
+					{
+						print(auth.idToken);
+						print(auth.accessToken);
+					});
+				});
+			}
 		);
 	}
+
+	// get user credentials from Facebook
+	initiateFacebookLogin() async
+	{
+		bool _isLoggedIn = true;
+		var  result = await FacebookAuth.instance.login();
+    }
 
 	formField()
 	{
@@ -273,7 +305,7 @@ class _LoginState extends State<Login>
 						SizedBox(height: 20),
 						TextFormField
 						(
-							controller: emailField,
+							controller: loginEmailField,
 							keyboardType: TextInputType.emailAddress,
 							style:  GoogleFonts.montserrat
 							(
@@ -302,18 +334,89 @@ class _LoginState extends State<Login>
 								}
 								else
 								{
-									if (!value.contains('@'))
-									{
-										return 'Invalid Email';
-									}
-									else
-									{
-										return null;
-									}
+									// if (!value.contains('@'))
+									// {
+									// 	return 'Invalid Email';
+									// }
+									// else
+									// {
+									// 	return null;
+									// }
 								}
 							},
-							onSaved: (value) => emailField.text = value.toString(),
+							onChanged: (value)
+							{
+								final number = num.tryParse(value);
+
+								print(value.length);
+
+								if(number == null && value.length != 0)
+								{
+									isLoginWithEmail = true;
+								}
+								else
+								{
+									isLoginWithEmail = false;
+								}
+
+								setState((){});
+							},
+							onSaved: (value) => loginEmailField.text = value.toString(),
 						),
+						SizedBox(height: 25,),
+						isLoginWithEmail ? Text
+						(
+							"Password",
+							style: GoogleFonts.montserrat
+							(
+								color: Colors.grey,
+								fontSize: fontSize / 25,
+								fontWeight: FontWeight.w300
+							),
+						) : SizedBox.shrink(),
+						isLoginWithEmail ? SizedBox(height: 20) : SizedBox.shrink(),
+						isLoginWithEmail ?
+						TextFormField
+						(
+							obscureText: true,
+							controller: loginPasswordField,
+							keyboardType: TextInputType.text,
+							style:  GoogleFonts.montserrat
+							(
+								fontWeight: FontWeight.bold,
+								color: Colors.black,
+								fontSize: fontSize / 30,
+							),
+							decoration: InputDecoration
+							(
+								hintStyle:  GoogleFonts.montserrat
+								(
+									color: Colors.grey,
+									fontSize: fontSize / 30,
+								),
+								counterText: "",
+								contentPadding: EdgeInsets.all(0),
+								isDense: true,
+								enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+								focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+							),
+							validator: (value)
+							{
+								if(value == null || value.isEmpty)
+								{
+									return "*Password cannot be empty";
+								}
+							},
+							onChanged: (value)
+							{
+								if(value.contains("@"))
+								{
+									print(value);
+									isLoginWithEmail = true;
+								}
+							},
+							onSaved: (value) => loginPasswordField.text = value.toString(),
+						) : SizedBox.shrink(),
 						SizedBox(height: 25,),
 						Center
 						(
@@ -325,7 +428,7 @@ class _LoginState extends State<Login>
 								(
 									child: Text
 									(
-										"Submit",
+										"Login",
 										style: GoogleFonts.montserrat(fontSize: fontSize / 20,)
 									),
 									style: ButtonStyle
@@ -341,13 +444,23 @@ class _LoginState extends State<Login>
 											)
 										)
 									),
-									onPressed: ()
+									onPressed: () async
 									{
-										if (_formKeyLogin.currentState!.validate()) 
+										if(isLoginWithEmail == true)
 										{
-											showSnackBar(context, "OTP send successfully");
-											Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyOTP()));
+											await loginWithEmail(loginEmailField.text, loginPasswordField.text);
 										}
+										else
+										{
+											print("else part");
+											print(loginEmailField.text);
+											await loginWithPhone(loginEmailField.text);
+										}
+										// if (_formKeyLogin.currentState!.validate())
+										// {
+										// 	showSnackBar(context, "OTP send successfully");
+										// 	Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyOTP()));
+										// }
 									}
 
 								)
@@ -382,7 +495,7 @@ class _LoginState extends State<Login>
 								),
 								onTap: ()
 								{
-									setState(() 
+									setState(()
 									{
 										isNewUser = true;
 									});
@@ -395,7 +508,7 @@ class _LoginState extends State<Login>
 			),
 		);
 	}
-	
+
 	Widget register(context)
 	{
 		return Positioned
@@ -440,8 +553,10 @@ class _LoginState extends State<Login>
 								),
 							),
 							SizedBox(height: 20),
+							// email
 							TextFormField
 							(
+								controller: emailField,
 								keyboardType: TextInputType.emailAddress,
 								style:  GoogleFonts.montserrat
 								(
@@ -498,8 +613,10 @@ class _LoginState extends State<Login>
 								),
 							),
 							SizedBox(height: 20),
+							// phone
 							TextFormField
 							(
+								controller: phoneField,
 								keyboardType: TextInputType.phone,
 								maxLength: 10,
 								style:  GoogleFonts.montserrat
@@ -549,6 +666,129 @@ class _LoginState extends State<Login>
 							SizedBox(height: 25,),
 							Text
 							(
+								"Password",
+								style: GoogleFonts.montserrat
+								(
+									color: Colors.black38,
+									fontSize: fontSize / 30,
+								),
+							),
+							SizedBox(height: 20),
+							// password
+							TextFormField
+							(
+								obscureText: true,
+								controller: passwordField,
+								keyboardType: TextInputType.text,
+								style:  GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.bold,
+									color: Colors.black,
+									fontSize: fontSize / 30,
+								),
+
+								decoration: InputDecoration
+								(
+									errorStyle: GoogleFonts.montserrat
+									(
+										color: Colors.pink,
+										fontSize: fontSize / 30,
+									),
+									hintStyle:  GoogleFonts.montserrat
+									(
+										color: Colors.grey,
+										fontSize: fontSize / 30,
+									),
+									counterText: "",
+									contentPadding: EdgeInsets.all(0),
+									isDense: true,
+									enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+									focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+								),
+								validator: (value)
+								{
+									if(value == null || value.isEmpty)
+									{
+										return "*Password cannot be empty";
+									}
+									else
+									{
+										if (value.length < 8)
+										{
+											return '*Password is too weak';
+										}
+										else
+										{
+											return null;
+										}
+									}
+								},
+								onSaved: (value) => passwordField.text = value.toString(),
+							),
+							SizedBox(height: 25,),
+							Text
+							(
+								"Confirm Password",
+								style: GoogleFonts.montserrat
+								(
+									color: Colors.black38,
+									fontSize: fontSize / 30,
+								),
+							),
+							SizedBox(height: 20),
+							// confirm password
+							TextFormField
+							(
+								obscureText: true,
+								controller: confirmpasswordField,
+								keyboardType: TextInputType.text,
+								style:  GoogleFonts.montserrat
+								(
+									fontWeight: FontWeight.bold,
+									color: Colors.black,
+									fontSize: fontSize / 30,
+								),
+								decoration: InputDecoration
+								(
+									errorStyle: GoogleFonts.montserrat
+									(
+										color: Colors.pink,
+										fontSize: fontSize / 30,
+									),
+									hintStyle:  GoogleFonts.montserrat
+									(
+										color: Colors.grey,
+										fontSize: fontSize / 30,
+									),
+									counterText: "",
+									contentPadding: EdgeInsets.all(0),
+									isDense: true,
+									enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+									focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
+								),
+								validator: (value)
+								{
+									if(value == null || value.isEmpty)
+									{
+										return "*Confirm password cannot be empty";
+									}
+									else
+									{
+										if (value.toString() != passwordField.text.toString())
+										{
+											return '*Password mismatch!!!';
+										}
+										else
+										{
+											return null;
+										}
+									}
+								},
+								onSaved: (value) => confirmpasswordField.text = value.toString(),
+							),
+							SizedBox(height: 20),
+							Text
+							(
 								"Date of Birth",
 								style: GoogleFonts.montserrat
 								(
@@ -593,20 +833,21 @@ class _LoginState extends State<Login>
 								onSaved: (value) => dobField.text = value.toString(),
 								onTap: () async
 								{
-									// DateTime date = DateTime(1900);
 									FocusScope.of(context).requestFocus(new FocusNode());
-									DateFormat formatter = DateFormat('dd-MM-yyyy');
-									var date = await showDatePicker
-									(
-										context: context,
-										initialDate:DateTime.now(),
-										firstDate:DateTime(1900),
-										lastDate: DateTime(2100)
-									);
-									print(date);
-									print("date");
-									// formatter.format(date.t)
-									dobField.text = date.toString();
+										var date = await showDatePicker
+										(
+											context: context,
+											initialDate: DateTime(2000),
+											firstDate:DateTime(1970),
+											lastDate: DateTime(2010)
+										);
+										var x = date.toString().split("-").join("/");
+										var temp = x.split(" ");
+
+										setState(()
+										{
+											dobField.text = temp[0].toString();
+										});
 								},
 							),
 							SizedBox(height: 30,),
@@ -636,12 +877,14 @@ class _LoginState extends State<Login>
 												)
 											)
 										),
-										onPressed: ()
+										onPressed: () async
 										{
-											if (_formKeyRegister.currentState!.validate()) 
+											if (_formKeyRegister.currentState!.validate())
 											{
-												showSnackBar(context, "OTP send, please check your phone");
-												Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyOTP()));
+												popup(context);
+												await newRegistration(emailField.text, phoneField.text, passwordField.text, dobField.text);
+											// 	showSnackBar(context, "OTP send, please check your phone");
+											// 	Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyOTP()));
 											}
 										}
 									)
@@ -676,7 +919,7 @@ class _LoginState extends State<Login>
 									),
 									onTap: ()
 									{
-										setState(() 
+										setState(()
 										{
 											isNewUser = false;
 										});
@@ -712,7 +955,7 @@ class _LoginState extends State<Login>
 									),
 									onTap: ()
 									{
-										setState(() 
+										setState(()
 										{
 											isInfluencer = true;
 										});
@@ -727,4 +970,117 @@ class _LoginState extends State<Login>
 			)
 		);
 	}
+
+	newRegistration(email, phone, password, dob) async
+	{
+
+		if (_formKeyRegister.currentState!.validate())
+		{
+			var response = await Server.customerRegistration(email, phone, password, dob);
+			print(response);
+
+			if(response == false)
+			{
+				showPopup("error", "Already Registered", context);
+			}
+			else
+			{
+				var response = await Server.loginWithEmail(email, password);
+				if(response == false)
+				{
+					showPopup("error", "Error in Login", context);
+				}
+				else
+				{
+					user["email"] = email;
+					user["phone"] = phone;
+					user["dob"] = dob;
+					user["id"] = response[0]["id"];
+					user["token"] = response[0]["remember_token"];
+					user["isLoggedIn"]  = true;
+
+					saveLocally();
+
+					showSnackBar(context, "Registered Successfully");
+					Navigator.push(context, MaterialPageRoute(builder: (context) => AddUserDetails()));
+				}
+			}
+		}
+	}
+
+	loginWithEmail(email, password) async
+	{
+		if (_formKeyLogin.currentState!.validate())
+		{
+			var response = await Server.loginWithEmail(email, password);
+			print(response);
+
+			if(response == false)
+			{
+				showPopup("error", "Error in Login", context);
+			}
+			else
+			{
+				user["id"] = response[0]["id"];
+				user["token"] = response[0]["remember_token"];
+				user["name"] = response[0]["name"];
+				user["email"] = email;
+				user["phone"] = response[0]["phone"];
+				user["dob"] = response[0]["dob"];
+				user["image"] = response[0]["image"];
+				user["isLoggedIn"]  = true;
+				user["gender"]  = response[0]["gender"];
+
+				saveLocally();
+
+				Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+			}
+		}
+	}
+
+	loginWithPhone(phone) async
+	{
+		if (_formKeyLogin.currentState!.validate())
+		{
+			print(phone);
+			var response = await Server.loginWithPhone(phone);
+			print(response);
+
+			if(response == false)
+			{
+				showPopup("error", "Error in Login", context);
+			}
+			else
+			{
+				user["id"] = response["response"][0]["id"];
+				user["token"] = response["response"][0]["remember_token"];
+				user["name"] = response["response"][0]["name"];
+				user["email"] = response["response"][0]["email"];
+				user["phone"] = response["response"][0]["phone"];
+				user["dob"] = response["response"][0]["dob"];
+				user["image"] = response["response"][0]["image"];
+				user["isLoggedIn"]  = true;
+				user["gender"]  = response["response"][0]["gender"];
+
+				print(user);
+
+				saveLocally();
+				showSnackBar(context, "OTP send successfully");
+				Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyOTP(response["OTPnumber"])));
+
+			}
+
+		// if (_formKeyLogin.currentState!.validate())
+		// {
+			// Navigator.push(context, MaterialPageRoute(builder: (context) => VerifyOTP()));
+		}
+	}
+
+	saveLocally() async
+	{
+		SharedPreferences prefs = await SharedPreferences.getInstance();
+		await prefs.setString('isLoggedIn', jsonEncode(user.toString()));
+
+	}
+
 }

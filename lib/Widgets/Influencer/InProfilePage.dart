@@ -17,6 +17,8 @@ class _InProfilePageState extends State<InProfilePage>
 	var width;
 	var fontSize;
 
+	String dropdownValue = 'First';
+
 	@override
 	void initState()
 	{
@@ -47,6 +49,8 @@ class _InProfilePageState extends State<InProfilePage>
 	// appbar
 	appBar()
 	{
+		print(user);
+		
 		return AppBar
 		(
 			elevation: 2,
@@ -55,7 +59,7 @@ class _InProfilePageState extends State<InProfilePage>
 			centerTitle: true,
 			title: Text
 			(
-				"Annabell",
+				user["name"].toString() == "null" ? "" : user["name"].toString(),
 				style:  GoogleFonts.montserrat
 				(
 					fontWeight: FontWeight.bold,
@@ -86,22 +90,60 @@ class _InProfilePageState extends State<InProfilePage>
 			),
 			actions:
 			[
-				Container
+				dropDown()
+				// Container
+				// (
+				// 	margin: EdgeInsets.all(5),
+				// 	height: 10,
+				// 	width: 45,
+				// 	child: IconButton
+				// 	(
+				// 		onPressed: ()
+				// 		{
+				// 			dropDown();
+
+				// 			// Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications()));
+				// 		},
+				// 		icon: Icon(Icons.more_vert),
+				// 		color: Colors.black,
+				// 	),
+				// ),
+			],
+		);
+	}
+
+	Widget dropDown()
+	{
+		return PopupMenuButton<int>
+		(
+			color: Colors.white10.withOpacity(1),
+			itemBuilder: (context) =>
+			[
+				PopupMenuItem
 				(
-					margin: EdgeInsets.all(5),
-					height: 10,
-					width: 45,
-					child: IconButton
-					(
-						onPressed: ()
-						{
-							// Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications()));
-						},
-						icon: Icon(Icons.more_vert),
-						color: Colors.black,
-					),
+					value: 1,
+					child: Text("Log Out", style: GoogleFonts.montserrat(color: Colors.black)),
 				),
 			],
+			onCanceled: ()
+			{
+				print("You have cancelled the menu.");
+			},
+			onSelected: (value)
+			{
+				if (value == 1)
+				{
+					print("value:$value");
+					// var route = MaterialPageRoute(builder: (context) => EditProfilePage());
+					// Navigator.push(context, route);
+				}
+				else if(value == 2)
+				{
+					// var route = MaterialPageRoute(builder: (context) => ChangePasswordPage());
+					// Navigator.push(context, route);
+				}
+			},
+			icon: Icon(Icons.more_vert),
 		);
 	}
 
@@ -171,7 +213,7 @@ class _InProfilePageState extends State<InProfilePage>
 			child: ClipRRect
 			(
 				borderRadius: BorderRadius.circular(10.0),
-				child: Image.network("https://images.pexels.com/photos/3586798/pexels-photo-3586798.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500", fit: BoxFit.cover),
+				child: Image.network(user["image"] == null ? "https://images.pexels.com/photos/3586798/pexels-photo-3586798.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" : user["image"].toString(), fit: BoxFit.cover),
 			),
 		);
 	}

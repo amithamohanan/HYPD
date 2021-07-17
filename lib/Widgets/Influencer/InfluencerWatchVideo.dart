@@ -84,32 +84,7 @@ class _InfluecnerWatchVideoState extends State<InfluecnerWatchVideo>
 			extendBodyBehindAppBar: isFullScreen ? true : false,
 			backgroundColor: Colors.white,
 			appBar: appBar(),
-			body: SlidingUpPanel
-			(
-				color: Colors.red,
-				maxHeight: height,
-				minHeight: height * .8,
-				body: Container
-				(
-					height: height,
-					width: width,
-				),
-				panelBuilder: (sc) => videoPlayer(sc),
-				borderRadius: BorderRadius.only(
-				topLeft: Radius.circular(35.0),
-				topRight: Radius.circular(35.0)),
-				onPanelOpened: ()
-				{
-					setState(() 
-					{
-						isFullScreen = true;
-					});
-				},
-				onPanelSlide: (double pos) => setState(() 
-				{
-					_fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
-				}),
-			),
+			body:videoPlayer(),
 			bottomNavigationBar: InBottomNavBar(pageInd: 0),
 		);
 	}
@@ -354,7 +329,7 @@ class _InfluecnerWatchVideoState extends State<InfluecnerWatchVideo>
     	}
   	}
 
-	videoPlayer(ScrollController sc)
+	videoPlayer()
 	{
 		return Container
 		(
@@ -362,7 +337,7 @@ class _InfluecnerWatchVideoState extends State<InfluecnerWatchVideo>
 			width: width,
 			child: FittedBox
 			(
-				fit: BoxFit.contain,
+				fit: BoxFit.cover,
 				child: Stack
 				(
 					children: 
@@ -881,7 +856,7 @@ class _InfluecnerWatchVideoState extends State<InfluecnerWatchVideo>
 						),
 						onTap:()
 						{
-							Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage()));
+							Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(1)));
 						},
 					);
 				}

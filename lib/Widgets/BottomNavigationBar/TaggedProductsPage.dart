@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/ProductPage.dart';
+import 'package:hypd/global.dart';
 
 class TaggedProducts extends StatefulWidget
 {
@@ -68,18 +69,25 @@ class _TaggedProductsState extends State<TaggedProducts>
 						color: Colors.white,
 						borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25), bottomRight: Radius.circular(25))
 					),
-					// child: taggedProducts(),
 				),
 				Container
 				(
-					height: height / 2.8,
+					height: height / 2.5,
 					width: width,
 					decoration: BoxDecoration
 					(
-						color: Colors.white,
+						// color: Colors.red,
 						borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25), bottomRight: Radius.circular(25))
 					),
-					child: taggedProducts(),
+					// child: Padding
+					// (
+					// 	padding: EdgeInsets.only(top: 18),
+						child: Align
+						(
+							alignment: Alignment.topCenter,
+							child: taggedProducts(),
+						),
+					// )
 				),
 				Positioned
 				(
@@ -124,6 +132,7 @@ class _TaggedProductsState extends State<TaggedProducts>
 					onPressed: ()
 					{
 						// Navigator.push(context, MaterialPageRoute(builder: (context) => MyBag()));
+						showPopup("success", "Item added to bag", context);
 					},
 					icon: Icon(Icons.shopping_bag_outlined),
 					color: Colors.black,
@@ -136,7 +145,7 @@ class _TaggedProductsState extends State<TaggedProducts>
 	{
 		return  Container
 		(
-			margin: EdgeInsets.only(top: 50, bottom: 10),
+			margin: EdgeInsets.only(top: 30, bottom: 10),
 			// height: 25,
 			child: ListView.builder
 			(
@@ -170,14 +179,15 @@ class _TaggedProductsState extends State<TaggedProducts>
 											)
 										)
 									),
-									Positioned
-									(
-										child: Align
+									// Positioned
+									// (
+									// 	child: 
+										Align
 										(
-											alignment: Alignment.bottomCenter,
+											alignment: Alignment.bottomLeft,
 											child: Container
 											(
-												height: 80,
+												height: height * .12,
 												width: width / 3,
 												decoration: BoxDecoration
 												(
@@ -220,7 +230,7 @@ class _TaggedProductsState extends State<TaggedProducts>
 														)
 													),
 												),
-											)
+											// )
 										)
 									),
 									Positioned
@@ -230,8 +240,8 @@ class _TaggedProductsState extends State<TaggedProducts>
 										child:Container
 										(
 											margin: EdgeInsets.all(5),
-											height: 45,
-											width: 45,
+											height: 30,
+											width: 30,
 											decoration: BoxDecoration
 											(
 												color: Color(int.parse("0xfff2f2f0")),
@@ -268,7 +278,7 @@ class _TaggedProductsState extends State<TaggedProducts>
 						),
 						onTap:()
 						{
-							Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage()));
+							Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(1)));
 						},
 					);
 				}

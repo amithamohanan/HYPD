@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -73,17 +72,6 @@ class _WatchVideoState extends State<WatchVideo>
 
     	}
   	}
-
-
-	playVideo(url)
-	{
-		_controller = VideoPlayerController.network(url.toString());
-
-		_controller.initialize();
-		_controller.play();
-		isPlaying = true;
-		_controller.setLooping(true);
-	}
 
 	@override
 	Widget build(BuildContext context)
@@ -295,6 +283,7 @@ class _WatchVideoState extends State<WatchVideo>
 					iconSize: 30,
 					onPressed: ()
 					{
+						playVideo(null);
 						Navigator.push(context, MaterialPageRoute(builder: (context) => TaggedProducts()));
 					},
 					icon: Icon
@@ -324,8 +313,9 @@ class _WatchVideoState extends State<WatchVideo>
 				child: IconButton
 				(
 					iconSize: 30,
-					onPressed: ()
+					onPressed: () async
 					{
+						await playVideo(null);
 						taggedProductsPopUp(context);
 					},
 					icon: Icon(Icons.shopping_bag_outlined),
@@ -664,7 +654,7 @@ class _WatchVideoState extends State<WatchVideo>
 						),
 						onTap:()
 						{
-							Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage()));
+							Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(1)));
 						},
 					);
 				}

@@ -3,56 +3,63 @@ import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/API/Server.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/ImageView.dart';
 import 'package:hypd/Widgets/MyBag.dart';
 import 'package:hypd/Widgets/MyWishlist.dart';
 import 'package:hypd/Widgets/Notifications.dart';
 import 'package:hypd/Widgets/Utilities/SelectSizeModal.dart';
+import 'package:hypd/Widgets/Utilities/SnackBar.dart';
 import 'package:hypd/global.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 
-class ProductPage extends StatefulWidget 
+class ProductPage extends StatefulWidget
 {
+	final productId;
+	ProductPage(this.productId);
+
 	@override
-	_ProductPageState createState() => _ProductPageState();
+	_ProductPageState createState() => _ProductPageState(this.productId);
 }
 
-class _ProductPageState extends State<ProductPage> 
+class _ProductPageState extends State<ProductPage>
 {
+	final productId;
+	_ProductPageState(this.productId);
+
 	final double _initFabHeight = 120.0;
 	double _fabHeight = 0;
 	double _panelHeightOpen = 0;
 	double _panelHeightClosed = 95.0;
+
 	var height;
 	var width;
 	var fontSize;
+	var productDetails;
 
 	int currentPos = 0;
+	int quantity = 1;
 
 	bool isFavourite = false;
 	bool _showBottomSheet = false;
 
 
-	 	List<String> listPaths = 
-	[
-    	"https://images.pexels.com/photos/6945696/pexels-photo-6945696.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    	"https://images.pexels.com/photos/3913589/pexels-photo-3913589.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-    	"https://images.pexels.com/photos/7404985/pexels-photo-7404985.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-  	];
+	List<String> listPaths = [];
 
 	List size = ["S", "M", "L", "XL", "XXL", "XXXL"];
 
 
 	@override
-	void initState() 
+	void initState()
 	{
 		super.initState();
 		_fabHeight = _initFabHeight;
+		getProductDetails();
 	}
 
 	@override
-	Widget build(BuildContext context) 
+	Widget build(BuildContext context)
 	{
 		height = getHeight(context);
 		width = getWidth(context);
@@ -67,34 +74,34 @@ class _ProductPageState extends State<ProductPage>
 			body: SlidingUpPanel
 			(
 				color: !_showBottomSheet ? Color(int.parse("0xff674094")) : Colors.white,
-				maxHeight: height,
+				maxHeight: _panelHeightOpen,
 				minHeight: _panelHeightClosed,
 				parallaxEnabled: true,
 				parallaxOffset: .5,
 				body: stack(),
-				panelBuilder: (sc) => scroller(sc),
+				panelBuilder: (sc) => productDetails == null ? SizedBox.shrink(): scroller(sc),
 				borderRadius: BorderRadius.only(
 				topLeft: Radius.circular(18.0),
 				topRight: Radius.circular(18.0)),
 				onPanelOpened: ()
 				{
-					setState(() 
+					setState(()
 					{
 						_showBottomSheet = true;
 					});
 				},
 				onPanelClosed: ()
 				{
-					setState(() 
+					setState(()
 					{
 						_showBottomSheet = false;
 					});
 				},
-				onPanelSlide: (double pos) => setState(() 
+				onPanelSlide: (double pos) => setState(()
 				{
 					_fabHeight = pos * (_panelHeightOpen - _panelHeightClosed) + _initFabHeight;
 
-					
+
 				}),
 			)
 		);
@@ -130,7 +137,7 @@ class _ProductPageState extends State<ProductPage>
 					),
 				)
 			),
-			actions: 
+			actions:
 			[
 				Container
 				(
@@ -200,7 +207,7 @@ class _ProductPageState extends State<ProductPage>
 	{
 		return Stack
 		(
-			children: 
+			children:
 			[
 				Container
 				(
@@ -219,7 +226,7 @@ class _ProductPageState extends State<ProductPage>
 							scrollDirection: Axis.vertical,
                   			onPageChanged: (index, reason)
 							{
-                    			setState(() 
+                    			setState(()
 								{
                       				currentPos = index;
                     			});
@@ -237,7 +244,7 @@ class _ProductPageState extends State<ProductPage>
 					right: width / 17,
 					child: Column
 					(
-						children: listPaths.map((url) 
+						children: listPaths.map((url)
 						{
 							int index = listPaths.indexOf(url);
 							return Container
@@ -268,7 +275,7 @@ class _ProductPageState extends State<ProductPage>
 			child: Row
 			(
 				mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-				children: 
+				children:
 				[
 					Container
 					(
@@ -276,11 +283,11 @@ class _ProductPageState extends State<ProductPage>
 						// color: Colors.white,
 						child: Wrap
 						(
-							children: 
+							children:
 							[
 								Text
 								(
-									"Pangolian Backpack",
+									productDetails["productDetails"]["name"].toString(),
 									style: GoogleFonts.montserrat
 									(
 										// fontWeight: FontWeight.w600,
@@ -294,11 +301,11 @@ class _ProductPageState extends State<ProductPage>
 					Column
 					(
 						crossAxisAlignment: CrossAxisAlignment.end,
-						children: 
+						children:
 						[
 							Text
 							(
-								"₹3800",
+								"₹ " + productDetails["productDetails"]["price"].toString(),
 								style: GoogleFonts.montserrat
 								(
 									fontWeight: FontWeight.w600,
@@ -312,7 +319,7 @@ class _ProductPageState extends State<ProductPage>
 								style: GoogleFonts.montserrat
 								(
 									color: Color(int.parse("0xff42b369")),
-									fontWeight: FontWeight.w400, 
+									fontWeight: FontWeight.w400,
 									fontSize: 11,
 								)
 							)
@@ -349,10 +356,10 @@ class _ProductPageState extends State<ProductPage>
 		return MediaQuery.removePadding
 		(
         	removeTop: true,
-			context: context, 
+			context: context,
 			child: ListView
 			(
-				children: 
+				children:
 				[
 					topButton(),
 					SizedBox(height: height / 30),
@@ -366,7 +373,7 @@ class _ProductPageState extends State<ProductPage>
 							child: Column
 							(
 								crossAxisAlignment: CrossAxisAlignment.start,
-								children: 
+								children:
 								[
 									SizedBox(height: height / 30),
 									howItWorsk(),
@@ -402,7 +409,7 @@ class _ProductPageState extends State<ProductPage>
 			),
 			child: Row
 			(
-				children: 
+				children:
 				[
 					Container
 					(
@@ -417,7 +424,7 @@ class _ProductPageState extends State<ProductPage>
 						child: Column
 						(
 							crossAxisAlignment: CrossAxisAlignment.start,
-							children: 
+							children:
 							[
 								Text
 								(
@@ -499,7 +506,7 @@ class _ProductPageState extends State<ProductPage>
 			child: Column
 			(
 				crossAxisAlignment: CrossAxisAlignment.start,
-				children: 
+				children:
 				[
 					Text
 					(
@@ -579,7 +586,7 @@ class _ProductPageState extends State<ProductPage>
 			padding: EdgeInsets.only(left: 15, right: 15),
 			child: Text
 			(
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident..",
+				productDetails["productDetails"]["description"].toString(),
 				style: GoogleFonts.montserrat
 				(
 					color: Colors.black38,
@@ -604,14 +611,14 @@ class _ProductPageState extends State<ProductPage>
 				color: Color(int.parse("0xff674094")),
 				borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
 			),
-			child: 
+			child:
 			Column
 			(
-				children: 
+				children:
 				[
 					Row
 					(
-						children: 
+						children:
 						[
 							Expanded
 							(
@@ -619,7 +626,7 @@ class _ProductPageState extends State<ProductPage>
 								(
 									child: Container
 									(
-										padding: EdgeInsets.only(left: 15, right: 15, top: 5), 
+										padding: EdgeInsets.only(left: 15, right: 15, top: 5),
 										margin: EdgeInsets.only(left: 15, right: 15, top: 25),
 										height: height / 12,
 										decoration: BoxDecoration
@@ -630,7 +637,7 @@ class _ProductPageState extends State<ProductPage>
 										child: Column
 										(
 											crossAxisAlignment: CrossAxisAlignment.start,
-											children: 
+											children:
 											[
 												Text
 												(
@@ -665,7 +672,7 @@ class _ProductPageState extends State<ProductPage>
 							(
 								child: Container
 								(
-									padding: EdgeInsets.only(left: 15, right: 15), 
+									padding: EdgeInsets.only(left: 15, right: 15),
 									margin: EdgeInsets.only(left: 15, right: 15, top: 25),
 									height: height / 12,
 									decoration: BoxDecoration
@@ -675,7 +682,7 @@ class _ProductPageState extends State<ProductPage>
 									),
 									child: Row
 									(
-										children: 
+										children:
 										[
 											Expanded
 											(
@@ -690,7 +697,16 @@ class _ProductPageState extends State<ProductPage>
 													(
 														child: IconButton
 														(
-															onPressed: null, 
+															onPressed: ()
+															{
+																setState(()
+																{
+																	if(quantity > 1)
+																	{
+																		quantity--;
+																	}
+																});
+															},
 															icon: Icon(Icons.remove, color: Colors.white),
 														),
 													),
@@ -704,7 +720,7 @@ class _ProductPageState extends State<ProductPage>
 													(
 														child: Text
 														(
-															"1",
+															quantity.toString(),
 															style: GoogleFonts.montserrat
 															(
 																color: Colors.white,
@@ -727,8 +743,13 @@ class _ProductPageState extends State<ProductPage>
 													(
 														child: IconButton
 														(
-															onPressed: null, 
-															icon: Icon(Icons.add_outlined, color: Colors.white),
+															onPressed: ()
+															{
+																setState(()
+																{
+																	quantity++;
+																});
+															},															icon: Icon(Icons.add_outlined, color: Colors.white),
 														),
 													),
 												)
@@ -742,7 +763,7 @@ class _ProductPageState extends State<ProductPage>
 					SizedBox(height: 20),
 					Row
 					(
-						children: 
+						children:
 						[
 							Container
 							(
@@ -758,15 +779,15 @@ class _ProductPageState extends State<ProductPage>
 								(
 									onPressed: ()
 									{
-										setState(() 
-										{
-											isFavourite = !isFavourite;
-										});
+										// setState(()
+										// {
+											addProductToWishlist();
+										// });
 									},
 									icon: Icon
 									(
-										Icons.favorite_border,
-										color: Colors.white70,
+										Icons.favorite,
+										color: isFavourite ? Colors.red :  Colors.white70,
 									),
 								),
 							),
@@ -798,7 +819,7 @@ class _ProductPageState extends State<ProductPage>
 												)
 											)
 										),
-										onPressed: () => null
+										onPressed: () => addToBag()
 									)
 								)
 							)
@@ -839,5 +860,57 @@ class _ProductPageState extends State<ProductPage>
 				fontSize: 18
 			),
 		);
+	}
+
+	// ----------------------------------------------------------------------------API------------------------------------------------------------------//
+
+	getProductDetails() async
+	{
+		productDetails = await Server.getProductDetails(this.productId);
+
+		setState(()
+		{
+			for(int i = 0; i < productDetails["productImage"].length; i++)
+			{
+				listPaths.add(productDetails["productImage"][i]);
+			}
+		});
+	}
+
+	// add to wishlist
+	addProductToWishlist() async
+	{
+		var userId = user["id"];
+
+		var response = await Server.addProductsToWishlist(userId, productId);
+
+		if(response == "Wish list added Successfully")
+		{
+			setState(()
+			{
+				isFavourite = true;
+			});
+		}
+		else
+		{
+			setState(()
+			{
+				isFavourite = false;
+			});
+		}
+	}
+
+	addToBag() async
+	{
+		print(user);
+
+		var userId = user["id"];
+
+		var response = await Server.addToCart(userId, productId, quantity);
+
+		if(response == "cart added Successfully")
+		{
+			showSnackBar(context, "Added to bag");
+		}
 	}
 }

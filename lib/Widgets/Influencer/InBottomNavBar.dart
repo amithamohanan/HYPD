@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/VideoPlayer.dart';
-import 'package:hypd/Widgets/Influencer/CameraRecord.dart';
 import 'package:hypd/Widgets/Influencer/InProfilePage.dart';
 import 'package:hypd/Widgets/Influencer/InfluencerShoppinPage.dart';
 import 'package:hypd/Widgets/Influencer/InfluencerWatchVideo.dart';
-import 'package:hypd/Widgets/Influencer/Influencerdashboard.dart';
 import 'package:hypd/Widgets/Influencer/RecordVideo.dart';
+import 'package:hypd/Widgets/Influencer/Test.dart';
 import 'package:hypd/global.dart';
 
 class InBottomNavBar extends StatefulWidget
@@ -24,6 +22,7 @@ class _InBottomNavBarState extends State<InBottomNavBar>
 {
     int _currentIndex = 0;
 	var currentBackPressTime;
+
 	bool hasNetwork = true;
 
 	late Player playing;
@@ -31,9 +30,9 @@ class _InBottomNavBarState extends State<InBottomNavBar>
 	static List<Widget> _widgetOptions = <Widget>
 	[
 		InfluecnerWatchVideo(),
-		InfluencerShoppingPage(),
+		InfluencerShoppingPage(false),
 		// RecordVideo(),
-		CameraApp(),
+		Test(),
 		InProfilePage(),
 	];
 
@@ -41,8 +40,6 @@ class _InBottomNavBarState extends State<InBottomNavBar>
 	void initState()
 	{
 		super.initState();
-		print(widget.pageInd);
-		print("widget.pageInd");
 		_currentIndex = widget.pageInd != null ? widget.pageInd : 0;
 	}
 
@@ -52,13 +49,11 @@ class _InBottomNavBarState extends State<InBottomNavBar>
 
 		if (_currentIndex == index)
 		{
-			print("888888888888888888888888888888888888888888");
 			return;
 		}
 
 		setState(()
 		{
-			print(index);
 			_currentIndex = index;
 
 			// if(hasNetwork == true)

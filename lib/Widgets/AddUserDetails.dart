@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:hypd/Widgets/API/Server.dart';
+import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
 import 'package:hypd/Widgets/Influencer/PendingVerification.dart';
+import 'package:hypd/Widgets/Utilities/Loader.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
 import 'package:hypd/global.dart';
 
 class AddUserDetails extends StatefulWidget
@@ -31,12 +33,24 @@ class _AddUserDetailsState extends State<AddUserDetails>
 	var height;
 	var width;
 	var fontSize;
+	var gender;
+	var dob;
+
+	String image = "";
 
 	bool isDateEnter = true;
 	bool isFemale = false;
 	bool isMale = false;
 	bool isOther = false;
 	bool isImageUploaded = false;
+
+	@override
+	void initState()
+	{
+		super.initState();
+		print(user);
+		dob = user["dob"].toString().split("/");
+	}
 
 
 	@override
@@ -211,6 +225,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 								color: Colors.pink,
 								fontSize: 12,
 							),
+							hintText: user["name"].toString(),
 							counterText: "",
 							contentPadding: EdgeInsets.all(0),
 							isDense: true,
@@ -219,12 +234,12 @@ class _AddUserDetailsState extends State<AddUserDetails>
 						),
 						validator: (value)
 						{
-							if(value == null || value.isEmpty)
-							{
-								return "*Name cannot be empty";
-							}
+							// if(value == null || value.isEmpty)
+							// {
+							// 	return "*Name cannot be empty";
+							// }
 						},
-						onSaved: (value) => nameController.text = value.toString(),
+						onSaved: (value) => nameController.text = user["name"].toString(),
 					),
 					SizedBox(height: height / 15,),
 					Text
@@ -237,17 +252,13 @@ class _AddUserDetailsState extends State<AddUserDetails>
 						),
 					),
 					SizedBox(height: height / 25,),
+					// phone
 					TextFormField
 					(
 						keyboardType: TextInputType.phone,
 						controller: phoneController,
 						maxLength: 10,
-						style:  GoogleFonts.montserrat
-						(
-							fontWeight: FontWeight.bold,
-							color: Colors.black,
-							fontSize: 12
-						),
+						readOnly: true,
 						decoration: InputDecoration
 						(
 							errorStyle: GoogleFonts.montserrat
@@ -255,9 +266,11 @@ class _AddUserDetailsState extends State<AddUserDetails>
 								color: Colors.pink,
 								fontSize: 12,
 							),
+							hintText: user["phone"].toString(),
 							hintStyle:  GoogleFonts.montserrat
 							(
-								color: Colors.grey,
+								fontWeight: FontWeight.bold,
+								color: Colors.black,
 								fontSize: 12
 							),
 							counterText: "",
@@ -266,25 +279,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 							enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 							focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 						),
-						validator: (value)
-						{
-							if(value == null || value.isEmpty)
-							{
-								return "*Phone cannot be empty";
-							}
-							else
-							{
-								if (value.length != 10)
-								{
-									return 'Enter a valid phone number';
-								}
-								else
-								{
-									return null;
-								}
-							}
-						},
-						onSaved: (value) => phoneController.text = value.toString(),
+						onSaved: (value) => phoneController.text = user["phone"].toString(),
 					),
 					SizedBox(height: height / 15,),
 					Text
@@ -307,11 +302,13 @@ class _AddUserDetailsState extends State<AddUserDetails>
 							color: Colors.black,
 							fontSize: 12
 						),
+						readOnly: true,
 						decoration: InputDecoration
 						(
 							hintStyle:  GoogleFonts.montserrat
 							(
-								color: Colors.grey,
+								fontWeight: FontWeight.bold,
+								color: Colors.black,
 								fontSize: 12
 							),
 							errorStyle: GoogleFonts.montserrat
@@ -319,31 +316,14 @@ class _AddUserDetailsState extends State<AddUserDetails>
 								color: Colors.pink,
 								fontSize: 12,
 							),
+							hintText: user["email"].toString(),
 							counterText: "",
 							contentPadding: EdgeInsets.all(0),
 							isDense: true,
 							enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 							focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.black12)),
 						),
-						validator: (value)
-						{
-							if(value == null || value.isEmpty)
-							{
-								return "*Email cannot be empty";
-							}
-							else
-							{
-								if (!value.contains("@"))
-								{
-									return 'Enter a valid email';
-								}
-								else
-								{
-									return null;
-								}
-							}
-						},
-						onSaved: (value) => emailController.text = value.toString(),
+						onSaved: (value) => emailController.text = user["email"].toString(),
 					),
 					SizedBox(height: height / 25,),
 					Text
@@ -356,6 +336,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 						),
 					),
 					SizedBox(height: height / 25,),
+					// date field
 					Row
 					(
 						mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -379,11 +360,11 @@ class _AddUserDetailsState extends State<AddUserDetails>
 									textAlign: TextAlign.center,
 									decoration: InputDecoration
 									(
-										hintText: "DD",
+										hintText: user["dob"] == "" ? "DD" : dob[2],
 										hintStyle:  GoogleFonts.montserrat
 										(
-											fontWeight: FontWeight.w500,
-											color: Colors.black26,
+											fontWeight: FontWeight.bold,
+											color: Colors.black,
 											fontSize: fontSize / 35
 										),
 										counterText: "",
@@ -414,11 +395,11 @@ class _AddUserDetailsState extends State<AddUserDetails>
 									textAlign: TextAlign.center,
 									decoration: InputDecoration
 									(
-										hintText: "MM",
+										hintText: user["dob"] == "" ? "MM" : dob[1],
 										hintStyle:  GoogleFonts.montserrat
 										(
-											fontWeight: FontWeight.w500,
-											color: Colors.black26,
+											fontWeight: FontWeight.bold,
+											color: Colors.black,
 											fontSize: fontSize / 35
 										),
 										counterText: "",
@@ -448,11 +429,11 @@ class _AddUserDetailsState extends State<AddUserDetails>
 									textAlign: TextAlign.center,
 									decoration: InputDecoration
 									(
-										hintText: "YYYY",
+										hintText: user["dob"] == "" ? "YYY" : dob[0],
 										hintStyle:  GoogleFonts.montserrat
 										(
-											fontWeight: FontWeight.w500,
-											color: Colors.black26,
+											fontWeight: FontWeight.bold,
+											color: Colors.black,
 											fontSize: fontSize / 35
 										),
 										counterText: "",
@@ -476,16 +457,20 @@ class _AddUserDetailsState extends State<AddUserDetails>
 										var date = await showDatePicker
 										(
 											context: context,
-											initialDate:DateTime.now(),
-											firstDate:DateTime(1900),
-											lastDate: DateTime(2100)
+											initialDate: DateTime(2000),
+											firstDate:DateTime(1970),
+											lastDate: DateTime(2010)
 										);
-										var x = date.toString().split("-");
-										var temp = x[2].toString().split(" ");
 
-										yearController.text = x[0];
-										monthController.text = x[1];
-										dateController.text = temp[0];
+										var x = date.toString().split("-").join("/");
+										var temp = x.split(" ");
+										var temp1  = temp[0].toString().split("/");
+
+										dob = temp[0].toString();
+
+										yearController.text = temp1[0];
+										monthController.text = temp1[1];
+										dateController.text = temp1[2];
 									},
 								),
 							)
@@ -523,11 +508,12 @@ class _AddUserDetailsState extends State<AddUserDetails>
 								),
 								onPressed: ()
 								{
-									setState(() 
+									setState(()
 									{
 										isMale = true;
 										isOther = false;
 										isFemale = false;
+										gender = "male";
 									});
 								}
 							),
@@ -548,11 +534,12 @@ class _AddUserDetailsState extends State<AddUserDetails>
 								),
 								onPressed: ()
 								{
-									setState(() 
+									setState(()
 									{
 										isFemale = true;
 										isMale = false;
 										isOther = false;
+										gender = "female";
 									});
 								}
 							),
@@ -573,11 +560,12 @@ class _AddUserDetailsState extends State<AddUserDetails>
 								),
 								onPressed: ()
 								{
-									setState(() 
+									setState(()
 									{
 										isOther = true;
 										isMale = false;
 										isFemale = false;
+										gender = "other";
 									});
 								}
 							)
@@ -612,7 +600,7 @@ class _AddUserDetailsState extends State<AddUserDetails>
 							{
 
 								print(isInfluencer);
-								
+
 								if(dateController.text != "0" && monthController.text != "0" && yearController.text != "0")
 								{
 									setState(()
@@ -620,11 +608,15 @@ class _AddUserDetailsState extends State<AddUserDetails>
 										isDateEnter = false;
 									});
 								}
+
+								popup(context);
+								addUserDetails(nameController.text, phoneController.text, dob, gender, _image);
+								print("YES");
 								// if(_profileKey.currentState!.validate())
 								// {
 									// showSnackBar(context, "Profile Added Successfully");
-									!isInfluencer  ? Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()))
-									: Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PendingVerification()));
+									// !isInfluencer  ? Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()))
+									// : Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PendingVerification()));
 								// }
 							}
 						)
@@ -751,17 +743,18 @@ class _AddUserDetailsState extends State<AddUserDetails>
 
 	Future getGalleryImage() async
 	{
-		
     	final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
-    	setState(() 
+    	setState(()
 		{
-      		if (pickedFile != null) 
+      		if (pickedFile != null)
 			{
         		_image = File(pickedFile.path);
 				isImageUploaded = true;
-      		} 
-			else 
+				image = pickedFile.path;
+				print(image);
+      		}
+			else
 			{
         		print('No image selected.');
       		}
@@ -772,18 +765,46 @@ class _AddUserDetailsState extends State<AddUserDetails>
 	{
     	final pickedFile = await picker.getImage(source: ImageSource.camera);
 
-    	setState(() 
+    	setState(()
 		{
-      		if (pickedFile != null) 
+      		if (pickedFile != null)
 			{
         		_image = File(pickedFile.path);
 				isImageUploaded = true;
-      		} 
-			else 
+				image = pickedFile.path;
+				print(image);
+      		}
+			else
 			{
         		print('No image selected.');
       		}
     	});
   	}
 
+	addUserDetails(name, phone, dob, gender, image) async
+	{
+		print(user);
+
+		if(_profileKey.currentState!.validate())
+		{
+			var response = await Server.addUserDetails(name, phone, dob, user["id"], gender, image);
+
+
+			if(response == false)
+			{
+				showPopup("error", "Updation Failed", context);
+			}
+			else
+			{
+				if(isInfluencer == true)
+				{
+					Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PendingVerification()));
+				}
+				else
+				{
+					Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+				}
+			}
+		}
+	}
 }

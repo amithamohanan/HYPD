@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class MyImageView extends StatelessWidget
 {
 
-	String imgPath;
+	final String imgPath;
  
   	MyImageView(this.imgPath);
  

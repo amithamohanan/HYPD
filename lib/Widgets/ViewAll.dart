@@ -1,24 +1,54 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/API/Server.dart';
 import 'package:hypd/Widgets/MyBag.dart';
 import 'package:hypd/Widgets/MyWishlist.dart';
+import 'package:hypd/Widgets/ProductPage.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 
 
-class ViewAll extends StatefulWidget 
+class ViewAll extends StatefulWidget
 {
+	final categoryId;
+	final subCategoryId;
+
+	ViewAll(this.categoryId, this.subCategoryId);
+
 	@override
-	_ViewAllState createState() => _ViewAllState();
+	_ViewAllState createState() => _ViewAllState(this.categoryId, this.subCategoryId);
 }
 
-class _ViewAllState extends State<ViewAll> 
+class _ViewAllState extends State<ViewAll>
 {
+	final categoryId;
+	final subCategoryId;
+
+	_ViewAllState(this.categoryId, this.subCategoryId);
+
+	List productList = [];
+
 	var height;
 	var width;
 
 	bool isFavourite = false;
-	
+
+	@override
+	void initState()
+	{
+		super.initState();
+
+		if(this.subCategoryId == null)
+		{
+			getProductsByBrands(this.categoryId);
+		}
+		else
+		{
+			getAllProducts(this.categoryId, this.subCategoryId);
+		}
+	}
+
+
 	appBar()
 	{
 		return PreferredSize
@@ -45,7 +75,7 @@ class _ViewAllState extends State<ViewAll>
 						),
 					),
 				),
-				actions: 
+				actions:
 				[
 					Container
 					(
@@ -92,7 +122,7 @@ class _ViewAllState extends State<ViewAll>
 		);
 	}
 
-	Widget build(BuildContext context) 
+	Widget build(BuildContext context)
 	{
 		height = MediaQuery.of(context).size.height;
 		width = MediaQuery.of(context).size.width;
@@ -109,142 +139,195 @@ class _ViewAllState extends State<ViewAll>
 					(
 						child: ResponsiveGridRow
 						(
-							children:  List.generate(15, (index)
+							children:  List.generate(productList.length, (index)
 							{
 								return ResponsiveGridCol
 								(
 									lg: 3,
 									xs: 6,
 									md: 4,
-									child: Container
+									child: GestureDetector
 									(
-										margin: EdgeInsets.only(left: 15, bottom: 15),
-										color: Colors.white,
-										height: 250,
-										child: Stack
+										child: Container
 										(
-											children: 
-											[
-												Positioned
-												(
-													child: Container
+											margin: EdgeInsets.only(left: 15, bottom: 15),
+											color: Colors.white,
+											height: 250,
+											child: Stack
+											(
+												children:
+												[
+													Positioned
 													(
-														height: 230,
-														width: width / 2.5,
-														child: FittedBox
-														(
-															child:ClipRRect
-															(
-																borderRadius: BorderRadius.circular(50.0),
-																child: Image.network("https://images.pexels.com/photos/908934/pexels-photo-908934.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
-															),
-															fit: BoxFit.fill,
-														)
-													)
-												),
-												Positioned.fill
-												(
-													child: Align
-													(
-														alignment: Alignment.bottomLeft,
 														child: Container
 														(
-															height: 80,
-															width: width / 2.8,
-															decoration: BoxDecoration
+															height: 230,
+															width: width / 2.5,
+															child: FittedBox
 															(
-																borderRadius: BorderRadius.circular(50)
-															),
-															child: Card
-															(
-																elevation: 10,
-																shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-																child: ListTile
+																child:ClipRRect
 																(
-																	leading: Column
-																	(
-																		crossAxisAlignment: CrossAxisAlignment.start,
-																		children: 
-																		[
-																			SizedBox(height: 5),
-																			Text
-																			(
-																				"Travis Scott Tee",
-																				style: GoogleFonts.montserrat
-																				(
-																					color: Colors.black,
-																					fontWeight: FontWeight.w500,
-																					fontSize: 10,
-																				),
-																			),
-																			SizedBox(height: 20),
-																			Text
-																			(
-																				" ₹ 12000",
-																				style: GoogleFonts.montserrat
-																				(
-																					color: Colors.black,
-																					fontWeight: FontWeight.bold,
-																					fontSize: 10,
-																				),
-																			),
-																		],
-																	)
+																	borderRadius: BorderRadius.circular(50.0),
+																	child: Image.network(productList[index]["productImage"][0]["image"].toString()),
 																),
-															),
-														)
-													)
-												),
-												Positioned
-												(
-													top: 5,
-													right: width / 2.5 - width / 2.8,
-													child:Container
-													(
-														margin: EdgeInsets.all(5),
-														height: 45,
-														width: 45,
-														decoration: BoxDecoration
-														(
-															color: Color(int.parse("0xfff2f2f0")),
-															borderRadius: BorderRadius.circular(10)
-														),
-														child: FittedBox
-														(
-															child: IconButton
-															(
-																onPressed: ()
-																{
-																	setState(() 
-																	{
-																		isFavourite = !isFavourite;
-																	});
-																},
-																icon: isFavourite 
-																? Icon
-																(
-																	Icons.favorite,
-																	color: Color(int.parse("0xffA12C2A"))
-																)
-																: Icon
-																(
-																	Icons.favorite_border,
-																	color: Colors.black,
-																),
-															),
+																fit: BoxFit.fill,
+															)
 														)
 													),
-												)
-											],
-										)
+													Positioned.fill
+													(
+														child: Align
+														(
+															alignment: Alignment.bottomLeft,
+															child: Container
+															(
+																height: 80,
+																width: width / 2.8,
+																decoration: BoxDecoration
+																(
+																	borderRadius: BorderRadius.circular(50)
+																),
+																child: Card
+																(
+																	elevation: 10,
+																	shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+																	child: ListTile
+																	(
+																		leading: Column
+																		(
+																			crossAxisAlignment: CrossAxisAlignment.start,
+																			children:
+																			[
+																				// SizedBox(height: 5),
+																				Expanded(child: Text
+																				(
+																					productList[index]["name"].toString(),
+																					style: GoogleFonts.montserrat
+																					(
+																						color: Colors.black,
+																						fontWeight: FontWeight.w500,
+																						fontSize: 10,
+																					),
+																				),),
+																				// SizedBox(height: 10),
+																				Text
+																				(
+																					" ₹ " + productList[index]["price"].toString(),
+																					style: GoogleFonts.montserrat
+																					(
+																						color: Colors.black,
+																						fontWeight: FontWeight.bold,
+																						fontSize: 10,
+																					),
+																				),
+																			],
+																		)
+																	),
+																),
+															)
+														)
+													),
+													Positioned
+													(
+														top: 5,
+														right: width / 2.5 - width / 2.8,
+														child:Container
+														(
+															margin: EdgeInsets.all(5),
+															height: 45,
+															width: 45,
+															decoration: BoxDecoration
+															(
+																color: Color(int.parse("0xfff2f2f0")),
+																borderRadius: BorderRadius.circular(10)
+															),
+															child: FittedBox
+															(
+																child: IconButton
+																(
+																	onPressed: ()
+																	{
+																		setState(()
+																		{
+																			isFavourite = !isFavourite;
+																		});
+																	},
+																	icon: isFavourite
+																	? Icon
+																	(
+																		Icons.favorite,
+																		color: Color(int.parse("0xffA12C2A"))
+																	)
+																	: Icon
+																	(
+																		Icons.favorite_border,
+																		color: Colors.black,
+																	),
+																)
+															)
+														)
+													)
+												]
+											)
+										),
+										onTap: ()
+										{
+											Navigator.push(context, MaterialPageRoute(builder: (context) => ProductPage(productList[index]["id"])));
+										},
 									)
 								);
 							}
-						),
-					),
-				),
+						)
+					)
+				)
 				)
 			)
 		);
+	}
+
+	getAllProducts(id, 	subId) async
+	{
+		productList.clear();
+
+		var response = await Server.getAllProducts(id, subId);
+
+		if(response == false)
+		{
+			print("empty");
+		}
+		else
+		{
+			for(int i = 0; i < response.length; i++)
+			{
+				productList.add(response[i]);
+			}
+			setState(()
+			{
+				print(productList);
+			});
+		}
+	}
+
+	getProductsByBrands(productId) async
+	{
+		productList.clear();
+
+		var response = await Server.getProductsByBrands(productId);
+
+		if(response == false)
+		{
+			print("empty");
+		}
+		else
+		{
+			for(int i = 0; i < response.length; i++)
+			{
+				productList.add(response[i]);
+			}
+			setState(()
+			{
+
+			});
+		}
 	}
 }

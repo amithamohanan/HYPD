@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/API/Server.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/BottomNavBar.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/ShoppingPage.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/WatchVideos.dart';
+import 'package:hypd/Widgets/Influencer/InfluencerShoppinPage.dart';
 import 'package:hypd/Widgets/MyBag.dart';
 import 'package:hypd/Widgets/MyWishlist.dart';
 import 'package:hypd/Widgets/Notifications.dart';
@@ -24,17 +26,20 @@ class _HomePageState extends State<HomePage>
 	var height;
 	var width;
 	var fontSize;
+	var response;
 
 	bool isScrollLeft = false;
 	bool isScrollRight = false;
 	bool isFavourite = false;
 	bool isFullScreen = false;
+	bool isCustomer = true;
 
 
 	@override
 	void initState()
 	{
     	super.initState();
+		// getUserDetails();
   	}
 
 	@override
@@ -55,7 +60,8 @@ class _HomePageState extends State<HomePage>
 				controller: controller,
 				children:
 				[
-					ShoppingPage(),
+					// ShoppingPage(),
+					InfluencerShoppingPage(isCustomer),
 					WatchVideo(this.hasChanged),
 					SearchPage(),
 				],
@@ -156,7 +162,7 @@ class _HomePageState extends State<HomePage>
 				],
 				bottom: !isFullScreen ?  PreferredSize
 				(
-        			preferredSize: Size.fromHeight(height / 9),
+        			preferredSize: Size.fromHeight(height / 11),
 					child: header(),
 				) : null
 		);
@@ -168,7 +174,7 @@ class _HomePageState extends State<HomePage>
 		return Container
 		(
 			margin: EdgeInsets.only(bottom: 10),
-			height: height / 12,
+			height: height / 15,
 			// color: Colors.pinkAccent,
 			child: Row
 			(
@@ -332,6 +338,23 @@ class _HomePageState extends State<HomePage>
 		setState(()
 		{
 			isFullScreen = value;
+		});
+	}
+
+	getUserDetails() async
+	{
+		// pro
+		response = await Server.getUserDetails(user["id"]);
+
+		print(response);
+		print("response");
+
+		user["image"] = response["image"];
+		user["name"] = response["name"];
+
+		setState(() 
+		{
+			// user[]
 		});
 	}
 }

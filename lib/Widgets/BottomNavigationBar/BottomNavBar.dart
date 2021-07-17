@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
 import 'package:hypd/Widgets/BottomNavigationBar/VideoPlayer.dart';
 import 'package:hypd/Widgets/Utilities/LiveSessionPage.dart';
@@ -89,6 +91,7 @@ class _BottomNavBarState extends State<BottomNavBar>
 			),
 			onWillPop:()
 			{
+				// showExitConfirm();
 				onWillPopScope(_currentIndex);
 				return Future.value(true);
 			}
@@ -98,6 +101,10 @@ class _BottomNavBarState extends State<BottomNavBar>
 	// Handle back press to exit
 	Future<bool> onWillPopScope(_currentIndex)
 	{
+		if(_currentIndex == 0)
+		{
+			showExitConfirm();
+		}
 		if(widget.pageInd != 0)
 		{
 			Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => HomePage()));
@@ -117,5 +124,132 @@ class _BottomNavBarState extends State<BottomNavBar>
 		}
 
 		return Future.value(true);
+	}
+
+	showExitConfirm()
+	{
+		return showModalBottomSheet
+		(	
+			isScrollControlled: true,
+			shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+			context: context,
+			builder: (BuildContext context) 
+			{
+    			return Padding
+				(
+        			padding: MediaQuery.of(context).viewInsets,
+					child: Container
+					(
+						decoration: BoxDecoration
+						(
+							borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))
+						),
+						child: SingleChildScrollView
+						(
+							child: Form
+							(
+								// key: _fo/rmKey,
+								child:  Column
+								(
+									mainAxisSize: MainAxisSize.min,
+									children: 
+									[
+										SizedBox(height: 25),
+										Text
+										(
+											"Do you want to Exit?",
+											style: GoogleFonts.montserrat
+											(
+												fontWeight: FontWeight.bold,
+												fontSize: 18
+											),
+										),
+										SizedBox(height: 25),
+										Container
+										(
+											child: Row
+											(
+												children: 
+												[
+													Expanded
+													(
+														child: Container
+														(
+															margin: EdgeInsets.only(bottom:15, left: 15, right: 15 ),
+															height: MediaQuery.of(context).size.height / 12,
+															width: double.infinity,
+															child: ElevatedButton
+															(
+																child: Text
+																(
+																	"YES",
+																	style: TextStyle(fontSize: 16)
+																),
+																style: ButtonStyle
+																(
+																	foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+																	backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffEF5C99"))),
+																	shape: MaterialStateProperty.all<RoundedRectangleBorder>
+																	(
+																		RoundedRectangleBorder
+																		(
+																			borderRadius: BorderRadius.circular(20.5),
+																			side: BorderSide(color: Colors.white38)
+																		)
+																	)
+																),
+																onPressed: ()
+																{
+																	SystemNavigator.pop();
+																}
+															)
+														)
+													),
+													Expanded
+													(
+														child: Container
+														(
+															margin: EdgeInsets.only(bottom:15, left: 15, right: 15 ),
+															height: MediaQuery.of(context).size.height / 12,
+															width: double.infinity,
+															child: ElevatedButton
+															(
+																child: Text
+																(
+																	"NO",
+																	style: TextStyle(fontSize: 16)
+																),
+																style: ButtonStyle
+																(
+																	foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+																	backgroundColor: MaterialStateProperty.all<Color>(Color(int.parse("0xffEF5C99"))),
+																	shape: MaterialStateProperty.all<RoundedRectangleBorder>
+																	(
+																		RoundedRectangleBorder
+																		(
+																			borderRadius: BorderRadius.circular(20.5),
+																			side: BorderSide(color: Colors.white38)
+																		)
+																	)
+																),
+																onPressed: ()
+																{
+																	Navigator.pop(context);
+																}
+															)
+														)
+													)
+												],
+											),
+										),
+										SizedBox(height: 25),
+									],
+								)
+							)
+						)
+					)
+				);
+			}
+		);
 	}
 }

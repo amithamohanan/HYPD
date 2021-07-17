@@ -2,7 +2,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/Influencer/InBottomNavBar.dart';
 import 'package:hypd/Widgets/Influencer/InProfilePage.dart';
+import 'package:hypd/Widgets/Influencer/InfluencerWatchVideo.dart';
 
 class PendingVerification extends StatelessWidget
 {
@@ -66,7 +68,7 @@ class PendingVerification extends StatelessWidget
 							),
 							onTap: ()
 							{
-								Navigator.push(context, MaterialPageRoute(builder: (context) => InProfilePage()));
+								Navigator.push(context, MaterialPageRoute(builder: (context) => InfluecnerWatchVideo()));
 							},
 						)
 					],

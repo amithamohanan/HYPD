@@ -2,6 +2,10 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/Login.dart';
+import 'package:hypd/Widgets/PrivacyPoliciy.dart';
+import 'package:hypd/Widgets/TermsOfUSe.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget
 {
@@ -213,6 +217,10 @@ class _SettingsState extends State<Settings>
 						fontSize: 15,
 					),
 				),
+				onTap: ()
+				{
+					Navigator.push(context, MaterialPageRoute(builder: (context) => PrivacyPolicy()));
+				},
 			),
 		);
 	}
@@ -250,8 +258,12 @@ class _SettingsState extends State<Settings>
 						fontWeight: FontWeight.bold,
 						fontSize: 15,
 					),
-				)
-			),
+				),
+				onTap: ()
+				{
+					Navigator.push(context, MaterialPageRoute(builder: (context) => TermsOfUse()));
+				}
+			)
 		);
 	}
 
@@ -287,46 +299,55 @@ class _SettingsState extends State<Settings>
 					(
 						fontWeight: FontWeight.bold,
 						fontSize: 15,
-					),
+					)
 				)
-			),
+			)
 		);
 	}
 
 	logOut()
 	{
-		return Container
+		return GestureDetector
 		(
-			padding: EdgeInsets.only(left: 25, right: 25),
-			width: width,
-			height: height / 15,
-			child: DottedBorder
+			child: Container
 			(
-				color: Color(int.parse("0xff674094")),
-  				borderType: BorderType.RRect,
-  				radius: Radius.circular(12),
-  				padding: EdgeInsets.all(6),
-  				child: ClipRRect
+				padding: EdgeInsets.only(left: 25, right: 25),
+				width: width,
+				height: height / 15,
+				child: DottedBorder
 				(
-    				borderRadius: BorderRadius.all(Radius.circular(12)),
-    				child: Container
+					color: Color(int.parse("0xff674094")),
+					borderType: BorderType.RRect,
+					radius: Radius.circular(12),
+					padding: EdgeInsets.all(6),
+					child: ClipRRect
 					(
-						child: Center
+						borderRadius: BorderRadius.all(Radius.circular(12)),
+						child: Container
 						(
-							child: Text
+							child: Center
 							(
-								"Log Out",
-								style: GoogleFonts.montserrat
+								child: Text
 								(
-									color: Color(int.parse("0xff674094")),
-									fontWeight: FontWeight.bold,
-									fontSize: 18
-								),
-							),
+									"Log Out",
+									style: GoogleFonts.montserrat
+									(
+										color: Color(int.parse("0xff674094")),
+										fontWeight: FontWeight.bold,
+										fontSize: 18
+									)
+								)
+							)
 						)
-    				),
-  				),
-			)
+					)
+				)
+			),
+			onTap: () async
+			{
+				SharedPreferences prefs = await SharedPreferences.getInstance();
+				prefs.remove("isLoggedIn");
+				Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+			}
 		);
 	}
 }

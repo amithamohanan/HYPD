@@ -1,16 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/API/Server.dart';
+import 'package:hypd/Widgets/Utilities/Loader.dart';
 import 'package:hypd/Widgets/Utilities/SnackBar.dart';
 import 'package:hypd/global.dart';
+import 'package:image_picker/image_picker.dart';
 
-class EditProfile extends StatefulWidget 
+class EditProfile extends StatefulWidget
 {
 	@override
 	_EditProfileState createState() => _EditProfileState();
 }
 
-class _EditProfileState extends State<EditProfile> 
+class _EditProfileState extends State<EditProfile>
 {
 	final _profileKey = GlobalKey<FormState>();
 
@@ -22,11 +27,28 @@ class _EditProfileState extends State<EditProfile>
 	var height;
 	var width;
 	var fontSize;
+	var dob;
+	var gender;
 
 	bool isMale = false;
 	bool isFemale = false;
 	bool isOther = false;
 	bool isDateEnter = false;
+	bool isImageUploaded = false;
+
+	String image = "";
+
+	File _image = new File("");
+  	final picker = ImagePicker();
+
+	@override
+	void initState()
+	{
+		super.initState();
+		print(user);
+		dob = user["dob"].toString().split("/");
+		user["gender"] == "male" ? isMale = true : user["gender"] == "female" ? isFemale = true : isOther = true;
+	}
 
 	@override
 	Widget build(BuildContext context)
@@ -44,6 +66,7 @@ class _EditProfileState extends State<EditProfile>
 
 	Widget scaffold()
 	{
+		print(user);
 		return Scaffold
 		(
 			body: Container
@@ -69,7 +92,7 @@ class _EditProfileState extends State<EditProfile>
 							imageUpload(),
 							SizedBox(height: height / 15,),
 							textFormField(),
-							// SizedBox(height: height / 15,),
+							SizedBox(height: height / 15,),
 							// submitButton()
 						],
 					)
@@ -84,7 +107,7 @@ class _EditProfileState extends State<EditProfile>
 		return Row
 		(
 			mainAxisAlignment: MainAxisAlignment.end,
-			children: 
+			children:
 			[
 				Container
 				(
@@ -174,6 +197,11 @@ class _EditProfileState extends State<EditProfile>
 							color: Colors.black,
 							borderRadius: BorderRadius.circular(25)
 						),
+						child: ClipRRect
+						(
+							borderRadius: BorderRadius.circular(15),
+							child: isImageUploaded ? Image.file(_image, fit: BoxFit.fill,) : Image.network(user["image"].toString(), fit: BoxFit.fill)
+						)
 					),
 				),
 				Positioned
@@ -186,10 +214,7 @@ class _EditProfileState extends State<EditProfile>
 						child: IconButton
 						(
 							color: Colors.white,
-							onPressed: ()
-							{
-
-							},
+							onPressed: () => _onButtonPressed(),
 							icon: Icon(Icons.camera_alt)
 						)
 					)
@@ -230,6 +255,13 @@ class _EditProfileState extends State<EditProfile>
 						),
 						decoration: InputDecoration
 						(
+							hintText: user["name"].toString() == "null" ? "" : user["name"].toString(),
+							hintStyle:  GoogleFonts.montserrat
+							(
+								fontWeight: FontWeight.bold,
+								color: Colors.black,
+								fontSize: 12
+							),
 							errorStyle: GoogleFonts.montserrat
 							(
 								color: Colors.pink,
@@ -284,13 +316,13 @@ class _EditProfileState extends State<EditProfile>
 									textAlign: TextAlign.center,
 									decoration: InputDecoration
 									(
-										hintText: "DD",
 										hintStyle:  GoogleFonts.montserrat
 										(
-											fontWeight: FontWeight.w500,
-											color: Colors.black26,
-											fontSize: fontSize / 35
+											fontWeight: FontWeight.bold,
+											color: Colors.black,
+											fontSize: 12
 										),
+										hintText: user["dob"].toString() == "null" ? "DD" : dob[2],
 										counterText: "",
 										contentPadding: EdgeInsets.all(0),
 										isDense: true,
@@ -319,11 +351,11 @@ class _EditProfileState extends State<EditProfile>
 									textAlign: TextAlign.center,
 									decoration: InputDecoration
 									(
-										hintText: "MM",
+										hintText: user["dob"].toString() == "null" ? "MM" : dob[1],
 										hintStyle:  GoogleFonts.montserrat
 										(
-											fontWeight: FontWeight.w500,
-											color: Colors.black26,
+											fontWeight: FontWeight.bold,
+											color: Colors.black,
 											fontSize: fontSize / 35
 										),
 										counterText: "",
@@ -353,11 +385,11 @@ class _EditProfileState extends State<EditProfile>
 									textAlign: TextAlign.center,
 									decoration: InputDecoration
 									(
-										hintText: "YYYY",
+										hintText: user["dob"].toString() == "null" ? "YYYY" : dob[0],
 										hintStyle:  GoogleFonts.montserrat
 										(
-											fontWeight: FontWeight.w500,
-											color: Colors.black26,
+											fontWeight: FontWeight.bold,
+											color: Colors.black,
 											fontSize: fontSize / 35
 										),
 										counterText: "",
@@ -385,12 +417,15 @@ class _EditProfileState extends State<EditProfile>
 											firstDate:DateTime(1900),
 											lastDate: DateTime(2100)
 										);
-										var x = date.toString().split("-");
-										var temp = x[2].toString().split(" ");
+										var x = date.toString().split("-").join("/");
+										var temp = x.split(" ");
+										var temp1  = temp[0].toString().split("/");
 
-										yearController.text = x[0];
-										monthController.text = x[1];
-										dateController.text = temp[0];
+										dob = temp[0].toString();
+
+										yearController.text = temp1[0];
+										monthController.text = temp1[1];
+										dateController.text = temp1[2];
 									},
 								),
 							)
@@ -428,11 +463,12 @@ class _EditProfileState extends State<EditProfile>
 								),
 								onPressed: ()
 								{
-									setState(() 
+									setState(()
 									{
 										isMale = true;
 										isOther = false;
 										isFemale = false;
+										gender = "male";
 									});
 								}
 							),
@@ -453,11 +489,12 @@ class _EditProfileState extends State<EditProfile>
 								),
 								onPressed: ()
 								{
-									setState(() 
+									setState(()
 									{
 										isFemale = true;
 										isMale = false;
 										isOther = false;
+										gender = "female";
 									});
 								}
 							),
@@ -478,11 +515,12 @@ class _EditProfileState extends State<EditProfile>
 								),
 								onPressed: ()
 								{
-									setState(() 
+									setState(()
 									{
 										isOther = true;
 										isMale = false;
 										isFemale = false;
+										gender = "other";
 									});
 								}
 							)
@@ -515,7 +553,11 @@ class _EditProfileState extends State<EditProfile>
 										)
 									)
 								),
-								onPressed: () =>  showSnackBar(context, "Profile updated successfully")
+								onPressed: ()
+								{
+									popup(context);
+									editProfile();
+								}
 
 							)
 						)
@@ -524,5 +566,178 @@ class _EditProfileState extends State<EditProfile>
 				]
 			)
 		);
+	}
+
+	//Show bottom sheet
+	void _onButtonPressed()
+	{
+		showModalBottomSheet
+		(
+			context: context,
+			builder: (builder)
+			{
+				return  Container
+				(
+					height: 190.0,
+					color: Colors.transparent, //could change this to Color(0xFF737373),
+					child: new Container
+					(
+						decoration: new BoxDecoration
+						(
+							color: Color.fromRGBO(34, 34, 34, 1.0),
+							borderRadius: new BorderRadius.only
+							(
+								topLeft: const Radius.circular(10.0),
+								topRight: const Radius.circular(10.0)
+							)
+						),
+						child: bottomSheet()
+					),
+				);
+			}
+		);
+	}
+
+	// Creating bottom sheet for selecting profile picture
+	Widget bottomSheet()
+	{
+		return Container
+		(
+			child: Column
+			(
+				children: <Widget>
+				[
+					InkWell
+					(
+						onTap: ()
+						{
+							getCameraImage();
+							Navigator.pop(context);
+						},
+						child: Padding
+						(
+							padding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 0.0),
+							child: Row
+							(
+								crossAxisAlignment: CrossAxisAlignment.center,
+								mainAxisAlignment: MainAxisAlignment.start,
+								children: <Widget>
+								[
+									Icon(Icons.camera, color: Color.fromRGBO(34,34,34,1.0), size: 35,),
+									Container
+									(
+										width: 250.0,
+										child:  ListTile
+										(
+											title: Text('Camera',style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1.0)),),
+											subtitle: Text("Click profile picture from camera.",style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1.0)),),
+										),
+									)
+								],
+							),
+						)
+					),
+					InkWell
+					(
+						onTap: ()
+						{
+							getGalleryImage();
+							Navigator.pop(context);
+						},
+						child: Padding
+						(
+							padding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 0.0),
+							child: Row
+							(
+								crossAxisAlignment: CrossAxisAlignment.center,
+								mainAxisAlignment: MainAxisAlignment.start,
+								children: <Widget>
+								[
+									Icon(Icons.photo, color: Color.fromRGBO(34,34,34,1.0), size: 35,),
+									Container
+									(
+										width: 260.0,
+										child:  ListTile
+										(
+											title: Text('Gallery',style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1.0)),),
+											subtitle: Text("Choose profile picture from gallery.",style: TextStyle(color: Color.fromRGBO(20, 20, 20, 1.0))),
+										),
+									)
+								],
+							),
+						)
+					),
+				],
+			),
+			decoration: BoxDecoration
+			(
+				color: Colors.white,
+				borderRadius: BorderRadius.only
+				(
+					topLeft: const Radius.circular(10.0),
+					topRight: const Radius.circular(10.0),
+				),
+			),
+		);
+	}
+
+	Future getGalleryImage() async
+	{
+    	final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    	setState(()
+		{
+      		if (pickedFile != null)
+			{
+        		_image = File(pickedFile.path);
+				isImageUploaded = true;
+				image = pickedFile.path;
+      		}
+			else
+			{
+        		print('No image selected.');
+      		}
+    	});
+  	}
+
+	Future getCameraImage() async
+	{
+    	final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    	setState(()
+		{
+      		if (pickedFile != null)
+			{
+        		_image = File(pickedFile.path);
+				isImageUploaded = true;
+				image = pickedFile.path;
+				print(image);
+      		}
+			else
+			{
+        		print('No image selected.');
+      		}
+    	});
+  	}
+
+	editProfile() async
+	{
+
+		var response = await Server.editUserDetails(nameController.text, gender, dob, image);
+
+		if(response == "User Added Successfully")
+		{
+			var userData = await Server.getUserDetails(user["id"]);
+
+			print(userData);
+			print("USERDATA");
+
+			Navigator.pop(context);
+			showSnackBar(context, "Updated");
+		}
+		else
+		{
+			showPopup("error", "Updating Failed", context);
+		}
 	}
 }

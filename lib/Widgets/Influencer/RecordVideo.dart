@@ -1,457 +1,11 @@
 import 'dart:io';
-// import 'package:camerawesome/camerawesome_plugin.dart';
-// import 'package:camerawesome/video_controller.dart';
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:hypd/Widgets/Influencer/InBottomNavBar.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:path_provider/path_provider.dart';
-// import 'package:video_player/video_player.dart';
-
-
-// class RecordVideo extends StatefulWidget
-// {
-// 	@override
-// 	_RecordVideoState createState() => _RecordVideoState();
-// }
-
-// class _RecordVideoState extends State<RecordVideo>
-// {
-	
-// 	bool randomPhotoName = true;
-
-// 	late VideoPlayerController _controller = VideoPlayerController.network("");
-
-// 	late VideoController _videoController;
-// 	PictureController _pictureController = new PictureController();
-
-
-// 	ValueNotifier<CaptureModes> _captureMode = ValueNotifier(CaptureModes.PHOTO);
-// 	ValueNotifier<Sensors> _sensor = ValueNotifier(Sensors.BACK);
-// 	ValueNotifier<Size> _photoSize = ValueNotifier(Size.infinite);
-
-// 	File video = new File("");
-//   	final picker = ImagePicker();
-
-// 	var height;
-// 	var width;
-
-// 	bool isVideoUploaded = false;
-// 	bool isVideoPlaying = false;
-// 	bool isButtonPressed = true;
-// 	bool _isRecordingVideo = false;
-
-// 	String _lastVideoPath = "";
-
-// 	@override
-// 	void initState()
-// 	{
-// 		super.initState();
-// 		_controller.initialize();
-// 	}
-
-// 	@override
-// 	void dispose()
-// 	{
-// 		_controller.dispose();
-// 		super.dispose();
-// 	}
-
-// 	@override
-// 	Widget build(BuildContext context)
-// 	{
-// 		height = MediaQuery.of(context).size.height;
-// 		width = MediaQuery.of(context).size.width;
-
-
-// 		return SafeArea
-// 		(
-// 			top: !isVideoUploaded ? false : true,
-// 			bottom: true,
-// 			child: Scaffold
-// 			(
-// 				backgroundColor: Colors.white,
-// 				body: !isVideoUploaded
-// 					? videoViewer()
-// 					: Center
-// 					(
-// 						child: GestureDetector
-// 						(
-// 							child: Text
-// 							(
-// 								"Tap to record a video"
-// 							),
-// 							onTap: ()
-// 							{
-// 								popUpModal(context);
-// 							},
-// 						),
-// 					),
-// 				bottomNavigationBar: InBottomNavBar(pageInd: 2,),
-// 			)
-// 		);
-// 	}
-
-// 	// play the video after recoding
-// 	videoPlayer()
-// 	{
-// 		return Container
-// 		(
-// 			height: height,
-// 			width: width,
-// 			child: 	Stack
-// 			(
-// 				children:
-// 				[
-// 					VideoPlayer(_controller),
-// 					Align
-// 					(
-// 						alignment: Alignment.bottomCenter,
-// 						child: IconButton
-// 						(
-// 							onPressed: ()
-// 							{
-// 								isVideoPlaying ? _controller.pause() : _controller.play();
-// 								setState(()
-// 								{
-// 									isVideoPlaying = !isVideoPlaying;
-// 								});
-// 							},
-// 							icon: isVideoPlaying ? Icon(Icons.pause) : Icon(Icons.play_arrow),
-// 							color: Colors.white,
-// 							iconSize: 35,
-// 						),
-// 					),
-// 					Align
-// 					(
-// 						alignment: Alignment.topRight,
-// 						child: IconButton
-// 						(
-// 							onPressed: ()
-// 							{
-// 								exitVideo(context);
-// 							},
-// 							icon: Icon(Icons.close),
-// 							color: Colors.white,
-// 							iconSize: 35,
-// 						),
-// 					),
-// 				],
-// 			),
-// 		);
-// 	}
-
-// 	// get video from gallery
-// 	Future getGalleryVideo() async
-// 	{
-//     	final pickedFile = await picker.getVideo(source: ImageSource.gallery);
-
-//     	setState(()
-// 		{
-//       		if (pickedFile != null)
-// 			{
-//         		video = File(pickedFile.path);
-// 				isVideoUploaded = true;
-// 				_controller = VideoPlayerController.file(video)..initialize();
-// 				_controller.setVolume(0);
-// 				_controller.play();
-// 				_controller.setLooping(true);
-
-// 				setState(()
-// 				{
-// 					isVideoPlaying = true;
-// 				});
-
-//       		}
-// 			else
-// 			{
-//         		print('No image selected.');
-//       		}
-//     	});
-//   	}
-
-// 	// record the video instantly
-// 	Future getCameraVideo() async
-// 	{
-//     	final pickedFile = await picker.getVideo(source: ImageSource.camera, maxDuration: const Duration(seconds: 30));
-
-//     	setState(()
-// 		{
-//       		if (pickedFile != null)
-// 			{
-//         		video = File(pickedFile.path);
-// 				isVideoUploaded = true;
-// 				_controller = VideoPlayerController.file(video)..initialize();
-// 				_controller.setVolume(0);
-// 				_controller.play();
-// 				_controller.setLooping(true);
-
-// 				setState(()
-// 				{
-// 					isVideoPlaying = true;
-// 				});
-//       		}
-// 			else
-// 			{
-//         		print('No image selected.');
-//       		}
-//     	});
-//   	}
-
-
-
-// 	// play the captured video
-// 	videoViewer()
-// 	{
-// 		return Container
-// 		(
-// 			height: height,
-// 			width: width,
-// 			child: Stack
-// 			(
-// 				children: 
-// 				[
-					
-// 					Align
-// 					(
-// 						alignment: Alignment.bottomCenter,
-// 						child: IconButton
-// 						(
-// 							onPressed: () async
-// 							{
-// 								var filePath = getApplicationDocumentsDirectory();
-// 								await _videoController.recordVideo(filePath.toString());
-// 							},
-// 							icon: isVideoPlaying ? Icon(Icons.pause) : Icon(Icons.play_arrow),
-// 							color: Colors.white,
-// 							iconSize: 35,
-// 						),
-// 					),
-// 					Align
-// 					(
-// 						alignment: Alignment.topRight,
-// 						child: IconButton
-// 						(
-// 							onPressed: ()
-// 							{
-// 								var filePath = getApplicationDocumentsDirectory();
-// 								_videoController.recordVideo(filePath.toString());
-// 							},
-// 							icon: Icon(Icons.close),
-// 							color: Colors.white,
-// 							iconSize: 35,
-// 						),
-// 					),
-// 				],
-// 			),
-// 		);
-// 	}
-
-
-// 	// built inteface
-	
-// 	// show options to choose from gallery or live recording
-// 	popUpModal(context)
-// 	{
-// 		return showModalBottomSheet
-// 		(
-// 			isScrollControlled: false,
-// 			shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-// 			context: context,
-// 			builder: (BuildContext context)
-// 			{
-//     			return Padding
-// 				(
-//         			padding: MediaQuery.of(context).viewInsets,
-// 					child: Container
-// 					(
-// 						decoration: BoxDecoration
-// 						(
-// 							borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10))
-// 						),
-// 						child: Column
-// 						(
-// 							mainAxisSize: MainAxisSize.min,
-// 							children:
-// 							[
-// 								Padding
-// 								(
-// 									padding: EdgeInsets.only(left: 15, right: 15),
-// 									child: Row
-// 									(
-// 										mainAxisAlignment: MainAxisAlignment.spaceBetween,
-// 										children:
-// 										[
-// 											Text
-// 											(
-// 												"Create",
-// 												style: GoogleFonts.montserrat
-// 												(
-// 													fontWeight: FontWeight.w300,
-// 													color: Colors.black38,
-// 													fontSize: 15
-// 												),
-// 											),
-// 											IconButton
-// 											(
-// 												onPressed: () => Navigator.pop(context),
-// 												icon: Icon(Icons.close),
-// 												color: Colors.black38,
-// 											)
-// 										],
-// 									),
-// 								),
-// 								Divider(),
-// 								ListTile
-// 								(
-// 									leading: Icon(Icons.upload),
-// 									title: Text
-// 									(
-// 										"Upload a video",
-// 										style: GoogleFonts.montserrat
-// 										(
-// 											fontWeight: FontWeight.w300,
-// 											color: Colors.black38,
-// 											fontSize: 15
-// 										),
-// 									),
-// 									onTap: () => getGalleryVideo(),
-// 								),
-// 								Divider(),
-// 								ListTile
-// 								(
-// 									leading: Icon(Icons.camera_alt_outlined),
-// 									title: Text
-// 									(
-// 										"Create a short",
-// 										style: GoogleFonts.montserrat
-// 										(
-// 											fontWeight: FontWeight.w300,
-// 											color: Colors.black38,
-// 											fontSize: 15
-// 										),
-// 									),
-// 									onTap: () => getCameraVideo(),
-// 								)
-// 							],
-// 						)
-// 					)
-// 				);
-// 			}
-// 		);
-// 	}
-
-// 	// close and exit video
-// 	exitVideo(context)
-// 	{
-// 		return showDialog
-// 		(
-// 			context: context,
-// 			builder: (BuildContext context)
-// 			{
-// 				return AlertDialog
-// 				(
-// 					title: Text
-// 					(
-// 						"Discard all changes!",
-// 						style: GoogleFonts.montserrat
-// 						(
-// 							color: Colors.black38,
-// 							fontSize: 15
-// 						),
-// 					),
-// 					content: Text
-// 					(
-// 						"Do you want to cancel the video?",
-// 						style: GoogleFonts.montserrat
-// 						(
-// 							color: Colors.black38,
-// 							fontSize: 15
-// 						),
-// 					),
-// 					actions: 
-// 					[
-// 						continueButton(context),
-// 						cancelButton(context)
-// 					],
-// 				);
-// 			},
-// 		);
-// 	}
-
-// 	continueButton(context) => TextButton
-// 	(
-//     	child: Text
-// 		(
-// 			"Continue",
-// 			style: GoogleFonts.montserrat
-// 			(
-// 				color: Colors.black38,
-// 				fontSize: 15
-// 			),
-// 		),
-//     	onPressed: ()
-// 		{
-// 			Navigator.pop(context);
-// 		},
-//   	);
-
-// 	cancelButton(context) => TextButton
-// 	(
-//     	child: Text
-// 		(
-// 			"Cancel",
-// 			style: GoogleFonts.montserrat
-// 			(
-// 				color: Colors.black38,
-// 				fontSize: 15
-// 			),
-// 		),
-//     	onPressed: ()
-// 		{
-// 			video.delete();
-// 			Navigator.pop(context);
-// 			setState(() 
-// 			{
-// 				isVideoUploaded = false;
-// 			});
-// 		},
-//   	);
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hypd/Widgets/Influencer/InBottomNavBar.dart';
 import 'package:hypd/global.dart';
+import 'package:video_compress/video_compress.dart';
 import 'package:video_player/video_player.dart';
 
 class RecordVideo extends StatefulWidget
@@ -632,7 +186,7 @@ class _RecordVideoState extends State<RecordVideo> with WidgetsBindingObserver, 
 
 					],
 				),
-				// bottomNavigationBar: InBottomNavBar(pageInd: 2,),
+				bottomNavigationBar: InBottomNavBar(pageInd: 2,),
 			)
 		);
 	}
@@ -1436,14 +990,30 @@ class _RecordVideoState extends State<RecordVideo> with WidgetsBindingObserver, 
 
 	void onStopButtonPressed()
 	{
-		stopVideoRecording().then((file)
+		stopVideoRecording().then((file) async
 		{
 			if (mounted) setState(() {});
-			if (file != null)
+			if (file != null) 
 			{
+				print(file.path);
+				print("fileeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 				showInSnackBar('Video recorded');
-				videoFile = file;
-				_startVideoPlayer();
+				videoFile = file;	
+				var info = await VideoCompress.compressVideo
+				(
+					file.path,
+					quality: VideoQuality.MediumQuality,
+					deleteOrigin: true,
+				);
+
+				print("FILE PATH " + file.path.toString());
+				print(info!.duration.toString() + " DURATION");
+				print(info.path.toString() + " PATH");
+				print(info.filesize.toString() + " FILE SIZE");
+				print(info.author.toString() + " AUTHOR");
+				print("infooooooooooooooooooooooooooooooooooooooooooooooo");
+
+				// _startVideoPlayer();
 				setState(() 
 				{
 					videoRecored = true;

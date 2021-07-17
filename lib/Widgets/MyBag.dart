@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/API/Server.dart';
 import 'package:hypd/Widgets/MyWishlist.dart';
 import 'package:hypd/Widgets/Utilities/SelectSizeModal.dart';
+import 'package:hypd/global.dart';
 
 class MyBag extends StatefulWidget
 {
@@ -14,10 +16,19 @@ class _MyBagState extends State<MyBag>
 {
 	var height;
 	var width;
+	var totalPrice = 0;
 
 	List size = ["S", "M", "L", "XL", "XXL", "XXXL"];
+	List cartList = [];
 
 	bool isEmpty = true;
+
+	@override
+	void initState()
+	{
+		super.initState();
+		getCartItems();
+	}
 
 	@override
 	Widget build(BuildContext context)
@@ -29,14 +40,13 @@ class _MyBagState extends State<MyBag>
 		(
 			appBar: appBar(),
 			resizeToAvoidBottomInset: false,
-			backgroundColor: Color(int.parse("0xff312247")),
+			backgroundColor: isEmpty ? Colors.white : Color(int.parse("0xff312247")),
 			body: Container
 			(
 				padding: EdgeInsets.only( bottom: 25),
-				// child: isEmpty ? bagIsEmpty() : bagItems()
-				child: bagItems(),
+				child: isEmpty ? bagIsEmpty() : bagItems()
 			),
-			bottomSheet: priceDetails(),
+			bottomSheet: isEmpty ? null : priceDetails(),
 		);
 	}
 
@@ -178,6 +188,7 @@ class _MyBagState extends State<MyBag>
 
 	Widget bagItems()
 	{
+		print(user);
 		return Container
 		(
 			decoration: BoxDecoration
@@ -197,6 +208,7 @@ class _MyBagState extends State<MyBag>
 				height: height / 1.8,
 				child: ListView.builder
 				(
+					itemCount: cartList.length,
 					scrollDirection: Axis.horizontal,
 					itemBuilder: (BuildContext context, int index)
 					{
@@ -214,26 +226,26 @@ class _MyBagState extends State<MyBag>
 										(
 											height: height / 3.5,
 											width: width / 2.5,
-											child: FittedBox
+										child: FittedBox
 											(
 												child:ClipRRect
 												(
 													borderRadius: BorderRadius.circular(50.0),
-													child: Image.network("https://images.pexels.com/photos/6315354/pexels-photo-6315354.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
+													child: Image.network(cartList[index]["productImage"][0]["image"]),
 												),
 												fit: BoxFit.fill,
 											)
 										),
 										SizedBox(height: 7,),
-										brandName(),
+										brandName(index),
 										SizedBox(height: 7,),
-										productName(),
+										productName(index),
 										SizedBox(height: 7,),
-										cost(),
+										cost(index),
 										SizedBox(height: 7,),
 										sizeSelector(),
 										SizedBox(height: 7,),
-										buttons()
+										buttons(index)
 									],
 								)
 							),
@@ -248,13 +260,13 @@ class _MyBagState extends State<MyBag>
 		);
 	}
 
-	Widget brandName()
+	Widget brandName(index)
 	{
 		return Center
 		(
 			child: Text
 			(
-				"Off Street Company",
+				cartList[index]["productBrand"].toString(),
 				style: GoogleFonts.montserrat
 				(
 					fontWeight: FontWeight.w600,
@@ -265,13 +277,13 @@ class _MyBagState extends State<MyBag>
 		);
 	}
 
-	Widget productName()
+	Widget productName(index)
 	{
 		return Center
 		(
 			child: Text
 			(
-				"Delhi 1947 India T-shirt",
+				cartList[index]["productName"].toString(),
 				style: GoogleFonts.montserrat
 				(
 					color: Colors.black,
@@ -282,7 +294,7 @@ class _MyBagState extends State<MyBag>
 		);
 	}
 
-	Widget cost()
+	Widget cost(index)
 	{
 		return Center
 		(
@@ -294,7 +306,7 @@ class _MyBagState extends State<MyBag>
 					[
 						TextSpan
 						(
-							text: "₹ 895",
+							text: "₹ " + cartList[index]["productPrice"].toString(),
 							style: GoogleFonts.montserrat
 							(
 								color: Colors.black,
@@ -382,8 +394,10 @@ class _MyBagState extends State<MyBag>
 		);
 	}
 
-	Widget buttons()
+	Widget buttons(index)
 	{
+		var quantity = cartList[index]["productQuantity"];
+
 		return  Container
 		(
 			padding: EdgeInsets.only(left: 15, right: 15),
@@ -412,7 +426,16 @@ class _MyBagState extends State<MyBag>
 							(
 								child: IconButton
 								(
-									onPressed: null,
+									onPressed: ()
+									{
+										setState(() 
+										{
+											if(quantity > "1")
+											{
+												quantity --;
+											}
+										});
+									},
 									icon: Icon(Icons.remove, color: Colors.black38),
 								),
 							),
@@ -428,7 +451,7 @@ class _MyBagState extends State<MyBag>
 							(
 								child: Text
 								(
-									"1",
+									quantity.toString(),
 									style: GoogleFonts.montserrat
 									(
 										color: Colors.black38,
@@ -454,7 +477,13 @@ class _MyBagState extends State<MyBag>
 							(
 								child: IconButton
 								(
-									onPressed: null,
+									onPressed: ()
+									{
+										setState(() 
+										{
+											quantity ++;
+										});
+									},
 									icon: Icon(Icons.add_outlined, color: Colors.black38),
 								),
 							),
@@ -467,6 +496,7 @@ class _MyBagState extends State<MyBag>
 
 	priceDetails()
 	{
+		print(user);
 		return Container
 		(
 			color: Color(int.parse("0xff312247")),
@@ -512,7 +542,7 @@ class _MyBagState extends State<MyBag>
 									padding: EdgeInsets.only(left: 15),
 									child: Text
 									(
-										"₹ 8500",
+										"₹ " + totalPrice.toString(),
 										style: GoogleFonts.montserrat
 										(
 											color: Colors.white,
@@ -561,6 +591,34 @@ class _MyBagState extends State<MyBag>
 				],
 			)
 		);
+	}
+
+	// -------------------------------------------------------API-----------------------------------------------------//
+
+	getCartItems() async
+	{
+
+		var userId = user["id"];
+
+		var response = await Server.getCartProducts(userId);
+
+		if(response["status"] == 0)
+		{
+			for(int i = 0; i < response["cartList"].length; i++)
+			{
+				cartList.add(response["cartList"][i]);
+			}
+
+			setState(() 
+			{
+				isEmpty = false;
+				totalPrice = response["totalAmount"];
+			});
+		}
+		else
+		{
+			isEmpty = true;
+		}
 	}
 }
 

@@ -1,21 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/API/Server.dart';
 import 'package:hypd/Widgets/MyBag.dart';
 import 'package:hypd/Widgets/MyWishlist.dart';
+import 'package:hypd/Widgets/ViewAll.dart';
 
 class Collections extends StatefulWidget 
 {
+	final categoryId;
+	Collections(this.categoryId);
+
 	@override
-	_CollectionsState createState() => _CollectionsState();
+	_CollectionsState createState() => _CollectionsState(this.categoryId);
 }
 
 class _CollectionsState extends State<Collections> 
 {
+	final categoryId;
+	_CollectionsState(this.categoryId);
+
 	var height;
 	var width;
 
+	List collectionsList = [];
+
 	bool isFavourite = false;
+
+	@override
+	void initState()
+	{
+		super.initState();
+		getSubCategory(this.categoryId);
+	}
 
 	@override
 	Widget build(BuildContext context) 
@@ -114,51 +131,80 @@ class _CollectionsState extends State<Collections>
 			child: ListView.builder
 			(
 				scrollDirection: Axis.vertical,
-				itemCount: 15,
+				itemCount: collectionsList.length,
 				itemBuilder: (BuildContext context, int index)
 				{
-					return Stack
+					return GestureDetector
 					(
-						children: 
-						[
-							Container
-							(
-								margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),
-								height: height / 5.5,
-								width: width,
-								
+						child: Stack
+						(
+							children: 
+							[
+								Container
+								(
+									margin: EdgeInsets.only(left: 15, right: 15, bottom: 20),
+									height: height / 5.5,
+									width: width,
 									child:ClipRRect
 									(
 										borderRadius: BorderRadius.circular(20.0),
-										child: Image.network("https://images.pexels.com/photos/862848/pexels-photo-862848.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500", fit: BoxFit.cover,),
+										child: Image.network(collectionsList[index]["image"], fit: BoxFit.contain,),
 									),
-							),
-							Positioned
-							(
-								left: width / 10,
-								top: height / 15,
-								child: Column
-								(
-									crossAxisAlignment: CrossAxisAlignment.start,
-									children: 
-									[
-										Text
-										(
-											"Supplements.",
-											style: GoogleFonts.montserrat
-											(
-												fontSize: 20,
-												fontWeight: FontWeight.bold,
-												color: Colors.white
-											),
-										),
-									],
 								),
-							)
-						],
+								Positioned
+								(
+									left: width / 10,
+									top: height / 15,
+									child: Column
+									(
+										crossAxisAlignment: CrossAxisAlignment.start,
+										children: 
+										[
+											Text
+											(
+												"",
+												style: GoogleFonts.montserrat
+												(
+													fontSize: 20,
+													fontWeight: FontWeight.bold,
+													color: Colors.white
+												),
+											),
+										],
+									),
+								)
+							],
+						),
+						onTap: ()
+						{
+							Navigator.push(context, MaterialPageRoute(builder: (context) => ViewAll(this.categoryId, collectionsList[index]["id"])));
+						},
 					);
-				}
+				},
 			)
 		);
+	}
+
+	getSubCategory(id) async
+	{
+		collectionsList.clear();
+
+		var response = await Server.getSubCategories(id);
+
+		if(response == false)
+		{
+			print("empty");
+		}
+		else
+		{
+			for(int i = 0; i < response.length; i++)
+			{
+				collectionsList.add(response[i]);
+			}
+			setState(() 
+			{
+				print(collectionsList);
+			});
+		}
 	}
 }

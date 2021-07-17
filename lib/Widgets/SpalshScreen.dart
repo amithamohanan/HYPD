@@ -1,16 +1,56 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
 import 'package:hypd/Widgets/Login.dart';
 import 'package:hypd/global.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 
-class  Spalsh extends StatelessWidget
+class Splash extends StatefulWidget 
+{
+	@override
+	_SplashState createState() => _SplashState();
+}
+
+class _SplashState extends State<Splash> 
 {
 	var height;
 	var width;
 	var fontSize;
+
+	bool isLoggedIn = false;
+
+	@override
+	void initState()
+	{
+		super.initState();
+		getSharedPreference();
+	}
+
+	getSharedPreference() async
+	{
+		SharedPreferences prefs = await SharedPreferences.getInstance();
+		var response = jsonDecode(prefs.getString("isLoggedIn").toString());
+
+		print(response);
+		print("SHARED PREFERENCE");
+
+		if(response == null)
+		{
+			isLoggedIn = false;
+		}
+		else
+		{
+			isLoggedIn = true;
+		}
+
+		setState(() {
+		});
+	}
 
 	Widget build(BuildContext context)
 	{
@@ -58,7 +98,7 @@ class  Spalsh extends StatelessWidget
 					),
 				),
 				photoSize: width * .3,
-				navigateAfterSeconds: Login(),
+				navigateAfterSeconds: isLoggedIn ? HomePage() : Login(),
 				useLoader: false,
 			),
 		);

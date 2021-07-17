@@ -3,18 +3,26 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hypd/Widgets/API/Server.dart';
 import 'package:hypd/Widgets/AddUserDetails.dart';
+import 'package:hypd/Widgets/BottomNavigationBar/HomePage.dart';
 import 'package:hypd/Widgets/Utilities/SnackBar.dart';
 import 'package:hypd/global.dart';
 
 class VerifyOTP extends StatefulWidget 
 {
+	final otp;
+	VerifyOTP(this.otp);
+
 	@override
-	_VerifyOTPState createState() => _VerifyOTPState();
+	_VerifyOTPState createState() => _VerifyOTPState(this.otp);
 }
 
 class _VerifyOTPState extends State<VerifyOTP> 
 {
+	final otp;
+	_VerifyOTPState(this.otp);
+
 	var height;
 	var width;
 	var fontSize;
@@ -23,6 +31,8 @@ class _VerifyOTPState extends State<VerifyOTP>
 
 	int _start = 60;
 	int disabledCounter = 0;
+
+	var otpCode;
 
 	bool isOtpEntered = false;
 	bool resendOTP = false;
@@ -47,6 +57,9 @@ class _VerifyOTPState extends State<VerifyOTP>
 	{
 		super.initState();
 		startTimer();
+		print(this.otp);
+		otpCode = this.otp.toString();
+		isOtpEntered = true;
 	}
 
 	@override
@@ -207,6 +220,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 						maxLength: 1,
 						decoration: InputDecoration
 						(
+							hintText: otpCode[0].toString(),
 							counterText: ''
 						),
 						onChanged: (v)
@@ -245,6 +259,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 						maxLength: 1,
 						decoration: InputDecoration
 						(
+							hintText: otpCode[1].toString(),
 							counterText: ''
 						),
 						onChanged: (v)
@@ -283,6 +298,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 						maxLength: 1,
 						decoration: InputDecoration
 						(
+							hintText: otpCode[2].toString(),
 							counterText: ''
 						),
 						onChanged: (v)
@@ -321,6 +337,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 						maxLength: 1,
 						decoration: InputDecoration
 						(
+							hintText: otpCode[3].toString(),
 							counterText: ''
 						),
 						onChanged: (v)
@@ -338,82 +355,82 @@ class _VerifyOTPState extends State<VerifyOTP>
 						}
 					),
 				),
-				Container
-				(
-					height: 50,
-					width: 30,
-					margin: EdgeInsets.only(right:8, bottom:10),
-					child: TextFormField
-					(
-						style:   GoogleFonts.montserrat
-						(
-							fontWeight: FontWeight.bold,
-							color: Colors.black,
-							fontSize: fontSize / 30,
-						),
-						controller: f5Controller,
-						textInputAction: TextInputAction.next,
-						focusNode: focus5,
-						keyboardType: TextInputType.number,
-						textAlign: TextAlign.center,
-						maxLength: 1,
-						decoration: InputDecoration
-						(
-							counterText: ''
-						),
-						onChanged: (v)
-						{
-							editOtp();
+				// Container
+				// (
+				// 	height: 50,
+				// 	width: 30,
+				// 	margin: EdgeInsets.only(right:8, bottom:10),
+				// 	child: TextFormField
+				// 	(
+				// 		style:   GoogleFonts.montserrat
+				// 		(
+				// 			fontWeight: FontWeight.bold,
+				// 			color: Colors.black,
+				// 			fontSize: fontSize / 30,
+				// 		),
+				// 		controller: f5Controller,
+				// 		textInputAction: TextInputAction.next,
+				// 		focusNode: focus5,
+				// 		keyboardType: TextInputType.number,
+				// 		textAlign: TextAlign.center,
+				// 		maxLength: 1,
+				// 		decoration: InputDecoration
+				// 		(
+				// 			counterText: ''
+				// 		),
+				// 		onChanged: (v)
+				// 		{
+				// 			editOtp();
 
-							if (v.length == 0)
-							{
-								FocusScope.of(context).requestFocus(focus4);
-							}
-							else
-							{
-								FocusScope.of(context).requestFocus(focus6);
-							}
-						}
-					),
-				),
-				Container
-				(
-					height: 50,
-					width: 30,
-					margin: EdgeInsets.only(right:8, bottom:10),
-					child: TextFormField
-					(
-						style:   GoogleFonts.montserrat
-						(
-							fontWeight: FontWeight.bold,
-							color: Colors.black,
-							fontSize: fontSize / 30,
-						),
-						controller: f6Controller,
-						textInputAction: TextInputAction.next,
-						focusNode: focus6,
-						keyboardType: TextInputType.number,
-						textAlign: TextAlign.center,
-						maxLength: 1,
-						decoration: InputDecoration
-						(
-							counterText: ''
-						),
-						onChanged: (v)
-						{
-							editOtp();
+				// 			if (v.length == 0)
+				// 			{
+				// 				FocusScope.of(context).requestFocus(focus4);
+				// 			}
+				// 			else
+				// 			{
+				// 				FocusScope.of(context).requestFocus(focus6);
+				// 			}
+				// 		}
+				// 	),
+				// ),
+				// Container
+				// (
+				// 	height: 50,
+				// 	width: 30,
+				// 	margin: EdgeInsets.only(right:8, bottom:10),
+				// 	child: TextFormField
+				// 	(
+				// 		style:   GoogleFonts.montserrat
+				// 		(
+				// 			fontWeight: FontWeight.bold,
+				// 			color: Colors.black,
+				// 			fontSize: fontSize / 30,
+				// 		),
+				// 		controller: f6Controller,
+				// 		textInputAction: TextInputAction.next,
+				// 		focusNode: focus6,
+				// 		keyboardType: TextInputType.number,
+				// 		textAlign: TextAlign.center,
+				// 		maxLength: 1,
+				// 		decoration: InputDecoration
+				// 		(
+				// 			counterText: ''
+				// 		),
+				// 		onChanged: (v)
+				// 		{
+				// 			editOtp();
 
-							if (v.length == 0)
-							{
-								FocusScope.of(context).requestFocus(focus5);
-							}
-							else
-							{
+				// 			if (v.length == 0)
+				// 			{
+				// 				FocusScope.of(context).requestFocus(focus5);
+				// 			}
+				// 			else
+				// 			{
 
-							}
-						}
-					),
-				)
+				// 			}
+				// 		}
+				// 	),
+				// )
 			],
 		);
 	}
@@ -496,7 +513,7 @@ class _VerifyOTPState extends State<VerifyOTP>
 				),
 				onPressed: ()
 				{
-				    isOtpEntered ? Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AddUserDetails())) : showSnackBar(context, "Please enter the OTP");
+				    isOtpEntered ? sendOTP() : showSnackBar(context, "Please enter the OTP");
 				}
 			)
 		);
@@ -539,5 +556,16 @@ class _VerifyOTPState extends State<VerifyOTP>
 			// isOtpEntered = true;
 			// otpEntered = code;
 		});
+	}
+
+	sendOTP() async
+	{
+		var userId = user["id"];
+
+		var response = await Server.sendOTP(otp, userId);
+
+		print(response);
+
+		 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
 	}
 }
